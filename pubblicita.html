@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pubblicita - Inserisci il Tuo Banner - BrevettIAmo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --accent: #c5a059;
+            --bg: #f5f0e8;
+            --card: #ffffff;
+            --text: #2c1810;
+            --text-light: #5a4a3a;
+            --border: #e8dfd1;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* HEADER */
+        header {
+            background: var(--card);
+            border-bottom: 2px solid var(--accent);
+            padding: 1rem 2rem;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .logo span { color: var(--accent); font-style: italic; }
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        nav a:hover { color: var(--accent); }
+        
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #2d5a87 100%);
+            color: white;
+        }
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* FORM */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .info-box {
+            background: rgba(197, 160, 89, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .info-box h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .info-box .gratis {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .info-box .poi {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .hint {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: var(--primary);
+            transform: scale(1.02);
+        }
+        
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #856404;
+        }
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* PREVIEW */
+        .preview-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+        }
+        .preview-section h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .banner-preview {
+            border: 2px dashed var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        .banner-preview img {
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+        }
+        
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+<<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">BREVETT<span>I</span>AMO</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="prezzi.html">Prezzi</a>
+            <a href="pubblicita.html">Pubblicita</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Pubblicita su BrevettIAmo</h1>
+    <p>Mostra il tuo brevetto al mondo. Inserisci il tuo banner in completa autonomia.</p>
+</section>
+
+<div class="container">
+    
+    <div class="info-box">
+        <h3>Gratuito durante il lancio!</h3>
+        <div class="gratis">0 EUR</div>
+        <p>Per sempre? No, ma per ora si.</p>
+        <div class="poi">Dopo il lancio ufficiale: 10 EUR/anno (con fattura)</div>
+    </div>
+    
+    <form id="bannerForm" onsubmit="return inviaBanner();">
+        
+        <div class="form-group">
+            <label>Nome Azienda o Inventore *</label>
+            <input type="text" id="nome" required placeholder="Es. Rossi Inventions">
+        </div>
+        
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" required placeholder="tua@email.com">
+        </div>
+        
+        <div class="form-group">
+            <label>Link Sito Web (dove cliccare) *</label>
+            <input type="url" id="link" required placeholder="https://tuosito.com">
+            <div class="hint">Quando qualcuno clicca sul tuo banner, verra reindirizzato qui.</div>
+        </div>
+        
+        <div class="form-group">
+            <label>URL Immagine Banner *</label>
+            <input type="url" id="immagine" required placeholder="https://tuosito.com/immagine-banner.jpg">
+            <div class="hint">
+                - Carica l'immagine su Imgur, Postimg, o il tuo sito<br>
+                - Dimensione consigliata: 400x120 pixel<br>
+                - Formato: JPG o PNG, max 200KB<br>
+                - Deve essere il TUO logo/immagine, non di altri
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Titolo Breve (max 30 caratteri)</label>
+            <input type="text" id="titolo" maxlength="30" placeholder="Es. Brevetto Tecnologia Verde">
+        </div>
+        
+        <div class="form-group">
+            <label>Descrizione (opzionale, max 100 caratteri)</label>
+            <textarea id="descrizione" maxlength="100" rows="2" placeholder="Breve descrizione del tuo prodotto..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn">Inserisci il Mio Banner</button>
+        
+    </form>
+    
+    <div class="disclaimer">
+        <strong>Disclaimer / Liberatoria</strong>
+        Inserendo il banner dichiari che:<br>
+        - L'immagine e il contenuto sono di tua proprieta o hai diritto di usarli<br>
+        - Non inserirai contenuti illegali, offensivi o di proprieta altrui<br>
+        - BrevettIAmo non controlla i contenuti e non e responsabile per eventuali violazioni<br>
+        - Il banner puo essere rimosso senza preavviso in caso di segnalazione di abuso<br>
+        - Dati trattati ai sensi del GDPR per finalita di pubblicita
+    </div>
+    
+    <div class="preview-section">
+        <h2>Anteprima del Tuo Banner</h2>
+        <div class="banner-preview" id="preview">
+            <span style="color: var(--text-light);">Compila il form per vedere l'anteprima</span>
+        </div>
+    </div>
+    
+</div>
+
+<<footer>
+    <p>BrevettIAmo 2026 - Protetti da Brevetto UBIM</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">Tutti i diritti riservati</p>
+</footer>
+
+<script>
+    // Anteprima live
+    document.getElementById('immagine').addEventListener('input', function() {
+        const url = this.value;
+        const preview = document.getElementById('preview');
+        if (url && url.startsWith('http')) {
+            preview.innerHTML = '<img src="' + url + '" alt="Anteprima banner" onerror="this.parentElement.innerHTML=\'<<span style=color:red>Immagine non trovata. Controlla l\\\'URL.</span>\'">';
+        }
+    });
+    
+    function inviaBanner() {
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const link = document.getElementById('link').value;
+        const immagine = document.getElementById('immagine').value;
+        const titolo = document.getElementById('titolo').value;
+        const descrizione = document.getElementById('descrizione').value;
+        
+        // Crea il codice HTML del banner
+        const bannerCode = 
+            '    <!-- ' + nome + ' -->\n' +
+            '    <a href="' + link + '" target="_blank" title="' + titolo + '" style="display: block; transition: transform 0.3s;" onmouseover="this.style.transform=\'scale(1.05)\'" onmouseout="this.style.transform=\'scale(1)\'">\n' +
+            '        <img src="' + immagine + '" alt="' + nome + '" style="width: 100%; height: 120px; object-fit: contain; border-radius: 8px; background: white; padding: 0.5rem; border: 1px solid var(--ps);">\n' +
+            '    </a>';
+        
+        // Prepara email
+        const subject = 'Nuovo Banner Pubblicitario - ' + nome;
+        const body = 'Nome: ' + nome + '\n' +
+                     'Email: ' + email + '\n' +
+                     'Link: ' + link + '\n' +
+                     'Immagine: ' + immagine + '\n' +
+                     'Titolo: ' + titolo + '\n' +
+                     'Descrizione: ' + descrizione + '\n\n' +
+                     'CODICE HTML DA INSERIRE:\n' + bannerCode;
+        
+        // Apri email client
+        window.location.href = 'mailto:info@brevettiamo.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        
+        alert('Grazie! Ora invia l\\\'email che si e aperta. Il tuo banner sara attivo entro 24h.');
+        return false;
+    }
+</script>
+
+</body>
+</html>

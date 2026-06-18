@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'OCCHIO - BrevettIAmo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-2xl px-6">
+        <i class="fas fa-eye text-8xl text-blue-400 pulse mb-6"></i>
+        <h1 class="text-5xl font-bold gradient-text mb-4">L'OCCHIO</h1>
+        <p class="text-xl text-gray-300 mb-2">Sorveglianza Brevettuale 24/7</p>
+        <p class="text-gray-400 mb-8">Dormi tra tre guanciali. L'OCCHIO veglia per te.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <i class="fas fa-search text-3xl text-blue-400 mb-2"></i>
+                <p class="font-bold">Falco</p>
+                <p class="text-sm text-gray-400">Ricerca infrazioni</p>
+            </div>
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <i class="fas fa-shield-alt text-3xl text-green-400 mb-2"></i>
+                <p class="font-bold">Lince</p>
+                <p class="text-sm text-gray-400">Monitoraggio prodotti</p>
+            </div>
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                <i class="fas fa-gavel text-3xl text-yellow-400 mb-2"></i>
+                <p class="font-bold">Aquila</p>
+                <p class="text-sm text-gray-400">Azioni legali</p>
+            </div>
+        </div>
+        
+        <a href="occhio-dashboard.html?pacchetto=starter" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-bold inline-block transition">
+            <i class="fas fa-rocket mr-2"></i> Inizia Beta Gratuita
+        </a>
+        <p class="text-sm text-gray-500 mt-4">60 giorni gratis. Nessuna carta di credito.</p>
+    </div>
+</body>
+</html>

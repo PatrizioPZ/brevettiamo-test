@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrevettIAmo - Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:Arial,sans-serif; background:#f0f2f5; }
+.navbar { background:#1e3c72; color:white; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; }
+.navbar h1 { font-size:1.3em; }
+.navbar a { color:white; text-decoration:none; margin-left:20px; }
+.container { max-width:1200px; margin:0 auto; padding:20px; }
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:20px; }
+.stat-card { background:white; padding:20px; border-radius:10px; text-align:center; }
+.stat-number { font-size:2em; color:#2a5298; font-weight:bold; }
+.stat-label { color:#666; }
+.filters { background:white; padding:15px; border-radius:10px; margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; }
+.filters input, .filters select { padding:10px; border:1px solid #ddd; border-radius:5px; }
+.filters input { flex:1; min-width:200px; }
+.btn-new { background:#28a745; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; display:inline-block; }
+.table-container { background:white; border-radius:10px; overflow:hidden; }
+.table-header { background:#1e3c72; color:white; padding:15px 20px; }
+table { width:100%; border-collapse:collapse; }
+th { background:#f8f9fa; padding:12px; text-align:left; font-weight:bold; color:#555; }
+td { padding:12px; border-bottom:1px solid #eee; }
+tr:hover { background:#f8f9fa; }
+.status { padding:4px 12px; border-radius:15px; font-size:0.85em; font-weight:bold; }
+.status-nuova { background:#d1ecf1; color:#0c5460; }
+.status-bozza { background:#fff3cd; color:#856404; }
+.status-lavorazione { background:#cce5ff; color:#004085; }
+.status-depositata { background:#d4edda; color:#155724; }
+.status-concessa { background:#d1ecf1; color:#0c5460; }
+.status-rifiutata { background:#f8d7da; color:#721c24; }
+.btn-view { background:#e9ecef; border:none; padding:6px 12px; border-radius:5px; cursor:pointer; }
+.empty { text-align:center; padding:50px; color:#666; }
+.loading { text-align:center; padding:50px; }
+.spinner { width:40px; height:40px; border:3px solid #eee; border-top-color:#2a5298; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 15px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.alert { padding:15px; border-radius:5px; margin-bottom:15px; display:none; }
+.alert.show { display:block; }
+.alert-error { background:#f8d7da; color:#721c24; }
+@media (max-width:768px) { .stats { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px) { .stats { grid-template-columns:1fr; } }
+</style>
+  <link rel="stylesheet" href="chatbot.css">
+</head>
+<body>
+<<nav class="navbar">
+<h1>BrevettIAmo - Dashboard</h1>
+<div>
+<a href="dashboard.html">Dashboard</a>
+<a href="nuova-pratica.html">Nuova Pratica</a>
+<a href="index.html">Home</a>
+<a href="prezzi.html">Prezzi</a>
+<a href="modulo_privacy_nda.html" style="color:#ffd700;">Privacy & NDA</a>  
+  <a href="#" onclick="logout()">Esci</a>
+</div>
+</nav>
+
+<div class="container">
+<div class="alert alert-error" id="errorAlert"></div>
+
+<div class="stats">
+<div class="stat-card"><div class="stat-number" id="statTotale">0</div><div class="stat-label">Totale Pratiche</div></div>
+<div class="stat-card"><div class="stat-number" id="statBozza">0</div><div class="stat-label">In Bozza</div></div>
+<div class="stat-card"><div class="stat-number" id="statLavorazione">0</div><div class="stat-label">In Lavorazione</div></div>
+<div class="stat-card"><div class="stat-number" id="statDepositate">0</div><div class="stat-label">Depositate</div></div>
+</div>
+
+<div class="filters">
+<input type="text" id="searchInput" placeholder="Cerca per titolo..." onkeyup="filtraPratiche()">
+<select id="filterTipo" onchange="filtraPratiche()">
+<option value="">Tutti i tipi</option>
+<option value="invenzione">Invenzione</option>
+<option value="modello_utilita">Modello Utilita</option>
+<option value="design">Design</option>
+<option value="marchi">Marchio</option>
+<option value="software">Software</option>
+<option value="altro">Altro</option>
+</select>
+<select id="filterStato" onchange="filtraPratiche()">
+<option value="">Tutti gli stati</option>
+<option value="nuova">Nuova</option>
+<option value="bozza">In Bozza</option>
+<option value="lavorazione">In Lavorazione</option>
+<option value="depositata">Depositate</option>
+<option value="concessa">Concessa</option>
+<option value="rifiutata">Rifiutata</option>
+</select>
+<a href="nuova-pratica.html" class="btn-new">+ Nuova Pratica</a>
+<button class="btn-new" onclick="mostraServiziAI()" style="background:#2a5298; margin-left:10px; border:none; cursor:pointer;">+ Servizi AI</button>
+</div>
+
+<div class="table-container">
+<div class="table-header">Elenco Pratiche (<span id="praticheCount">caricamento...</span>)</div>
+<div id="tableContent">
+<div class="loading">
+<div class="spinner"></div>
+<p>Caricamento pratiche...</p>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+var SUPABASE_URL = 'https://jtekrvlmqnluvaiapmwb.supabase.co';
+var SUPABASE_ANON_KEY = 'sb_publishable_p9WH85YPfwtaKp4tfcDwug_Q9duausk';
+var supabaseClient = null;
+var tuttePratiche = [];
+
+function initSupabase() {
+try {
+if (window.supabase && window.supabase.createClient) {
+supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+console.log('Supabase ok');
+// SOSTITUISCI riga 117-118 con:
+checkAuth().then(userId => {
+  if (userId) caricaPratiche(userId);
+});;
+return true;
+} else {
+showError('Errore connessione server');
+return false;
+}
+} catch (err) {
+showError('Errore: ' + err.message);
+return false;
+}
+}
+
+setTimeout(initSupabase, 500);
+
+async function caricaPratiche(userId) {
+if (!supabaseClient) return;
+try {
+console.log('Carico pratiche...');
+var result = await supabaseClient.from('pratiche').select('*').eq('user_id', userId).order('created_at', {ascending:false});
+if (result.error) throw result.error;
+tuttePratiche = result.data || [];
+console.log('Pratiche caricate: ' + tuttePratiche.length);
+aggiornaStatistiche();
+renderTabella(tuttePratiche);
+} catch (err) {
+console.error('Errore:', err);
+showError('Errore caricamento: ' + err.message);
+document.getElementById('tableContent').innerHTML = '<div class="empty"><h3>Errore caricamento</h3><p>' + escapeHtml(err.message) + '</p></div>';
+}
+}
+
+function aggiornaStatistiche() {
+var totale = tuttePratiche.length;
+var bozza = 0;
+var lavorazione = 0;
+var depositate = 0;
+for (var i = 0; i < tuttePratiche.length; i++) {
+var p = tuttePratiche[i];
+if (p.status === 'bozza') bozza++;
+if (p.status === 'lavorazione') lavorazione++;
+if (p.status === 'depositata' || p.status === 'concessa') depositate++;
+}
+document.getElementById('statTotale').textContent = totale;
+document.getElementById('statBozza').textContent = bozza;
+document.getElementById('statLavorazione').textContent = lavorazione;
+document.getElementById('statDepositate').textContent = depositate;
+}
+
+function renderTabella(pratiche) {
+var container = document.getElementById('tableContent');
+document.getElementById('praticheCount').textContent = pratiche.length;
+
+if (pratiche.length === 0) {
+container.innerHTML = '<div class="empty"><h3>Nessuna pratica trovata</h3><p>Crea una nuova pratica</p></div>';
+return;
+}
+
+var tipoLabels = {
+'invenzione': 'Invenzione',
+'modello_utilita': 'Modello Utilita',
+'design': 'Design',
+'marchi': 'Marchio',
+'software': 'Software',
+'altro': 'Altro'
+};
+
+var statusLabels = {
+'nuova': 'Nuova',
+'bozza': 'In Bozza',
+'lavorazione': 'In Lavorazione',
+'depositata': 'Depositate',
+'concessa': 'Concessa',
+'rifiutata': 'Rifiutata'
+};
+
+var statusClasses = {
+'nuova': 'status-nuova',
+'bozza': 'status-bozza',
+'lavorazione': 'status-lavorazione',
+'depositata': 'status-depositata',
+'concessa': 'status-concessa',
+'rifiutata': 'status-rifiutata'
+};
+
+var html = '<table><thead><tr><th>ID</th><th>Titolo</th><th>Tipo</th><th>Settore</th><th>Inventore</th><th>Stato</th><th>Data</th><th>Azioni</th></tr></thead><tbody>';
+
+for (var i = 0; i < pratiche.length; i++) {
+var p = pratiche[i];
+var idShort = p.id ? p.id.substring(0,8) + '...' : '-';
+var titolo = escapeHtml(p.titolo || '-');
+var tipo = tipoLabels[p.tipo_brevetto] || p.tipo_brevetto || '-';
+var settore = p.settore || '-';
+var inventore = escapeHtml(p.inventore || '-');
+var statusClass = statusClasses[p.status] || 'status-nuova';
+var statusLabel = statusLabels[p.status] || p.status || 'Nuova';
+var data = formatData(p.created_at);
+
+html += '<tr>';
+html += '<td><code style="font-size:0.8em;color:#666;">' + idShort + '</code></td>';
+html += '<td>' + titolo + '</td>';
+html += '<td>' + tipo + '</td>';
+html += '<td>' + settore + '</td>';
+html += '<td>' + inventore + '</td>';
+html += '<td><span class="status ' + statusClass + '">' + statusLabel + '</span></td>';
+html += '<td>' + data + '</td>';
+html += '<td><button class="btn-view" onclick="vediDettaglio(' + "'" + p.id + "'" + ')">Vedi</button></td>';
+html += '</tr>';
+}
+
+html += '</tbody></table>';
+container.innerHTML = html;
+}
+
+function filtraPratiche() {
+var search = document.getElementById('searchInput').value.toLowerCase().trim();
+var tipo = document.getElementById('filterTipo').value;
+var stato = document.getElementById('filterStato').value;
+
+var filtrate = [];
+for (var i = 0; i < tuttePratiche.length; i++) {
+var p = tuttePratiche[i];
+var include = true;
+
+if (search) {
+var match = false;
+if (p.titolo && p.titolo.toLowerCase().indexOf(search) !== -1) match = true;
+if (p.inventore && p.inventore.toLowerCase().indexOf(search) !== -1) match = true;
+if (!match) include = false;
+}
+
+if (tipo && p.tipo_brevetto !== tipo) include = false;
+if (stato && p.status !== stato) include = false;
+
+if (include) filtrate.push(p);
+}
+
+renderTabella(filtrate);
+}
+
+function vediDettaglio(id) {
+window.location.href = 'dettaglio.html?id=' + id;
+}
+
+function escapeHtml(text) {
+if (!text) return '';
+var div = document.createElement('div');
+div.textContent = text;
+return div.innerHTML;
+}
+
+function formatData(isoDate) {
+if (!isoDate) return '-';
+var d = new Date(isoDate);
+return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+}
+
+function showError(msg) {
+var alert = document.getElementById('errorAlert');
+alert.textContent = msg;
+alert.classList.add('show');
+setTimeout(function() { alert.classList.remove('show'); }, 8000);
+}
+
+// SERVIZI AI - BACKEND
+const BACKEND_URL = 'https://brevettiamo-backend.onrender.com';
+
+async function mostraServiziAI() {
+    try {
+        const response = await fetch(BACKEND_URL + '/api/services/list');
+        const data = await response.json();
+        
+        let html = '<div style="background:white; padding:20px; border-radius:10px; margin-top:20px;">';
+        html += '<h2 style="color:#1e3c72; margin-bottom:15px;">19 Intelligenze AI</h2>';
+        
+        // Selettore lingua
+        html += '<div style="margin-bottom:15px;">';
+        html += '<label style="font-weight:bold;">Lingua: </label>';
+        html += '<select id="linguaAI" style="padding:8px; border-radius:5px; border:1px solid #ddd;">';
+        html += '<option value="it">Italiano</option>';
+        html += '<option value="en">English</option>';
+        html += '<option value="it-en">Italiano + English</option>';
+        html += '</select>';
+        html += '</div>';
+        
+        html += '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:15px;">';
+        
+       const ndaAccettato = localStorage.getItem('brevettiamo_nda_accettato');
+
+for (let s of data.services) {
+    if (ndaAccettato) {
+        html += '<div style="border:1px solid #ddd; padding:15px; border-radius:8px; cursor:pointer;" onclick="eseguiServizio(\'' + s.id + '\', \'' + s.name + '\')">';
+    } else {
+        html += '<a href="modulo_privacy_nda.html" style="text-decoration:none; color:inherit; display:block; border:1px solid #ddd; padding:15px; border-radius:8px;">';
+    }
+    html += '<h3 style="color:#2a5298; font-size:1em;">' + s.name + '</h3>';
+    html += '<p style="color:#666; font-size:0.9em;">EUR ' + s.prezzo + ' | ' + s.credits + ' crediti</p>';
+    if (ndaAccettato) {
+        html += '</div>';
+    } else {
+        html += '</a>';
+    }
+}
+        
+        html += '</div>';
+        html += '<div id="aiResult" style="margin-top:20px;"></div>';
+        html += '</div>';
+        
+        document.getElementById('tableContent').innerHTML = html;
+        
+    } catch (err) {
+        showError('Errore caricamento servizi AI: ' + err.message);
+    }
+}
+
+async function eseguiServizio(serviceId, serviceName) {
+     
+
+    const input = prompt('Descrivi la tua invenzione per ' + serviceName + ':'); 
+    if (!input) return;
+    
+    const lingua = document.getElementById('linguaAI')?.value || 'it';
+    
+    document.getElementById('aiResult').innerHTML = '<div class="loading"><div class="spinner"></div><p>Analisi AI in corso... (puo richiedere 20-30 secondi)</p></div>';
+    
+    try {
+        const response = await fetch(BACKEND_URL + '/api/services/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                serviceId: serviceId,
+                input: input,
+                language: lingua
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const docId = 'DOC-' + new Date().getTime();
+            const dataDoc = new Date().toLocaleDateString('it-IT');
+            
+            let html = '<div id="' + docId + '" style="background:white; padding:30px; border-radius:10px; border:2px solid #1e3c72; font-family:Arial,sans-serif;">';
+            
+            // Intestazione documento
+            html += '<div style="border-bottom:3px solid #1e3c72; padding-bottom:15px; margin-bottom:20px;">';
+            html += '<h1 style="color:#1e3c72; margin:0;">BrevettIAmo</h1>';
+            html += '<p style="color:#666; margin:5px 0 0 0;">Documento AI Generato - ' + serviceName + '</p>';
+            html += '<p style="color:#666; margin:0; font-size:0.9em;">ID: ' + docId + ' | Data: ' + dataDoc + '</p>';
+            html += '</div>';
+            
+            // Contenuto AI
+            html += '<div style="line-height:1.8; color:#333;">';
+            html += '<pre style="white-space:pre-wrap; font-family:Arial; font-size:1em; margin:0;">' + escapeHtml(data.result) + '</pre>';
+            html += '</div>';
+            
+            // Footer
+            html += '<div style="border-top:2px solid #1e3c72; margin-top:30px; padding-top:15px; text-align:center; color:#666; font-size:0.85em;">';
+            html += '<p>BrevettIAmo - Servizi AI per Proprieta Intellettuale</p>';
+            html += '<p>Documento generato automaticamente - Da verificare con consulente qualificato</p>';
+            html += '</div>';
+            
+            html += '</div>';
+            
+            // Bottoni azione
+            html += '<div style="margin-top:15px; display:flex; gap:10px;">';
+            html += '<button onclick="stampaDocumento(\'' + docId + '\')" style="background:#1e3c72; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Stampa PDF</button>';
+            html += '<button onclick="scaricaTesto(\'' + docId + '\', \'' + serviceName + '\')" style="background:#28a745; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Scarica Testo</button>';
+            html += '</div>';
+            
+            document.getElementById('aiResult').innerHTML = html;
+            
+            // Salva su Supabase
+            if (supabaseClient) {
+                await supabaseClient.from('documenti_ai').insert({
+                    doc_id: docId,
+                    service_id: serviceId,
+                    service_name: serviceName,
+                    input: input.substring(0, 500),
+                    output: data.result.substring(0, 2000),
+                    lingua: lingua,
+                    created_at: new Date().toISOString()
+                });
+            }
+            
+        } else {
+            document.getElementById('aiResult').innerHTML = 
+                '<div style="background:#f8d7da; padding:20px; border-radius:8px;">' +
+                '<h3 style="color:#721c24;">Errore</h3>' +
+                '<p>' + (data.error || 'Errore sconosciuto') + '</p>' +
+                '</div>';
+        }
+        
+    } catch (err) {
+        document.getElementById('aiResult').innerHTML = 
+            '<div style="background:#f8d7da; padding:20px; border-radius:8px;">' +
+            '<h3 style="color:#721c24;">Errore di connessione</h3>' +
+            '<p>' + err.message + '</p>' +
+            '</div>';
+    }
+}
+
+function stampaDocumento(docId) {
+    const doc = document.getElementById(docId);
+    const win = window.open('', '_blank');
+    win.document.write('<html><head><title>BrevettIAmo - Documento</title></head><body>');
+    win.document.write(doc.innerHTML);
+    win.document.write('</body></html>');
+    win.document.close();
+    win.print();
+}
+
+function scaricaTesto(docId, serviceName) {
+    const doc = document.getElementById(docId);
+    const testo = doc.innerText;
+    const blob = new Blob([testo], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'BrevettIAmo_' + serviceName.replace(/\s+/g, '_') + '_' + new Date().getTime() + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+  // CONTROLLO AUTH
+async function checkAuth() {
+const { data: { session } } = await supabaseClient.auth.getSession(); 
+  if (!session) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return session.user.id;
+}  
+  async function logout() {
+  try {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html';
+  } catch (e) {
+    console.error('Errore logout:', e);
+    window.location.href = 'login.html';
+  }
+}
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

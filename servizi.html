@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servizi Singoli - BrevettIAmo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --accent: #e85d04;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* HEADER */
+        header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .logo span { color: var(--accent); font-style: italic; }
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: var(--accent); }
+        
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #2d5a87 100%);
+            color: white;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* SERVIZI GRID */
+        .section-title {
+            text-align: center;
+            padding: 3rem 2rem 1rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        .servizi-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .servizio-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .servizio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+        .servizio-card .nome {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .prezzo {
+            font-size: 1.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        .descrizione {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        /* FOOTER */
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        footer p { opacity: 0.8; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">BREVETT<span>I</span>AMO</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="prezzi.html">Pacchetti</a>
+            <a href="servizi.html">Servizi</a>
+            <a href="abbonamenti.html">Abbonamenti</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Servizi Singoli</h1>
+    <p>Ogni servizio per ogni esigenza. Scegli quello che ti serve, quando ti serve.</p>
+</section>
+
+<h2 class="section-title">Servizi Singoli (+20%)</h2>
+<p class="section-subtitle">Prezzi gia inclusivi del 20% di margine</p>
+
+<section class="servizi-grid">
+    
+    <!-- Riga 1 -->
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Base')">
+        <div class="nome">Ricerca Prior Art Base</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 15</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Avanzata')">
+        <div class="nome">Ricerca Prior Art Avanzata</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 23</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Brevettabilita')">
+        <div class="nome">Analisi Brevettabilita</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 18</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Redazione Claims Base')">
+        <div class="nome">Redazione Claims Base</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 23</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <!-- Riga 2 -->
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Redazione Claims Pro')">
+        <div class="nome">Redazione Claims Pro</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 47</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Traduzione Claims')">
+        <div class="nome">Traduzione Claims</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 14</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Monitoraggio Concorrenza')">
+        <div class="nome">Monitoraggio Concorrenza</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 35</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Consulenza 1:1')">
+        <div class="nome">Consulenza 1:1</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 59</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <!-- Riga 3 -->
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Tecnica')">
+        <div class="nome">Analisi Tecnica</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 29</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Figurativa')">
+        <div class="nome">Ricerca Figurativa</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 23</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Nullita')">
+        <div class="nome">Analisi Nullita</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 35</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Preparazione Opposizione')">
+        <div class="nome">Preparazione Opposizione</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 47</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <!-- Riga 4 -->
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Strategia Licensing')">
+        <div class="nome">Strategia Licensing</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 59</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Valorizzazione Brevetto')">
+        <div class="nome">Valorizzazione Brevetto</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 99</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Due Diligence IP')">
+        <div class="nome">Due Diligence IP</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 149</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Freedom to Operate')">
+        <div class="nome">Freedom to Operate</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 79</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <!-- Riga 5 -->
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Patentability Search')">
+        <div class="nome">Patentability Search</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 18</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Landscape Analysis')">
+        <div class="nome">Landscape Analysis</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 59</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Disegno CAD Professionale')">
+        <div class="nome">Disegno CAD Professionale</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 99</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Supporto Legale Base')">
+        <div class="nome">Supporto Legale Base</div>
+        <div class="badge">PREMIUM</div>
+        <div class="prezzo">EUR 39</div>
+        <div class="descrizione">Servizio AI professionale</div>
+    </div>
+    
+</section>
+
+<<footer>
+    <p>BrevettIAmo 2026 - Protetti da Brevetto UBIM</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">Tutti i diritti riservati</p>
+</footer>
+
+</body>
+</html>
