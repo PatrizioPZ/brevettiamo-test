@@ -147,7 +147,71 @@
             margin-top: 3rem;
         }
         footer p { opacity: 0.8; font-size: 0.9rem; }
-    </style>
+    
+/* TOOLTIP ESTESI */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f4e8e1;
+    color: #4a4a4a;
+    border: 2px solid #c5a059;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    text-align: left;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: #c5a059;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+    [data-tooltip]::after {
+        left: 10px;
+        right: 10px;
+        transform: none;
+        min-width: auto;
+        max-width: none;
+        bottom: calc(100% + 10px);
+    }
+    [data-tooltip]::before {
+        display: none;
+    }
+}
+</style>
+<base target="_blank">
 </head>
 <body>
 
@@ -174,28 +238,28 @@
 <section class="servizi-grid">
     
     <!-- Riga 1 -->
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Base')">
+    <div class="servizio-card" data-tooltip-id="servizio-priorart-base" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Base')">
         <div class="nome">Ricerca Prior Art Base</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 15</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Avanzata')">
+    <div class="servizio-card" data-tooltip-id="servizio-priorart-avanzata" onclick="alert('Aggiunto al carrello: Ricerca Prior Art Avanzata')">
         <div class="nome">Ricerca Prior Art Avanzata</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 23</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Brevettabilita')">
+    <div class="servizio-card" data-tooltip-id="servizio-analisi-brevettabilita" onclick="alert('Aggiunto al carrello: Analisi Brevettabilita')">
         <div class="nome">Analisi Brevettabilita</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 18</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Redazione Claims Base')">
+    <div class="servizio-card" data-tooltip-id="servizio-claims-base" onclick="alert('Aggiunto al carrello: Redazione Claims Base')">
         <div class="nome">Redazione Claims Base</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 23</div>
@@ -203,28 +267,28 @@
     </div>
     
     <!-- Riga 2 -->
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Redazione Claims Pro')">
+    <div class="servizio-card" data-tooltip-id="servizio-claims-pro" onclick="alert('Aggiunto al carrello: Redazione Claims Pro')">
         <div class="nome">Redazione Claims Pro</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 47</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Traduzione Claims')">
+    <div class="servizio-card" data-tooltip-id="servizio-traduzione-claims" onclick="alert('Aggiunto al carrello: Traduzione Claims')">
         <div class="nome">Traduzione Claims</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 14</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Monitoraggio Concorrenza')">
+    <div class="servizio-card" data-tooltip-id="servizio-monitoraggio-concorrenza" onclick="alert('Aggiunto al carrello: Monitoraggio Concorrenza')">
         <div class="nome">Monitoraggio Concorrenza</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 35</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Consulenza 1:1')">
+    <div class="servizio-card" data-tooltip-id="servizio-consulenza" onclick="alert('Aggiunto al carrello: Consulenza 1:1')">
         <div class="nome">Consulenza 1:1</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 59</div>
@@ -232,28 +296,28 @@
     </div>
     
     <!-- Riga 3 -->
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Tecnica')">
+    <div class="servizio-card" data-tooltip-id="servizio-analisi-tecnica" onclick="alert('Aggiunto al carrello: Analisi Tecnica')">
         <div class="nome">Analisi Tecnica</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 29</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Ricerca Figurativa')">
+    <div class="servizio-card" data-tooltip-id="servizio-ricerca-figurativa" onclick="alert('Aggiunto al carrello: Ricerca Figurativa')">
         <div class="nome">Ricerca Figurativa</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 23</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Analisi Nullita')">
+    <div class="servizio-card" data-tooltip-id="servizio-analisi-nullita" onclick="alert('Aggiunto al carrello: Analisi Nullita')">
         <div class="nome">Analisi Nullita</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 35</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Preparazione Opposizione')">
+    <div class="servizio-card" data-tooltip-id="servizio-opposizione" onclick="alert('Aggiunto al carrello: Preparazione Opposizione')">
         <div class="nome">Preparazione Opposizione</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 47</div>
@@ -261,28 +325,28 @@
     </div>
     
     <!-- Riga 4 -->
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Strategia Licensing')">
+    <div class="servizio-card" data-tooltip-id="servizio-licensing" onclick="alert('Aggiunto al carrello: Strategia Licensing')">
         <div class="nome">Strategia Licensing</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 59</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Valorizzazione Brevetto')">
+    <div class="servizio-card" data-tooltip-id="servizio-valorizzazione" onclick="alert('Aggiunto al carrello: Valorizzazione Brevetto')">
         <div class="nome">Valorizzazione Brevetto</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 99</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Due Diligence IP')">
+    <div class="servizio-card" data-tooltip-id="servizio-due-diligence" onclick="alert('Aggiunto al carrello: Due Diligence IP')">
         <div class="nome">Due Diligence IP</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 149</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Freedom to Operate')">
+    <div class="servizio-card" data-tooltip-id="servizio-freedom-to-operate" onclick="alert('Aggiunto al carrello: Freedom to Operate')">
         <div class="nome">Freedom to Operate</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 79</div>
@@ -290,28 +354,28 @@
     </div>
     
     <!-- Riga 5 -->
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Patentability Search')">
+    <div class="servizio-card" data-tooltip-id="servizio-patentability" onclick="alert('Aggiunto al carrello: Patentability Search')">
         <div class="nome">Patentability Search</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 18</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Landscape Analysis')">
+    <div class="servizio-card" data-tooltip-id="servizio-landscape" onclick="alert('Aggiunto al carrello: Landscape Analysis')">
         <div class="nome">Landscape Analysis</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 59</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Disegno CAD Professionale')">
+    <div class="servizio-card" data-tooltip-id="servizio-cad" onclick="alert('Aggiunto al carrello: Disegno CAD Professionale')">
         <div class="nome">Disegno CAD Professionale</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 99</div>
         <div class="descrizione">Servizio AI professionale</div>
     </div>
     
-    <div class="servizio-card" onclick="alert('Aggiunto al carrello: Supporto Legale Base')">
+    <div class="servizio-card" data-tooltip-id="servizio-legale-base" onclick="alert('Aggiunto al carrello: Supporto Legale Base')">
         <div class="nome">Supporto Legale Base</div>
         <div class="badge">PREMIUM</div>
         <div class="prezzo">EUR 39</div>
@@ -325,5 +389,6 @@
     <p style="margin-top: 0.5rem; font-size: 0.8rem;">Tutti i diritti riservati</p>
 </footer>
 
+<script src="js/tooltip.js"></script>
 </body>
 </html>
