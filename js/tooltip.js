@@ -1,5 +1,5 @@
 /* ============================================================
-   TOOLTIP.JS v2.0 - BrevettIAmo
+   TOOLTIP.JS v2.1 - BrevettIAmo
    Tooltip light con espansione al click
    ============================================================ */
 
@@ -74,13 +74,13 @@ function apriTooltipModale(id, testo) {
     modal.innerHTML = `
         <div class="tooltip-modal-header">
             <span class="tooltip-modal-title">Dettaglio Servizio</span>
-            <button class="tooltip-modal-close" onclick="chiudiTooltipModale()">&times;</button>
+            <button class="tooltip-modal-close" id="tooltip-modal-close-btn">&times;</button>
         </div>
         <div class="tooltip-modal-body">
             ${htmlContent}
         </div>
         <div class="tooltip-modal-footer">
-            <button class="tooltip-modal-btn" onclick="chiudiTooltipModale()">Chiudi</button>
+            <button class="tooltip-modal-btn" id="tooltip-modal-chiudi-btn">Chiudi</button>
             <a href="welcome.html" class="tooltip-modal-btn tooltip-modal-btn-primary">Inizia Ora</a>
         </div>
     `;
@@ -88,6 +88,10 @@ function apriTooltipModale(id, testo) {
     document.body.appendChild(overlay);
     document.body.appendChild(modal);
     tooltipAttivo = { overlay, modal };
+
+    // Event listener per chiusura (non onclick inline)
+    modal.querySelector('#tooltip-modal-close-btn').addEventListener('click', chiudiTooltipModale);
+    modal.querySelector('#tooltip-modal-chiudi-btn').addEventListener('click', chiudiTooltipModale);
 
     requestAnimationFrame(() => {
         overlay.classList.add('tooltip-modal-active');
@@ -125,7 +129,7 @@ function formattaTooltipTesto(testo) {
     let html = testo;
 
     // Titolo (prima riga)
-    const primoInvio = html.indexOf('\\n');
+    const primoInvio = html.indexOf('\n');
     if (primoInvio > 0) {
         const titolo = html.substring(0, primoInvio);
         const resto = html.substring(primoInvio + 2);
@@ -135,7 +139,7 @@ function formattaTooltipTesto(testo) {
     }
 
     // Liste numerate e puntate
-    const lines = html.split('\\n');
+    const lines = html.split('\n');
     let inOl = false;
     let inUl = false;
     let result = [];
@@ -257,7 +261,7 @@ function iniettaTooltipCSS() {
         }
         .tooltip-modal {
             position: fixed;
-            bottom: calc(100% + 20px);
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.9);
             background: #f5f0e6;
