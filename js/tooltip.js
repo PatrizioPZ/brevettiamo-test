@@ -1,5 +1,5 @@
 /* ============================================================
-   TOOLTIP.JS v2.1 - BrevettIAmo
+   TOOLTIP.JS v2.2 DEFINITIVO - BrevettIAmo
    Tooltip light con espansione al click
    ============================================================ */
 
@@ -7,7 +7,7 @@ let TOOLTIP_TESTI = {};
 let tooltipAttivo = null;
 
 // ============================================================
-// CARICAMENTO DATI
+// CARICAMENTO DATI (con cache-buster)
 // ============================================================
 
 async function caricaTooltipTesti(lingua = 'it') {
@@ -128,7 +128,6 @@ function chiudiTooltipEsc(e) {
 function formattaTooltipTesto(testo) {
     let html = testo;
 
-    // Titolo (prima riga)
     const primoInvio = html.indexOf('\n');
     if (primoInvio > 0) {
         const titolo = html.substring(0, primoInvio);
@@ -138,7 +137,6 @@ function formattaTooltipTesto(testo) {
         html = '<h3 class="tooltip-modal-h3">' + html + '</h3>';
     }
 
-    // Liste numerate e puntate
     const lines = html.split('\n');
     let inOl = false;
     let inUl = false;
@@ -182,8 +180,6 @@ function formattaTooltipTesto(testo) {
     if (inUl) result.push('</ul>');
 
     html = result.join('<br>');
-
-    // Bold
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 
     return html;
@@ -227,6 +223,7 @@ function iniettaTooltipCSS() {
             z-index: 1000;
             pointer-events: none;
             text-align: left;
+            margin-bottom: 4px;
         }
         [data-tooltip]::before {
             content: '';
@@ -246,7 +243,7 @@ function iniettaTooltipCSS() {
         [data-tooltip]:hover::before {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) scale(1);
+            transform: scale(1);
         }
         .tooltip-modal-overlay {
             position: fixed;
@@ -264,7 +261,7 @@ function iniettaTooltipCSS() {
             position: fixed;
             top: 50%;
             left: 50%;
-           transform: translate(-50%, -50%) scale(0.9);
+            transform: translate(-50%, -50%) scale(0.9);
             background: #f5f0e6;
             border: 2px solid #c9a96e;
             border-radius: 12px;
