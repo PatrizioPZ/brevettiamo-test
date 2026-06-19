@@ -12,7 +12,7 @@ let tooltipAttivo = null;
 
 async function caricaTooltipTesti(lingua = 'it') {
     try {
-        const response = await fetch('data/tooltip-testi.json');
+        const response = await fetch('data/tooltip-testi.json?v=' + Date.now());
         const data = await response.json();
         TOOLTIP_TESTI = data[lingua] || data['it'];
         inizializzaTooltip();
@@ -206,9 +206,9 @@ function iniettaTooltipCSS() {
         [data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: calc(100% + 20px);
-            left: 50%;
-            transform: translateX(-50%) scale(0.95);
+            bottom: 100%;
+            left: 0;
+            transform: scale(0.95);
             background: #f5f0e6;
             color: #3d2b1f;
             padding: 14px 18px;
@@ -216,9 +216,10 @@ function iniettaTooltipCSS() {
             font-size: 13px;
             line-height: 1.6;
             white-space: pre-line;
-            max-width: 320px;
-            width: max-content;
-            box-shadow: 0 4px 20px rgba(61, 43, 31, 0.25);
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 -4px 20px rgba(61, 43, 31, 0.25);
             border: 1px solid #c9a96e;
             opacity: 0;
             visibility: hidden;
@@ -230,11 +231,11 @@ function iniettaTooltipCSS() {
         [data-tooltip]::before {
             content: '';
             position: absolute;
-            bottom: calc(100% + 14px);
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 100%;
+            left: 20px;
+            transform: translateY(6px);
             border: 6px solid transparent;
-            border-top-color: #c9a96e;
+            border-bottom-color: #c9a96e;
             opacity: 0;
             visibility: hidden;
             transition: all 0.25s ease;
