@@ -516,16 +516,6 @@ document.addEventListener('DOMContentLoaded', () => {
     iniettaTooltipCSS();
     caricaTooltipTesti('it');
 
-    // Chiudi modale quando si clicca OVUNQUE
-    document.addEventListener('click', function(e) {
-        if (tooltipAttivo) {
-            const modal = document.getElementById('tooltip-modal');
-            if (modal && !modal.contains(e.target)) {
-                chiudiTooltipModale();
-            }
-        }
-    });
-
     setTimeout(assegnaTooltipServizi, 1000);
 
     const observer = new MutationObserver((mutations) => {
