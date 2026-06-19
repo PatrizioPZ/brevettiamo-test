@@ -216,9 +216,9 @@ function iniettaTooltipCSS() {
             font-size: 13px;
             line-height: 1.6;
             white-space: pre-line;
-            max-width: 100%;
-            width: 100%;
-            box-sizing: border-box;
+            min-width: 320px;
+            max-width: 400px;
+            width: max-content;
             box-shadow: 0 -4px 20px rgba(61, 43, 31, 0.25);
             border: 1px solid #c9a96e;
             opacity: 0;
