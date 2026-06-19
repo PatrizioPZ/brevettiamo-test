@@ -264,7 +264,7 @@ function iniettaTooltipCSS() {
             position: fixed;
             top: 50%;
             left: 50%;
-           transform: scale(1);
+           transform: translate(-50%, -50%) scale(0.9);
             background: #f5f0e6;
             border: 2px solid #c9a96e;
             border-radius: 12px;
