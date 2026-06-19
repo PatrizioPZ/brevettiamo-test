@@ -207,12 +207,12 @@ function iniettaTooltipCSS() {
             transform: translateX(-50%) scale(0.95);
             background: #f5f0e6;
             color: #3d2b1f;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border-radius: 8px;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             white-space: pre-line;
-            max-width: 280px;
+            max-width: 320px;
             width: max-content;
             box-shadow: 0 4px 20px rgba(61, 43, 31, 0.25);
             border: 1px solid #c9a96e;
@@ -221,6 +221,7 @@ function iniettaTooltipCSS() {
             transition: all 0.25s ease;
             z-index: 1000;
             pointer-events: none;
+            text-align: left;
         }
         [data-tooltip]::before {
             content: '';
