@@ -436,10 +436,14 @@ function generaServizi() {
                     ${servizio.prezzo} <span class="price-note">${servizio.prezzoNote}</span>
                 </div>
                 <div class="service-cta">
-                    ${servizio.cta === 'Prossimamente' 
+                    ${servizio.cta === 'Prossimamente'
                         ? `<button class="${btnClass}" ${btnAttr}>${servizio.cta}</button>`
                         : `<a href="${servizio.ctaLink}" class="${btnClass}">${servizio.cta}</a>`
                     }
+                </div>
+                <div class="service-hint">
+                    <span class="hint-icon">[i]</span>
+                    <span class="hint-text">Clicca per dettagli</span>
                 </div>
             </div>
         `;
