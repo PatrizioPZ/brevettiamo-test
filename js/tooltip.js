@@ -73,7 +73,7 @@ function apriTooltipModale(id, testo) {
 
     // Altrimenti, crea il pannello
     pannello = document.createElement('div');
-    pannello.className = 'tooltip-pannello';
+    pannello.className = 'tooltip-pannello tooltip-pannello-attivo';
     pannello.innerHTML = formattaTooltipTesto(testo) + 
         '<div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">' +
         '<button onclick="this.parentElement.parentElement.remove()" style="padding:6px 14px; border:1px solid #c9a96e; border-radius:4px; background:#f5f0e6; color:#3d2b1f; font-family:Cinzel,serif; font-size:12px; cursor:pointer;">Chiudi</button>' +
@@ -82,11 +82,7 @@ function apriTooltipModale(id, testo) {
 
     card.appendChild(pannello);
 
-    // Animazione
-    requestAnimationFrame(() => {
-        pannello.style.maxHeight = '500px';
-        pannello.style.opacity = '1';
-    });
+    // Pannello visibile grazie alla classe tooltip-pannello-attivo
 }
 
 // Funzioni vuote per compatibilita
