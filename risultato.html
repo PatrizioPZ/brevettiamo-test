@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risultato - BrevettIAmo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            background: #f5f0e8;
+            min-height: 100vh;
+            color: #3d2b1f;
+        }
+
+        .pergamena {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #faf6f0;
+            border: 2px solid #c9a96e;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(61,43,31,0.15), inset 0 0 60px rgba(201,169,110,0.1);
+            padding: 50px;
+            position: relative;
+        }
+
+        .pergamena::before, .pergamena::after {
+            content: '';
+            position: absolute;
+            left: 10px; right: 10px;
+            height: 2px;
+            background: #c9a96e;
+            opacity: 0.3;
+        }
+        .pergamena::before { top: 15px; }
+        .pergamena::after { bottom: 15px; }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: #8b0000;
+            letter-spacing: 2px;
+        }
+        .logo p {
+            font-style: italic;
+            color: #8b7355;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(201,169,110,0.1);
+            border-radius: 4px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            color: #8b7355;
+        }
+        .step.active { color: #8b0000; font-weight: 700; }
+        .step.completed { color: #2d5a27; }
+        .step .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d4c4a8;
+        }
+        .step.active .dot { background: #8b0000; }
+        .step.completed .dot { background: #2d5a27; }
+
+        .success-badge {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .success-badge .icon {
+            font-size: 3rem;
+            color: #2d5a27;
+            margin-bottom: 10px;
+        }
+        .success-badge h2 {
+            font-family: 'Cinzel', serif;
+            color: #2d5a27;
+            font-size: 1.2rem;
+        }
+        .success-badge p {
+            font-size: 0.85rem;
+            color: #8b7355;
+            margin-top: 5px;
+        }
+
+        .risultato-box {
+            background: #fffef8;
+            border: 1px solid #e8dcc8;
+            border-radius: 4px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .risultato-box h3 {
+            font-family: 'Cinzel', serif;
+            color: #8b0000;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e8dcc8;
+        }
+
+        .risultato-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #5a4a3a;
+        }
+
+        .risultato-content p { margin-bottom: 12px; }
+        .risultato-content strong { color: #8b0000; }
+        .risultato-content ul { margin-left: 20px; margin-bottom: 12px; }
+        .risultato-content li { margin-bottom: 6px; }
+
+        .azioni-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e8dcc8;
+        }
+
+        .btn {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-success {
+            background: #2d5a27;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(45,90,39,0.3);
+        }
+        .btn-success:hover {
+            background: #1e3d1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-revisione {
+            background: transparent;
+            color: #8b0000;
+            border: 2px solid #8b0000;
+        }
+        .btn-revisione:hover {
+            background: #8b0000;
+            color: #fff;
+        }
+
+        .revisione-box {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(139,0,0,0.05);
+            border: 1px dashed #8b0000;
+            border-radius: 4px;
+        }
+
+        .revisione-box h3 {
+            font-family: 'Cinzel', serif;
+            color: #8b0000;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .revisione-box textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
+            background: #fffef8;
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 0.9rem;
+            color: #3d2b1f;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        .btn-invia {
+            margin-top: 15px;
+            background: #8b0000;
+            color: #fff;
+            padding: 12px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .btn-invia:hover {
+            background: #6b0000;
+        }
+
+        .servizio-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(139,0,0,0.05);
+            border: 1px dashed #8b0000;
+            border-radius: 4px;
+        }
+        .servizio-info h3 {
+            font-family: 'Cinzel', serif;
+            color: #8b0000;
+            font-size: 0.9rem;
+        }
+        .servizio-info p {
+            font-size: 0.8rem;
+            color: #8b7355;
+            margin-top: 3px;
+        }
+
+        .banner-beta {
+            background: #8b0000;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin: -50px -50px 30px -50px;
+            border-radius: 4px 4px 0 0;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="pergamena">
+        <div class="banner-beta">BETA CHIUSA - ACCESSO RISERVATO</div>
+
+        <div class="logo">
+            <h1 id="risultato-titolo">IL TUO RISULTATO E PRONTO</h1>
+            <p id="risultato-sottotitolo">L Officina ha completato l analisi</p>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step completed"><span class="dot"></span> Servizio</div>
+            <div class="step completed"><span class="dot"></span> NDA</div>
+            <div class="step completed"><span class="dot"></span> Descrizione</div>
+            <div class="step completed"><span class="dot"></span> Elaborazione</div>
+            <div class="step active"><span class="dot"></span> Risultato</div>
+        </div>
+
+        <div class="servizio-info" id="servizio-info">
+            <h3>Servizio completato</h3>
+            <p id="nome-servizio">Caricamento...</p>
+        </div>
+
+        <div class="success-badge">
+            <div class="icon">OK</div>
+            <h2>Analisi completata con successo</h2>
+            <p>Rivedi il risultato e scegli se accettarlo o richiedere modifiche</p>
+        </div>
+
+        <div id="risultato-container"></div>
+
+        <div class="azioni-container">
+            <button class="btn btn-success" type="button" onclick="accettaRisultato()">ACCETTA IL RISULTATO</button>
+            <button class="btn btn-revisione" type="button" onclick="mostraRevisione()">RICHIEDI REVISIONE</button>
+        </div>
+
+        <div class="revisione-box" id="revisione-box" style="display:none">
+            <h3>Descrivi le modifiche necessarie</h3>
+            <textarea id="note-revisione" placeholder="Spiega cosa non va e cosa vorresti cambiare"></textarea>
+            <button type="button" class="btn-invia" onclick="inviaRevisione()">Invia richiesta revisione</button>
+        </div>
+    </div>
+
+    <script>
+        var nomiServizi = {
+            'servizio-deposito': 'Deposito Brevetto',
+            'servizio-priorart': 'Ricerca Prior Art',
+            'servizio-rivendicazioni': 'Rivendicazioni',
+            'servizio-tavole': 'Tavole Tecniche',
+            'servizio-monitoraggio': 'Monitoraggio',
+            'servizio-priorart-base': 'Ricerca Prior Art Base',
+            'servizio-priorart-avanzata': 'Ricerca Prior Art Avanzata',
+            'servizio-analisi-brevettabilita': 'Analisi Brevettabilita',
+            'servizio-claims-base': 'Redazione Claims Base',
+            'servizio-claims-pro': 'Redazione Claims Pro',
+            'servizio-traduzione-claims': 'Traduzione Claims',
+            'servizio-monitoraggio-concorrenza': 'Monitoraggio Concorrenza',
+            'servizio-consulenza': 'Consulenza 1:1',
+            'servizio-analisi-tecnica': 'Analisi Tecnica',
+            'servizio-ricerca-figurativa': 'Ricerca Figurativa',
+            'servizio-analisi-nullita': 'Analisi Nullita',
+            'servizio-opposizione': 'Preparazione Opposizione',
+            'servizio-licensing': 'Strategia Licensing',
+            'servizio-valorizzazione': 'Valorizzazione Brevetto',
+            'servizio-due-diligence': 'Due Diligence IP',
+            'servizio-freedom-to-operate': 'Freedom to Operate',
+            'servizio-patentability': 'Patentability Search',
+            'servizio-landscape': 'Landscape Analysis',
+            'servizio-cad': 'Disegno CAD Professionale',
+            'servizio-legale-base': 'Supporto Legale Base'
+        };
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var servizioId = urlParams.get('servizio') || '';
+
+        if (servizioId && nomiServizi[servizioId]) {
+            document.getElementById('nome-servizio').textContent = nomiServizi[servizioId];
+        } else {
+            document.getElementById('servizio-info').style.display = 'none';
+        }
+
+        var risultatiServizi = {
+            'servizio-deposito': {
+                titolo: 'DEPOSITO BREVETTO COMPLETATO',
+                sottotitolo: 'Documentazione pronta per UIBM',
+                sezioni: [
+                {titolo: '1. DESCRIZIONE TECNICA', contenuto: '<p>Descrizione dettagliata dell invenzione con tutti gli elementi tecnici necessari per il deposito. Include: campo tecnico, stato dell arte, descrizione dettagliata, modalita di realizzazione e funzionamento.</p><p><strong>Stato:</strong> Completata e formattata secondo standard UIBM.</p>'},
+                {titolo: '2. RIVENDICAZIONI', contenuto: '<p><strong>Rivendicazione indipendente 1:</strong> Descrizione della rivendicazione principale che definisce il campo di protezione.</p><p><strong>Rivendicazione dipendente 2:</strong> Dettaglio specifico che restringe la protezione.</p><p><strong>Rivendicazione dipendente 3:</strong> Ulteriore dettaglio tecnico.</p><p><strong>Nota:</strong> Le rivendicazioni sono formulate per massimizzare la protezione mantenendo la validita.</p>'},
+                {titolo: '3. TAVOLE DISEGNO', contenuto: '<p>Tavole tecniche generate in formato SVG pronte per UIBM:</p><ul><li>Figura 1: Vista generale dell invenzione</li><li>Figura 2: Dettaglio meccanico/tecnico</li><li>Figura 3: Schema di funzionamento</li><li>Figura 4: Sezione esemplificativa</li></ul><p><strong>Formato:</strong> SVG vettoriale, risoluzione stampa 300dpi.</p>'},
+                {titolo: '4. RIEPILOGO DEPOSITO', contenuto: '<p><strong>Tipo deposito:</strong> Brevetto per invenzione industriale</p><p><strong>Classificazione IPC:</strong> [Da determinare in base all invenzione]</p><p><strong>Priorita:</strong> Data presente richiesta</p><p><strong>Documenti pronti:</strong> Descrizione, rivendicazioni, tavole, abstract</p><p><strong>Prossimo passo:</strong> Procedere con il deposito ufficiale presso UIBM o delegare a un consulente.</p>'}
+                ]
+            },
+            'servizio-priorart': {
+                titolo: 'RICERCA PRIOR ART COMPLETATA',
+                sottotitolo: 'Analisi stato dell arte nel tuo settore tecnologico',
+                sezioni: [
+                {titolo: '1. RIEPILOGO RICERCA', contenuto: '<p><strong>Database consultati:</strong> Espacenet, USPTO, WIPO, Google Patents</p><p><strong>Periodo ricerca:</strong> Ultimi 20 anni + priorita rilevanti</p><p><strong>Keyword utilizzate:</strong> [Estratte dalla descrizione fornita]</p><p><strong>Risultato:</strong> X brevetti rilevanti trovati</p>'},
+                {titolo: '2. BREVETTI PIU RILEVANTI', contenuto: '<p><strong>Brevetto 1 (Rilevanza ALTA):</strong></p><ul><li>Titolo: [Titolo brevetto]</li><li>Numero: [Numero pubblicazione]</li><li>Titolare: [Nome azienda]</li><li>Data: [Data pubblicazione]</li><li>Rilevanza: Descrizione somiglianze e differenze con la tua invenzione</li></ul><p><strong>Brevetto 2 (Rilevanza MEDIA):</strong></p><ul><li>Titolo: [Titolo brevetto]</li><li>Numero: [Numero pubblicazione]</li><li>Rilevanza: Analisi differenze tecniche</li></ul>'},
+                {titolo: '3. ANALISI NOVITA', contenuto: '<p><strong>Valutazione novita:</strong></p><p>In base alla ricerca effettuata, la tua invenzione presenta elementi di novita rispetto allo stato dell arte. Le differenze principali risiedono in:</p><ul><li>[Differenza tecnica 1]</li><li>[Differenza tecnica 2]</li><li>[Differenza tecnica 3]</li></ul><p><strong>Raccomandazione:</strong> Procedere con il deposito, considerando le differenze evidenziate nelle rivendicazioni.</p>'},
+                {titolo: '4. MAPPA CONCORRENZA', contenuto: '<p><strong>Principali attori nel settore:</strong></p><ul><li>[Azienda 1] - X brevetti nel settore</li><li>[Azienda 2] - Y brevetti nel settore</li><li>[Azienda 3] - Z brevetti nel settore</li></ul><p><strong>White space:</strong> Aree tecnologiche con scarsa attivita brevettuale dove potenzialmente posizionarsi.</p>'}
+                ]
+            },
+            'servizio-rivendicazioni': {
+                titolo: 'RIVENDICAZIONI REDATTE',
+                sottotitolo: 'Formulazione professionale per massima protezione',
+                sezioni: [
+                {titolo: '1. RIVENDICAZIONE INDIPENDENTE', contenuto: '<p><strong>Rivendicazione 1 (Principale):</strong></p><p>Un [dispositivo/sistema/metodo] caratterizzato in quanto comprende:</p><ul><li>[Elemento tecnico A] configurato per [funzione];</li><li>[Elemento tecnico B] associato a [elemento A] e adattato per [funzione];</li><li>[Elemento tecnico C] interconnesso con [elemento B] mediante [mezzo].</li></ul><p><strong>Campo di protezione:</strong> Ampio, copre la soluzione generale al problema tecnico.</p>'},
+                {titolo: '2. RIVENDICAZIONI DIPENDENTI', contenuto: '<p><strong>Rivendicazione 2:</strong> Il dispositivo secondo la rivendicazione 1, dove [elemento A] comprende [dettaglio specifico].</p><p><strong>Rivendicazione 3:</strong> Il dispositivo secondo la rivendicazione 1 o 2, dove [elemento B] e realizzato in [materiale/configurazione].</p><p><strong>Rivendicazione 4:</strong> Il dispositivo secondo una qualsiasi delle rivendicazioni precedenti, ulteriormente caratterizzato da [feature aggiuntiva].</p><p><strong>Strategia:</strong> Gerarchia a cipolla che protegge dal generale al specifico.</p>'},
+                {titolo: '3. ANALISI PROTEZIONE', contenuto: '<p><strong>Punto 1 (Indipendente):</strong> Protezione massima, difficile aggirare</p><p><strong>Punto 2 (Dipendente):</strong> Protezione media, specifica implementazione</p><p><strong>Punto 3 (Dipendente):</strong> Protezione mirata, dettaglio tecnico</p><p><strong>Punto 4 (Dipendente):</strong> Protezione specifica, feature aggiuntiva</p><p><strong>Consiglio:</strong> Se il concorrente aggira il punto 1, e protetto dal punto 2, e cosi via.</p>'},
+                {titolo: '4. NOTE TECNICHE', contenuto: '<p><strong>Termini tecnici definiti:</strong> Ogni termine usato nelle rivendicazioni e stato definito nella descrizione per evitare interpretazioni ambigue.</p><p><strong>Supporto descrizione:</strong> Ogni elemento rivendicato trova supporto dettagliato nella descrizione tecnica.</p><p><strong>Enablement:</strong> La descrizione permette a un tecnico del settore di realizzare l invenzione senza sforzo inventivo.</p>'}
+                ]
+            },
+            'servizio-tavole': {
+                titolo: 'TAVOLE TECNICHE GENERATE',
+                sottotitolo: 'Disegni professionali pronti per UIBM e produzione',
+                sezioni: [
+                {titolo: '1. TAVOLA 1 - VISTA GENERALE', contenuto: '<p><strong>Figura 1:</strong> Vista prospettica dell invenzione completa</p><p><strong>Elementi numerati:</strong> 1-15 con legenda dettagliata</p><p><strong>Scala:</strong> 1:10 (indicativa, adattabile)</p><p><strong>Formato:</strong> SVG vettoriale, modificabile</p><p><strong>Note:</strong> Vista che mostra l assemblaggio completo e le relazioni spaziali tra i componenti.</p>'},
+                {titolo: '2. TAVOLA 2 - DETTAGLIO COSTRUTTIVO', contenuto: '<p><strong>Figura 2:</strong> Sezione esplosa o dettaglio meccanico</p><p><strong>Focus:</strong> Meccanismo interno / parte innovativa</p><p><strong>Dettaglio:</strong> Tolleranze, finiture, materiali indicati</p><p><strong>Formato:</strong> SVG vettoriale</p><p><strong>Note:</strong> Evidenzia l elemento tecnico che costituisce il cuore dell invenzione.</p>'},
+                {titolo: '3. TAVOLA 3 - SCHEMA FUNZIONALE', contenuto: '<p><strong>Figura 3:</strong> Diagramma di flusso o schema funzionale</p><p><strong>Tipologia:</strong> Schema a blocchi / Flusso di processo</p><p><strong>Legenda:</strong> Simboli standardizzati con spiegazione</p><p><strong>Formato:</strong> SVG vettoriale</p><p><strong>Note:</strong> Mostra il funzionamento logico indipendentemente dalla realizzazione fisica.</p>'},
+                {titolo: '4. SPECIFICHE TECNICHE', contenuto: '<p><strong>Formato file:</strong> SVG (scalabile), PNG (raster 300dpi)</p><p><strong>Dimensioni:</strong> A4 verticale / A3 orizzontale</p><p><strong>Margini:</strong> 25mm tutti i lati (standard UIBM)</p><p><strong>Caratteri:</strong> Arial 3.5mm minimo</p><p><strong>Numerazione:</strong> Araba, posizione centrale inferiore</p><p><strong>Pronte per:</strong> UIBM, pubblicazione, presentazione investitori</p>'}
+                ]
+            },
+            'servizio-analisi-brevettabilita': {
+                titolo: 'ANALISI BREVETTABILITA COMPLETATA',
+                sottotitolo: 'Valutazione sui 3 criteri legali',
+                sezioni: [
+                {titolo: '1. CRITERIO NOVITA', contenuto: '<p><strong>Definizione legale:</strong> L invenzione non deve essere stata divulgata al pubblico in modo tale da poter essere eseguita o realizzata da un esperto del settore.</p><p><strong>Analisi:</strong></p><ul><li>Stato dell arte ricercato: Nessun documento identico trovato</li><li>Divulgazione precedente: Non rilevata</li><li>Elementi di novita: [Elenco elementi nuovi rispetto allo stato dell arte]</li></ul><p><strong>Esito:</strong> NOVITA CONFERMATA</p>'},
+                {titolo: '2. CRITERIO ATTIVITA INVENTIVA', contenuto: '<p><strong>Definizione legale:</strong> L invenzione non deve essere ovvia per un tecnico specializzato del settore, partendo dallo stato dell arte.</p><p><strong>Analisi:</strong></p><ul><li>Combinazione elementi noti: Valutata non ovvia</li><li>Problema tecnico risolto: Non banale</li><li>Sforzo inventivo: Presente, supera lo stato dell arte</li></ul><p><strong>Esito:</strong> ATTIVITA INVENTIVA CONFERMATA</p>'},
+                {titolo: '3. CRITERIO APPLICABILITA INDUSTRIALE', contenuto: '<p><strong>Definizione legale:</strong> L invenzione deve poter essere realizzata o utilizzata in qualsiasi tipo di industria, inclusa l agricoltura.</p><p><strong>Analisi:</strong></p><ul><li>Realizzabilita tecnica: Confermata</li><li>Riproducibilita: Possibile con mezzi industriali standard</li><li>Campo applicazione: [Settore/i identificati]</li></ul><p><strong>Esito:</strong> APPLICABILITA INDUSTRIALE CONFERMATA</p>'},
+                {titolo: '4. GIUDIZIO COMPLESSIVO', contenuto: '<p><strong>Valutazione complessiva:</strong> BREVETTABILE</p><p><strong>Forza del brevetto:</strong> ALTA</p><p><strong>Raccomandazioni:</strong></p><ul><li>Procedere con il deposito</li><li>Formulare rivendicazioni ampie ma supportate</li><li>Considerare deposito internazionale (PCT) per mercati strategici</li></ul><p><strong>Prossimo passo:</strong> Deposito brevetto presso UIBM.</p>'}
+                ]
+            },
+            'servizio-analisi-tecnica': {
+                titolo: 'ANALISI TECNICA COMPLETATA',
+                sottotitolo: 'Valutazione approfondita della tua invenzione',
+                sezioni: [
+                {titolo: '1. ANALISI DI FATTIBILITA', contenuto: '<p><strong>Stato tecnologico:</strong> Le tecnologie necessarie per realizzare l invenzione sono disponibili e mature.</p><p><strong>Complessita realizzativa:</strong> Media. Non richiede sviluppi tecnologici dirompenti.</p><p><strong>Materiali e componenti:</strong> Tutti disponibili sul mercato o facilmente reperibili.</p><p><strong>Esito:</strong> FATTIBILE</p>'},
+                {titolo: '2. BENCHMARK TECNOLOGICO', contenuto: '<p><strong>Soluzioni esistenti:</strong> Analisi delle tecnologie attuali che risolvono lo stesso problema.</p><p><strong>Vantaggi della tua invenzione:</strong></p><ul><li>[Vantaggio 1: es. maggiore efficienza]</li><li>[Vantaggio 2: es. costo ridotto]</li><li>[Vantaggio 3: es. minore impatto ambientale]</li></ul><p><strong>Svantaggi/rischi:</strong> [Eventuali criticita identificate]</p>'},
+                {titolo: '3. ANALISI SWOT TECNICA', contenuto: '<p><strong>Strengths (Punti di forza):</strong> [Elenco]</p><p><strong>Weaknesses (Debolezze):</strong> [Elenco]</p><p><strong>Opportunities (Opportunita):</strong> [Elenco]</p><p><strong>Threats (Minacce):</strong> [Elenco]</p>'},
+                {titolo: '4. RACCOMANDAZIONI', contenuto: '<p><strong>Sviluppo consigliato:</strong> Prototipo funzionale per validare le prestazioni.</p><p><strong>Test necessari:</strong> [Elenco test da eseguire]</p><p><strong>Prossimo passo:</strong> Prototipazione o deposito brevetto.</p>'}
+                ]
+            },
+            'servizio-analisi-nullita': {
+                titolo: 'ANALISI NULLITA COMPLETATA',
+                sottotitolo: 'Valutazione validita brevetto concorrente',
+                sezioni: [
+                {titolo: '1. BREVETTO ANALIZZATO', contenuto: '<p><strong>Numero brevetto:</strong> [Numero]</p><p><strong>Titolare:</strong> [Nome]</p><p><strong>Data deposito:</strong> [Data]</p><p><strong>Stato:</strong> [Attivo/Scaduto/In scadenza]</p>'},
+                {titolo: '2. RICERCA ELEMENTI INVALIDANTI', contenuto: '<p><strong>Prior art non citata:</strong> [Documenti trovati anteriori al deposito]</p><p><strong>Divulgazione precedente:</strong> [Eventuali pubblicazioni anteriori]</p><p><strong>Violazione requisiti legali:</strong> [Analisi]</p><p><strong>Insufficiente descrizione:</strong> [Valutazione enablement]</p>'},
+                {titolo: '3. GIUDIZIO DI NULLITA', contenuto: '<p><strong>Probabilita nullita:</strong> [ALTA/MEDIA/BASSA]</p><p><strong>Elementi piu solidi:</strong> [Descrizione]</p><p><strong>Punti deboli:</strong> [Descrizione]</p><p><strong>Strategia consigliata:</strong> [Opposizione/Revoca/Attesa scadenza]</p>'},
+                {titolo: '4. PROSSIMI PASSI', contenuto: '<p><strong>Se probabilita ALTA:</strong> Preparare opposizione o richiesta di revoca.</p><p><strong>Se probabilita MEDIA:</strong> Valutare costi/benefici di un azione legale.</p><p><strong>Se probabilita BASSA:</strong> Considerare design-around o licenza.</p>'}
+                ]
+            },
+            'servizio-due-diligence': {
+                titolo: 'DUE DILIGENCE IP COMPLETATA',
+                sottotitolo: 'Analisi completa del portfolio IP',
+                sezioni: [
+                {titolo: '1. RIEPILOGO PORTFOLIO', contenuto: '<p><strong>Brevetti analizzati:</strong> X</p><p><strong>Marchi:</strong> Y</p><p><strong>Design:</strong> Z</p><p><strong>Domini:</strong> W</p><p><strong>Stato complessivo:</strong> [Sano/Con riserve/Critico]</p>'},
+                {titolo: '2. ANALISI BREVETTI CHIAVE', contenuto: '<p><strong>Brevetto 1 (Core):</strong> [Titolo] - Valore strategico ALTO</p><p><strong>Brevetto 2:</strong> [Titolo] - Valore strategico MEDIO</p><p><strong>Brevetto 3:</strong> [Titolo] - Valore strategico BASSO</p><p><strong>Gap identificati:</strong> [Aree non coperte dal portfolio]</p>'},
+                {titolo: '3. RISCHI E OPPORTUNITA', contenuto: '<p><strong>Rischi:</strong></p><ul><li>Brevetti in scadenza entro 2 anni</li><li>Copertura geografica insufficiente</li><li>Possibili opposizioni pendenti</li></ul><p><strong>Opportunita:</strong></p><ul><li>White space tecnologiche</li><li>Mercati non coperti</li><li>Possibili acquisizioni</li></ul>'},
+                {titolo: '4. VALUTAZIONE ECONOMICA', contenuto: '<p><strong>Valore stimato portfolio:</strong> [Range €]</p><p><strong>Metodo:</strong> Costo / Mercato / Reddito</p><p><strong>Raccomandazione:</strong> [Investimento / Acquisizione / Attesa]</p>'}
+                ]
+            },
+            'servizio-landscape': {
+                titolo: 'LANDSCAPE ANALYSIS COMPLETATA',
+                sottotitolo: 'Mappa tecnologica del settore',
+                sezioni: [
+                {titolo: '1. PANORAMICA TECNOLOGICA', contenuto: '<p><strong>Settore:</strong> [Identificato]</p><p><strong>Periodo analizzato:</strong> Ultimi 10 anni</p><p><strong>Brevetti totali nel settore:</strong> X</p><p><strong>Trend:</strong> Crescente / Stabile / Decrescente</p>'},
+                {titolo: '2. PRINCIPALI TECNOLOGIE', contenuto: '<p><strong>Tecnologia 1:</strong> [Nome] - X brevetti - Trend: [Su/Giu]</p><p><strong>Tecnologia 2:</strong> [Nome] - Y brevetti - Trend: [Su/Giu]</p><p><strong>Tecnologia 3:</strong> [Nome] - Z brevetti - Trend: [Su/Giu]</p><p><strong>Emergenti:</strong> [Nuove tecnologie in crescita]</p>'},
+                {titolo: '3. WHITE SPACES', contenuto: '<p><strong>Aree poco brevettate:</strong></p><ul><li>[Area 1] - Opportunita ALTA</li><li>[Area 2] - Opportunita MEDIA</li><li>[Area 3] - Opportunita BASSA</li></ul><p><strong>Raccomandazione:</strong> Posizionarsi nelle white spaces identificate.</p>'},
+                {titolo: '4. STRATEGIA BREVETTUALE', contenuto: '<p><strong>Posizionamento consigliato:</strong> [Area tecnologica]</p><p><strong>Timing:</strong> Entro [X mesi] per sfruttare la finestra</p><p><strong>Copertura geografica:</strong> [Mercati prioritari]</p>'}
+                ]
+            },
+            'servizio-patentability': {
+                titolo: 'PATENTABILITY SEARCH COMPLETATA',
+                sottotitolo: 'Ricerca brevettuale in stile americano',
+                sezioni: [
+                {titolo: '1. SCOPE RICERCA', contenuto: '<p><strong>Database:</strong> USPTO, EPO, WIPO, JPO</p><p><strong>Focus:</strong> Prior art in inglese</p><p><strong>Citazioni:</strong> Analisi backward e forward</p><p><strong>Famiglie brevettuali:</strong> Mappate</p>'},
+                {titolo: '2. PRIOR ART RILEVANTE', contenuto: '<p><strong>Documento 1:</strong> [Titolo] - Rilevanza ALTA</p><p><strong>Documento 2:</strong> [Titolo] - Rilevanza MEDIA</p><p><strong>Documento 3:</strong> [Titolo] - Rilevanza BASSA</p><p><strong>Analisi citazioni:</strong> [Rete di citazioni identificata]</p>'},
+                {titolo: '3. VALUTAZIONE BREVETTABILITA', contenuto: '<p><strong>102 Analysis (Novita):</strong> [Pass/Fail]</p><p><strong>103 Analysis (Non-ovvieta):</strong> [Pass/Fail]</p><p><strong>112 Analysis (Enablement):</strong> [Pass/Fail]</p><p><strong>Probabilita successo:</strong> [X%]</p>'},
+                {titolo: '4. RACCOMANDAZIONI US', contenuto: '<p><strong>Prossimo passo:</strong> Provisional application / Utility patent</p><p><strong>Timing:</strong> Entro 12 mesi dalla divulgazione</p><p><strong>Strategia:</strong> Continuation / Divisional se necessario</p>'}
+                ]
+            },
+            'servizio-claims-base': {
+                titolo: 'CLAIMS BASE REDATTI',
+                sottotitolo: 'Rivendicazioni indipendenti formulate',
+                sezioni: [
+                {titolo: '1. CLAIM INDIPENDENTE', contenuto: '<p><strong>Claim 1 (Independent):</strong></p><p>A [device/system/method] comprising:</p><ul><li>[Element A] configured to [function];</li><li>[Element B] coupled to [Element A];</li><li>[Element C] operatively connected to [Element B].</li></ul><p><strong>Scope:</strong> Broad, covers the general solution.</p>'},
+                {titolo: '2. ANALISI SCOPE', contenuto: '<p><strong>Broadest reasonable interpretation:</strong> [Analysis]</p><p><strong>Literal infringement:</strong> [Elements covered]</p><p><strong>Doctrine of equivalents:</strong> [Applicability]</p>'},
+                {titolo: '3. PRIOR ART CHECK', contenuto: '<p><strong>Anticipation risk:</strong> [Low/Medium/High]</p><p><strong>Obviousness risk:</strong> [Low/Medium/High]</p><p><strong>Enablement support:</strong> [Present in description]</p>'},
+                {titolo: '4. NEXT STEPS', contenuto: '<p><strong>Recommended:</strong> Add dependent claims for fallback positions.</p><p><strong>Prosecution strategy:</strong> Prepare for USPTO/EPO objections.</p>'}
+                ]
+            },
+            'servizio-claims-pro': {
+                titolo: 'CLAIMS PRO REDATTI',
+                sottotitolo: 'Set completo di rivendicazioni gerarchiche',
+                sezioni: [
+                {titolo: '1. INDEPENDENT CLAIMS', contenuto: '<p><strong>Claim 1 (Apparatus):</strong> [Formulation]</p><p><strong>Claim 5 (Method):</strong> [Formulation]</p><p><strong>Claim 10 (System):</strong> [Formulation]</p><p><strong>Strategy:</strong> Multiple independent claims for comprehensive coverage.</p>'},
+                {titolo: '2. DEPENDENT CLAIMS', contenuto: '<p><strong>Claims 2-4:</strong> Dependent on Claim 1, narrowing elements.</p><p><strong>Claims 6-9:</strong> Dependent on Claim 5, method variations.</p><p><strong>Claims 11-15:</strong> Dependent on Claim 10, system configurations.</p><p><strong>Hierarchy:</strong> Onion-layer protection from broad to specific.</p>'},
+                {titolo: '3. CLAIMS CHART', contenuto: '<p><strong>Element A:</strong> Covered by Claims 1, 2, 5, 6, 10, 11</p><p><strong>Element B:</strong> Covered by Claims 1, 3, 5, 7, 10, 12</p><p><strong>Element C:</strong> Covered by Claims 1, 4, 5, 8, 10, 13</p><p><strong>Feature D:</strong> Covered by Claims 2, 6, 11</p>'},
+                {titolo: '4. PROSECUTION STRATEGY', contenuto: '<p><strong>Primary claim:</strong> Claim 1 (broadest)</p><p><strong>Fallback positions:</strong> Claims 2-4 (progressive narrowing)</p><p><strong>Method coverage:</strong> Claims 5-9 (process protection)</p><p><strong>System coverage:</strong> Claims 10-15 (ecosystem protection)</p>'}
+                ]
+            },
+            'servizio-traduzione-claims': {
+                titolo: 'TRADUZIONE CLAIMS COMPLETATA',
+                sottotitolo: 'Claims tradotti per depositi internazionali',
+                sezioni: [
+                {titolo: '1. LINGUA TARGET', contenuto: '<p><strong>Da:</strong> Italiano</p><p><strong>A:</strong> Inglese / Francese / Tedesco / Spagnolo</p><p><strong>Standard:</strong> Certificata per depositi PCT, EPO, USPTO</p>'},
+                {titolo: '2. TRADUZIONE CLAIMS', contenuto: '<p><strong>Claim 1 (EN):</strong> [Translation]</p><p><strong>Claim 2 (EN):</strong> [Translation]</p><p><strong>Claim 3 (EN):</strong> [Translation]</p><p><strong>Note:</strong> Terminology consistent with patent standards.</p>'},
+                {titolo: '3. VERIFICA TECNICA', contenuto: '<p><strong>Termini tecnici:</strong> Verificati con glossari brevettuali</p><p><strong>Consistenza:</strong> Termini uniformi in tutti i claims</p><p><strong>Precisione:</strong> Nessuna ambiguita introdotta</p>'},
+                {titolo: '4. DOCUMENTO FINALE', contenuto: '<p><strong>Formato:</strong> DOCX / PDF</p><p><strong>Certificazione:</strong> Disponibile su richiesta</p><p><strong>Pronto per:</strong> EPO, USPTO, JPO, CNIPA</p>'}
+                ]
+            },
+            'servizio-monitoraggio': {
+                titolo: 'MONITORAGGIO ATTIVATO',
+                sottotitolo: 'Sorveglianza continua del tuo brevetto',
+                sezioni: [
+                {titolo: '1. PARAMETRI MONITORAGGIO', contenuto: '<p><strong>Brevetto monitorato:</strong> [Numero]</strong></p><p><strong>Scadenze:</strong> Rinnovi, opposizioni, azioni legali</p><p><strong>Concorrenza:</strong> Nuovi brevetti nel settore</p><p><strong>Alert:</strong> Email + SMS configurati</p>'},
+                {titolo: '2. CRONOLOGIA EVENTI', contenuto: '<p><strong>Prossima scadenza:</strong> [Data] - Rinnovo annuale</p><p><strong>Opposizioni:</strong> Nessuna pendente</p><p><strong>Azioni legali:</strong> Nessuna rilevata</p><p><strong>Stato:</strong> Attivo e protetto</p>'},
+                {titolo: '3. ALERT CONFIGURATI', contenuto: '<p><strong>Scadenze:</strong> 30, 60, 90 giorni prima</p><p><strong>Concorrenza:</strong> Nuovi depositi simili</p><p><strong>Infrazioni:</strong> Monitoraggio mercato</p><p><strong>Legislazione:</strong> Cambiamenti normativi</p>'},
+                {titolo: '4. REPORT PERIODICI', contenuto: '<p><strong>Frequenza:</strong> Mensile / Trimestrale</p><p><strong>Contenuto:</strong> Stato brevetto, attivita concorrenti, scadenze</p><p><strong>Formato:</strong> PDF via email</p>'}
+                ]
+            },
+            'servizio-monitoraggio-concorrenza': {
+                titolo: 'MONITORAGGIO CONCORRENZA ATTIVATO',
+                sottotitolo: 'Sorveglianza brevetti concorrenti',
+                sezioni: [
+                {titolo: '1. SETTORI MONITORATI', contenuto: '<p><strong>Settore 1:</strong> [Nome] - X brevetti/mese</p><p><strong>Settore 2:</strong> [Nome] - Y brevetti/mese</p><p><strong>Settore 3:</strong> [Nome] - Z brevetti/mese</p><p><strong>Settore 4:</strong> [Nome] - W brevetti/mese</p><p><strong>Settore 5:</strong> [Nome] - V brevetti/mese</p>'},
+                {titolo: '2. CONCORRENTE CHIAVE', contenuto: '<p><strong>Azienda A:</strong> [Nome] - Ultimo deposito: [Data]</p><p><strong>Azienda B:</strong> [Nome] - Trend: Crescente</p><p><strong>Azienda C:</strong> [Nome] - Nuova entrata nel settore</p>'},
+                {titolo: '3. ALERT RILEVANTI', contenuto: '<p><strong>Brevetto simile rilevato:</strong> [Titolo] - [Numero]</p><p><strong>Rilevanza:</strong> ALTA - Potenziale conflitto</p><p><strong>Azione consigliata:</strong> Valutare opposizione o design-around</p>'},
+                {titolo: '4. DASHBOARD', contenuto: '<p><strong>Accesso:</strong> Login area riservata</p><p><strong>Aggiornamento:</strong> In tempo reale</p><p><strong>Esportazione:</strong> CSV, PDF</p>'}
+                ]
+            },
+            'servizio-licensing': {
+                titolo: 'STRATEGIA LICENSING COMPLETATA',
+                sottotitolo: 'Piano di licenza per il tuo brevetto',
+                sezioni: [
+                {titolo: '1. ANALISI MERCATO', contenuto: '<p><strong>Mercato target:</strong> [Settore] - Valore stimato X MLD</p><p><strong>Crescita annua:</strong> Y%</p><p><strong>Concorrenza:</strong> Z competitor principali</p><p><strong>Barriere ingresso:</strong> [Analisi]</p>'},
+                {titolo: '2. POTENZIALI LICENSEE', contenuto: '<p><strong>Azienda 1:</strong> [Nome] - Fit strategico ALTO</p><p><strong>Azienda 2:</strong> [Nome] - Fit strategico MEDIO</p><p><strong>Azienda 3:</strong> [Nome] - Fit strategico BASSO</p><p><strong>Approccio consigliato:</strong> [Diretto/Intermediario]</p>'},
+                {titolo: '3. BOZZA CONTRATTO', contenuto: '<p><strong>Tipo licenza:</strong> Esclusiva / Non esclusiva / Sole</p><p><strong>Royalties:</strong> X% su net sales</p><p><strong>Minimum guarantees:</strong> Y annuali</p><p><strong>Termine:</strong> Z anni + rinnovo</p><p><strong>Territorio:</strong> [Geografie]</p>'},
+                {titolo: '4. STRATEGIA NEGOZIALE', contenuto: '<p><strong>Valore brevetto:</strong> [Stima]</p><p><strong>Punto di partenza:</strong> [Offerta iniziale]</p><p><strong>Bottom line:</strong> [Minimo accettabile]</p><p><strong>Next steps:</strong> Contattare potenziali licensee</p>'}
+                ]
+            },
+            'servizio-valorizzazione': {
+                titolo: 'VALORIZZAZIONE BREVETTO COMPLETATA',
+                sottotitolo: 'Stima del valore economico',
+                sezioni: [
+                {titolo: '1. METODO COSTO', contenuto: '<p><strong>Costi R&D:</strong> [€]</p><p><strong>Costi deposito:</strong> [€]</p><p><strong>Costi mantenimento:</strong> [€]</p><p><strong>Valore stimato:</strong> [€]</p>'},
+                {titolo: '2. METODO MERCATO', contenuto: '<p><strong>Transazioni comparabili:</strong> [Elenco]</p><p><strong>Multipli:</strong> [Xx royalties]</p><p><strong>Valore stimato:</strong> [€]</p>'},
+                {titolo: '3. METODO REDDITO', contenuto: '<p><strong>Proiezione royalties:</strong> [€/anno]</p><p><strong>Discount rate:</strong> X%</p><p><strong>NPV:</strong> [€]</p><p><strong>Valore stimato:</strong> [€]</p>'},
+                {titolo: '4. SINTESI VALUTAZIONE', contenuto: '<p><strong>Valore medio:</strong> [€]</p><p><strong>Range:</strong> [Min - Max €]</p><p><strong>Certezza:</strong> [Alta/Media/Bassa]</p><p><strong>Uso:</strong> Vendita / Licenza / Investimento</p>'}
+                ]
+            },
+            'servizio-freedom-to-operate': {
+                titolo: 'FREEDOM TO OPERATE ANALISI COMPLETATA',
+                sottotitolo: 'Verifica liberta di operare',
+                sezioni: [
+                {titolo: '1. PRODOTTO ANALIZZATO', contenuto: '<p><strong>Descrizione:</strong> [Prodotto/servizio]</p><p><strong>Componenti:</strong> [Elenco]</p><p><strong>Mercato target:</strong> [Geografie]</p>'},
+                {titolo: '2. RICERCA BREVETTI BARRIERA', contenuto: '<p><strong>Brevetto 1:</strong> [Numero] - Titolare [Nome] - Rischio ALTO</p><p><strong>Brevetto 2:</strong> [Numero] - Titolare [Nome] - Rischio MEDIO</p><p><strong>Brevetto 3:</strong> [Numero] - Titolare [Nome] - Rischio BASSO</p>'},
+                {titolo: '3. VALUTAZIONE RISCHI', contenuto: '<p><strong>Rischio complessivo:</strong> [ALTO/MEDIO/BASSO]</p><p><strong>Elementi a rischio:</strong> [Descrizione]</p><p><strong>Design-around possibile:</strong> [Si/No]</p>'},
+                {titolo: '4. RACCOMANDAZIONI', contenuto: '<p><strong>Se rischio ALTO:</strong> Negoziare licenza o modificare prodotto</p><p><strong>Se rischio MEDIO:</strong> Monitorare e preparare difesa</p><p><strong>Se rischio BASSO:</strong> Procedere con cautela</p>'}
+                ]
+            },
+            'servizio-consulenza': {
+                titolo: 'CONSULENZA 1:1 COMPLETATA',
+                sottotitolo: 'Report della sessione con l esperto',
+                sezioni: [
+                {titolo: '1. RIEPILOGO SESSIONE', contenuto: '<p><strong>Data:</strong> [Data]</p><p><strong>Durata:</strong> 30 minuti</p><p><strong>Esperto:</strong> [Nome]</p><p><strong>Tema:</strong> [Argomento principale]</p>'},
+                {titolo: '2. DOMANDE E RISPOSTE', contenuto: '<p><strong>Q1:</strong> [Domanda]</p><p><strong>A1:</strong> [Risposta dettagliata]</p><p><strong>Q2:</strong> [Domanda]</p><p><strong>A2:</strong> [Risposta dettagliata]</p><p><strong>Q3:</strong> [Domanda]</p><p><strong>A3:</strong> [Risposta dettagliata]</p>'},
+                {titolo: '3. RACCOMANDAZIONI ESPERTO', contenuto: '<p><strong>Priorita 1:</strong> [Azione]</p><p><strong>Priorita 2:</strong> [Azione]</p><p><strong>Priorita 3:</strong> [Azione]</p><p><strong>Timeline:</strong> [Scadenze]</p>'},
+                {titolo: '4. NEXT STEPS', contenuto: '<p><strong>Azione immediata:</strong> [Descrizione]</p><p><strong>Follow-up:</strong> [Data prossima sessione]</p><p><strong>Documenti necessari:</strong> [Elenco]</p>'}
+                ]
+            },
+            'servizio-opposizione': {
+                titolo: 'OPPOSIZIONE PREPARATA',
+                sottotitolo: 'Documentazione per opposizione a brevetto',
+                sezioni: [
+                {titolo: '1. BREVETTO OPPOSTO', contenuto: '<p><strong>Numero:</strong> [Numero]</p><p><strong>Titolare:</strong> [Nome]</p><p><strong>Motivo opposizione:</strong> [Novita / Attivita inventiva / Entensione oltre contenuto]</p>'},
+                {titolo: '2. PROVE RACCOLTE', contenuto: '<p><strong>Prior art 1:</strong> [Documento] - Antecedente al deposito</p><p><strong>Prior art 2:</strong> [Documento] - Divulgazione precedente</p><p><strong>Prior art 3:</strong> [Documento] - Uso pubblico</p>'},
+                {titolo: '3. ARGOMENTAZIONI', contenuto: '<p><strong>Argomento 1:</strong> Mancanza novita per [elemento]</p><p><strong>Argomento 2:</strong> Ovvieta per [combinazione]</p><p><strong>Argomento 3:</strong> Insufficiente descrizione per [aspetto]</p>'},
+                {titolo: '4. PROCEDURA', contenuto: '<p><strong>Termine:</strong> Entro 9 mesi dalla pubblicazione</p><p><strong>Ufficio:</strong> UIBM / EPO / USPTO</p><p><strong>Costo:</strong> [€]</p><p><strong>Probabilita successo:</strong> [X%]</p>'}
+                ]
+            },
+            'servizio-legale-base': {
+                titolo: 'SUPPORTO LEGALE BASE COMPLETATO',
+                sottotitolo: 'Revisione contratto e note legali',
+                sezioni: [
+                {titolo: '1. CONTRATTO REVISIONATO', contenuto: '<p><strong>Tipo:</strong> [NDA / Licenza / Cessione]</p><p><strong>Parti:</strong> [Nome 1] vs [Nome 2]</p><p><strong>Stato:</strong> Revisionato con note</p>'},
+                {titolo: '2. NOTE LEGALI', contenuto: '<p><strong>Punto 1:</strong> [Clausola] - Rischio [ALTO/MEDIO/BASSO] - Suggerimento: [Modifica]</p><p><strong>Punto 2:</strong> [Clausola] - Rischio [ALTO/MEDIO/BASSO] - Suggerimento: [Modifica]</p><p><strong>Punto 3:</strong> [Clausola] - OK</p>'},
+                {titolo: '3. RACCOMANDAZIONI', contenuto: '<p><strong>Clausole da rivedere:</strong> [Elenco]</p><p><strong>Clausole mancanti:</strong> [Elenco]</p><p><strong>Azione consigliata:</strong> Negoziazione / Accettazione con riserve / Rifiuto</p>'},
+                {titolo: '4. PROSSIMI PASSI', contenuto: '<p><strong>Se accetti:</strong> Firma con le modifiche suggerite</p><p><strong>Se negozi:</strong> Controproposta entro [X giorni]</p><p><strong>Se rifiuti:</strong> Motivazione legale pronta</p>'}
+                ]
+            },
+            'servizio-priorart-base': {
+                titolo: 'RICERCA PRIOR ART BASE COMPLETATA',
+                sottotitolo: 'Ricerca essenziale nelle banche dati principali',
+                sezioni: [
+                {titolo: '1. SCOPE RICERCA', contenuto: '<p><strong>Database:</strong> EP, US, WO (3 principali)</p><p><strong>Periodo:</strong> Ultimi 15 anni</p><p><strong>Keyword:</strong> [Estratte dalla descrizione]</p><p><strong>Risultato:</strong> X documenti rilevanti</p>'},
+                {titolo: '2. DOCUMENTI RILEVANTI', contenuto: '<p><strong>Doc 1:</strong> [Titolo] - Rilevanza ALTA</p><p><strong>Doc 2:</strong> [Titolo] - Rilevanza MEDIA</p><p><strong>Doc 3:</strong> [Titolo] - Rilevanza BASSA</p>'},
+                {titolo: '3. ANALISI NOVITA', contenuto: '<p><strong>Esito:</strong> Novita [CONFERMATA / PARZIALE / NON CONFERMATA]</p><p><strong>Differenze chiave:</strong> [Elenco]</p><p><strong>Raccomandazione:</strong> [Procedere / Rivedere / Abbandonare]</p>'},
+                {titolo: '4. PROSSIMI PASSI', contenuto: '<p><strong>Se novita confermata:</strong> Procedere con deposito</p><p><strong>Se novita parziale:</strong> Considerare ricerca avanzata</p><p><strong>Se novita non confermata:</strong> Rivedere invenzione</p>'}
+                ]
+            },
+            'servizio-priorart-avanzata': {
+                titolo: 'RICERCA PRIOR ART AVANZATA COMPLETATA',
+                sottotitolo: 'Ricerca approfondita in 15+ banche dati',
+                sezioni: [
+                {titolo: '1. SCOPE RICERCA', contenuto: '<p><strong>Database:</strong> 15+ banche dati globali</p><p><strong>Periodo:</strong> Ultimi 20 anni + priorita</p><p><strong>Famiglie brevettuali:</strong> Mappate</p><p><strong>Citazioni:</strong> Analizzate</p><p><strong>Risultato:</strong> X documenti rilevanti</p>'},
+                {titolo: '2. BREVETTI RILEVANTI', contenuto: '<p><strong>Brevetto 1:</strong> [Titolo] - Famiglia [Numero] - Rilevanza ALTA</p><p><strong>Brevetto 2:</strong> [Titolo] - Famiglia [Numero] - Rilevanza ALTA</p><p><strong>Brevetto 3:</strong> [Titolo] - Famiglia [Numero] - Rilevanza MEDIA</p>'},
+                {titolo: '3. ANALISI FAMIGLIE', contenuto: '<p><strong>Famiglia 1:</strong> [Numero] - Paesi: [Elenco] - Stato: [Attivo/Scaduto]</p><p><strong>Famiglia 2:</strong> [Numero] - Paesi: [Elenco] - Stato: [Attivo/Scaduto]</p><p><strong>Copertura geografica:</strong> [Analisi]</p>'},
+                {titolo: '4. MAPPA CONCORRENZA', contenuto: '<p><strong>Leader:</strong> [Azienda 1] - X brevetti</p><p><strong>Challenger:</strong> [Azienda 2] - Y brevetti</p><p><strong>Niche:</strong> [Azienda 3] - Z brevetti</p><p><strong>White space:</strong> [Aree identificate]</p>'}
+                ]
+            },
+            'servizio-ricerca-figurativa': {
+                titolo: 'RICERCA FIGURATIVA COMPLETATA',
+                sottotitolo: 'Ricerca design e marchi simili',
+                sezioni: [
+                {titolo: '1. SCOPE RICERCA', contenuto: '<p><strong>Database:</strong> EUIPO, USPTO, WIPO (design)</p><p><strong>Criteri:</strong> Forma, configurazione, ornamentazione</p><p><strong>Risultato:</strong> X design simili trovati</p>'},
+                {titolo: '2. DESIGN SIMILI', contenuto: '<p><strong>Design 1:</strong> [Numero] - Titolare [Nome] - Somiglianza ALTA</p><p><strong>Design 2:</strong> [Numero] - Titolare [Nome] - Somiglianza MEDIA</p><p><strong>Design 3:</strong> [Numero] - Titolare [Nome] - Somiglianza BASSA</p>'},
+                {titolo: '3. ANALISI RISCHIO', contenuto: '<p><strong>Rischio conflitto:</strong> [ALTO/MEDIO/BASSO]</p><p><strong>Differenze sostanziali:</strong> [Elenco]</p><p><strong>Probabilita opposizione:</strong> [X%]</p>'},
+                {titolo: '4. RACCOMANDAZIONI', contenuto: '<p><strong>Se rischio ALTO:</strong> Modificare design o negoziare</p><p><strong>Se rischio MEDIO:</strong> Procedere con cautela</p><p><strong>Se rischio BASSO:</strong> Deposito design consigliato</p>'}
+                ]
+            },
+            'servizio-cad': {
+                titolo: 'DISEGNO CAD PROFESSIONALE COMPLETATO',
+                sottotitolo: 'Disegni tecnici 2D/3D pronti per produzione',
+                sezioni: [
+                {titolo: '1. VISTE 2D', contenuto: '<p><strong>Vista frontale:</strong> [Dimensioni] - [Scala]</p><p><strong>Vista laterale:</strong> [Dimensioni] - [Scala]</p><p><strong>Vista superiore:</strong> [Dimensioni] - [Scala]</p><p><strong>Sezioni:</strong> [A-A, B-B] - [Scala]</p>'},
+                {titolo: '2. MODELLO 3D', contenuto: '<p><strong>Formato:</strong> STEP / IGES / DWG</p><p><strong>Parametrico:</strong> Si / No</p><p><strong>Feature tree:</strong> Completo</p><p><strong>Tolleranze:</strong> Indicate</p>'},
+                {titolo: '3. DETTAGLI COSTRUTTIVI', contenuto: '<p><strong>Materiali:</strong> [Specificati]</p><p><strong>Finiture:</strong> [Indicate]</p><p><strong>Tolleranze geometriche:</strong> [GD&T]</p><p><strong>Quote critiche:</strong> [Evidenziati]</p>'},
+                {titolo: '4. FILE CONSEGNATI', contenuto: '<p><strong>DWG:</strong> Disegni 2D</p><p><strong>STEP:</strong> Modello 3D solido</p><p><strong>IGES:</strong> Modello 3D superfici</p><p><strong>PDF:</strong> Disegni stampa</p><p><strong>Pronti per:</strong> UIBM, produzione, quotazione</p>'}
+                ]
+            },
+            'servizio-dominio': {
+                titolo: 'GESTIONE DOMINIO COMPLETATA',
+                sottotitolo: 'Dominio web protetto e configurato',
+                sezioni: [
+                {titolo: '1. DOMINIO REGISTRATO', contenuto: '<p><strong>Nome:</strong> [dominio.com]</p><p><strong>TLD:</strong> .com / .it / .eu</p><p><strong>Registrar:</strong> [Nome]</p><p><strong>Scadenza:</strong> [Data]</p><p><strong>Stato:</strong> Attivo</p>'},
+                {titolo: '2. CONFIGURAZIONE DNS', contenuto: '<p><strong>A Record:</strong> [IP]</p><p><strong>MX Record:</strong> [Configurato]</p><p><strong>SPF/DKIM:</strong> [Attivati]</p><p><strong>SSL:</strong> [Attivo]</p>'},
+                {titolo: '3. PROTEZIONE MARCHIO', contenuto: '<p><strong>Verifica marchio:</strong> [Effettuata]</p><p><strong>Conflitti:</strong> [Nessuno / Rilevati]</p><p><strong>Raccomandazione:</strong> [Deposito marchio consigliato]</p>'},
+                {titolo: '4. MONITORAGGIO', contenuto: '<p><strong>Scadenza:</strong> Alert 30/60/90 giorni prima</p><p><strong>Renewal:</strong> Auto-renew attivato</p><p><strong>Transfer lock:</strong> Attivo</p>'}
+                ]
+            },
+            'servizio-copyright': {
+                titolo: 'COPYRIGHT SOFTWARE COMPLETATO',
+                sottotitolo: 'Protezione codice sorgente e software',
+                sezioni: [
+                {titolo: '1. ANALISI CODICE', contenuto: '<p><strong>Linguaggio:</strong> [Python/Java/C++/etc]</p><p><strong>Linee di codice:</strong> [X]</p><p><strong>Moduli principali:</strong> [Elenco]</p><p><strong>Architettura:</strong> [Monolitica/Microservizi]</p>'},
+                {titolo: '2. PROTEZIONE BREVETTUALE', contenuto: '<p><strong>Brevettabilita algoritmi:</strong> [Si/No/Parziale]</p><p><strong>Metodi software:</strong> [Brevettabili in US/No in EU]</p><p><strong>Strategia:</strong> [Brevetto / Copyright / Trade secret]</p>'},
+                {titolo: '3. REGISTRAZIONE COPYRIGHT', contenuto: '<p><strong>Depositato presso:</strong> [SIAE / US Copyright Office]</p><p><strong>Data deposito:</strong> [Data]</p><p><strong>Certificato:</strong> [Numero]</p>'},
+                {titolo: '4. LICENZA SOFTWARE', contenuto: '<p><strong>Licenza consigliata:</strong> [MIT / GPL / Apache / Proprietaria]</p><p><strong>Termini:</strong> [Riassunto]</p><p><strong>Distribuzione:</strong> [Open source / Closed source]</p>'}
+                ]
+            },
+            'servizio-nft': {
+                titolo: 'PROTEZIONE NFT/WEB3 COMPLETATA',
+                sottotitolo: 'Strategia protezione asset digitali',
+                sezioni: [
+                {titolo: '1. ANALISI PROGETTO', contenuto: '<p><strong>Tipo:</strong> [NFT / Token / DeFi / Metaverso]</p><p><strong>Blockchain:</strong> [Ethereum / Polygon / Solana / Altro]</p><p><strong>Smart contract:</strong> [Analizzato]</p><p><strong>IP associata:</strong> [Arte / Musica / Software / Altro]</p>'},
+                {titolo: '2. PROTEZIONE IP', contenuto: '<p><strong>Copyright:</strong> [Applicabile / Non applicabile]</p><p><strong>Marchio:</strong> [Registrato / Da registrare]</p><p><strong>Brevetto:</strong> [Tecnologia brevettabile / No]</p><p><strong>Trade secret:</strong> [Algoritmi protetti]</p>'},
+                {titolo: '3. COMPLIANCE', contenuto: '<p><strong>MiCA (UE):</strong> [Compliant / Da adeguare]</p><p><strong>AML/KYC:</strong> [Implementato / Da implementare]</p><p><strong>Privacy:</strong> [GDPR compliant / Da verificare]</p>'},
+                {titolo: '4. STRATEGIA', contenuto: '<p><strong>Licenza NFT:</strong> [Tipo di licenza associata]</p><p><strong>Royalties:</strong> [X% su secondary sales]</p><p><strong>Diritti acquirente:</strong> [Definiti]</p><p><strong>Prossimo passo:</strong> [Azione consigliata]</p>'}
+                ]
+            },
+        };
+
+        function caricaRisultato() {
+            var risultato = risultatiServizi[servizioId];
+
+            if (risultato) {
+                document.getElementById('risultato-titolo').textContent = risultato.titolo;
+                document.getElementById('risultato-sottotitolo').textContent = risultato.sottotitolo;
+
+                var container = document.getElementById('risultato-container');
+                var html = '';
+                for (var i = 0; i < risultato.sezioni.length; i++) {
+                    var s = risultato.sezioni[i];
+                    html += '<div class="risultato-box"><h3>' + s.titolo + '</h3>';
+                    html += '<div class="risultato-content">' + s.contenuto + '</div></div>';
+                }
+                container.innerHTML = html;
+            } else {
+                var nome = nomiServizi[servizioId] || servizioId;
+                var data = new Date().toLocaleDateString('it-IT');
+                document.getElementById('risultato-container').innerHTML = 
+                    '<div class="risultato-box"><h3>Report Generato</h3>' +
+                    '<div class="risultato-content">' +
+                    '<p><strong>Servizio:</strong> ' + nome + '</p>' +
+                    '<p><strong>Data:</strong> ' + data + '</p>' +
+                    '<p><strong>Stato:</strong> Completato</p>' +
+                    '<hr style="border:none;border-top:1px solid #e8dcc8;margin:15px 0">' +
+                    '<p><strong>Risultato dell analisi:</strong></p>' +
+                    '<p>L IA ha analizzato la descrizione e i documenti forniti. Il report dettagliato per questo servizio e in fase di implementazione.</p>' +
+                    '<p><strong>Nota:</strong> Questo e un risultato dimostrativo. In produzione, l IA generera un report specifico per ' + nome + '.</p>' +
+                    '</div></div>';
+            }
+        }
+
+        caricaRisultato();
+
+        function accettaRisultato() {
+            console.log('ACCETTA cliccato');
+            var pratica = JSON.parse(localStorage.getItem('brevettiamo_pratica') || '{}');
+            pratica.stato = 'completata';
+            pratica.dataCompletamento = new Date().toISOString();
+            localStorage.setItem('brevettiamo_pratica', JSON.stringify(pratica));
+            alert('Grazie! Il risultato e stato accettato. Riceverai il report via email.');
+            window.location.href = 'index.html';
+        }
+
+        function mostraRevisione() {
+            console.log('REVISIONE cliccato');
+            var box = document.getElementById('revisione-box');
+            box.style.display = 'block';
+            document.getElementById('note-revisione').focus();
+        }
+
+        function inviaRevisione() {
+            console.log('INVIA REVISIONE cliccato');
+            var note = document.getElementById('note-revisione').value.trim();
+
+            if (!note) {
+                alert('Per favore, descrivi le modifiche che desideri.');
+                document.getElementById('note-revisione').focus();
+                return;
+            }
+
+            var pratica = JSON.parse(localStorage.getItem('brevettiamo_pratica') || '{}');
+            pratica.revisione = note;
+            pratica.stato = 'in_revisione';
+            pratica.dataRevisione = new Date().toISOString();
+            localStorage.setItem('brevettiamo_pratica', JSON.stringify(pratica));
+
+            alert('Richiesta revisione inviata. Verrai reindirizzato alla pagina descrizione per modificare il progetto.');
+            window.location.href = 'descrizione.html?servizio=' + encodeURIComponent(servizioId);
+        }
+
+        var praticaData = localStorage.getItem('brevettiamo_pratica');
+        if (!praticaData) {
+            alert('Nessuna pratica trovata. Torna alla descrizione.');
+            window.location.href = 'descrizione.html?servizio=' + encodeURIComponent(servizioId);
+        }
+    </script>
+</body>
+</html>
