@@ -1,19 +1,15 @@
 // config.js — Configurazione API BrevettIAmo
-// ⚠️ NON COMMITTARE MAI SU GITHUB! Aggiungi a .gitignore
+// La chiave Groq NON è più qui — è sicura nel proxy Supabase
 
 const CONFIG = {
-    // Inserisci qui la tua chiave API Groq (senza virgolette interne)
-    GROQ_API_KEY: '
-      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  ',
+    // URL del proxy Supabase (chiave nascosta lato server)
+    PROXY_URL: 'https://jtekrvlmqnluvaiapmwb.supabase.co/functions/v1/groq-proxy',
     
-    // Endpoint Groq (compatibile OpenAI)
-    GROQ_API_URL: 'https://api.groq.com/openai/v1/chat/completions',
-    
-    // Modelli disponibili
+    // Modelli disponibili (aggiornati giugno 2026)
     MODELLI: {
-        testo: 'llama-3.1-70b-versatile',      // Analisi testuali complesse
+        testo: 'llama-3.3-70b-versatile',       // Analisi testuali complesse
         visione: 'llava-v1.5-7b-4096-preview', // Analisi immagini/disegni
-        rapido: 'mixtral-8x7b-32768',           // Task veloci
+        rapido: 'mixtral-8x7b-32768',            // Task veloci
         bilanciato: 'llama-3.1-8b-instant'      // Buon compromesso velocita/qualita
     },
     
@@ -26,7 +22,6 @@ const CONFIG = {
     MAX_RETRY: 2
 };
 
-// Esporta per moduli (se usi import) o globale
 if (typeof window !== 'undefined') {
     window.CONFIG = CONFIG;
 }
