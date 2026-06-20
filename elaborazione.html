@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elaborazione in corso - BrevettIAmo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            background: #f5f0e8;
+            min-height: 100vh;
+            color: #3d2b1f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pergamena {
+            max-width: 700px;
+            width: 90%;
+            margin: 40px auto;
+            background: #faf6f0;
+            border: 2px solid #c9a96e;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(61,43,31,0.15), inset 0 0 60px rgba(201,169,110,0.1);
+            padding: 50px;
+            position: relative;
+            text-align: center;
+        }
+
+        .pergamena::before, .pergamena::after {
+            content: '';
+            position: absolute;
+            left: 10px; right: 10px;
+            height: 2px;
+            background: #c9a96e;
+            opacity: 0.3;
+        }
+        .pergamena::before { top: 15px; }
+        .pergamena::after { bottom: 15px; }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: #8b0000;
+            letter-spacing: 2px;
+        }
+        .logo p {
+            font-style: italic;
+            color: #8b7355;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .spinner-container {
+            margin: 40px 0;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #e8dcc8;
+            border-top: 4px solid #8b0000;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: #8b0000;
+            margin-bottom: 10px;
+        }
+
+        .status-detail {
+            font-size: 0.85rem;
+            color: #8b7355;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8dcc8;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #c9a96e;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .step-list {
+            text-align: left;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 0.85rem;
+            color: #8b7355;
+            border-bottom: 1px solid #e8dcc8;
+        }
+
+        .step-item:last-child { border-bottom: none; }
+
+        .step-item.active { color: #8b0000; font-weight: 700; }
+        .step-item.completed { color: #2d5a27; }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d4c4a8;
+            flex-shrink: 0;
+        }
+
+        .step-item.active .step-dot {
+            background: #8b0000;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .step-item.completed .step-dot {
+            background: #2d5a27;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .servizio-info {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(139,0,0,0.05);
+            border: 1px dashed #8b0000;
+            border-radius: 4px;
+        }
+        .servizio-info h3 {
+            font-family: 'Cinzel', serif;
+            color: #8b0000;
+            font-size: 0.9rem;
+        }
+        .servizio-info p {
+            font-size: 0.8rem;
+            color: #8b7355;
+            margin-top: 3px;
+        }
+
+        .btn-annulla {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            padding: 12px 30px;
+            background: transparent;
+            color: #8b7355;
+            border: 1px solid #d4c4a8;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .btn-annulla:hover {
+            background: #f0ebe0;
+            border-color: #c9a96e;
+        }
+
+        .banner-beta {
+            background: #8b0000;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin: -50px -50px 30px -50px;
+            border-radius: 4px 4px 0 0;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="pergamena">
+        <div class="banner-beta">BETA CHIUSA - ACCESSO RISERVATO</div>
+
+        <div class="logo">
+            <h1>L'OFFICINA STA LAVORANDO</h1>
+            <p>Analisi in corso con le IA piu potenti</p>
+        </div>
+
+        <div class="servizio-info" id="servizio-info">
+            <h3>Servizio in elaborazione</h3>
+            <p id="nome-servizio">Caricamento...</p>
+        </div>
+
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="status-text" id="status-text">Analisi del progetto...</div>
+            <div class="status-detail" id="status-detail">Stiamo esaminando la descrizione e i documenti caricati</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="step-list" id="step-list">
+            <div class="step-item active" id="step-1">
+                <div class="step-dot"></div>
+                <span>Analisi descrizione testuale</span>
+            </div>
+            <div class="step-item" id="step-2">
+                <div class="step-dot"></div>
+                <span>Elaborazione immagini e schizzi</span>
+            </div>
+            <div class="step-item" id="step-3">
+                <div class="step-dot"></div>
+                <span>Ricerca prior art automatica</span>
+            </div>
+            <div class="step-item" id="step-4">
+                <div class="step-dot"></div>
+                <span>Generazione report completo</span>
+            </div>
+            <div class="step-item" id="step-5">
+                <div class="step-dot"></div>
+                <span>Revisione qualita e formattazione</span>
+            </div>
+        </div>
+
+        <button class="btn-annulla" onclick="annullaElaborazione()">Annulla e torna indietro</button>
+    </div>
+
+    <script>
+        // Leggi il servizio selezionato
+        const urlParams = new URLSearchParams(window.location.search);
+        const servizioId = urlParams.get('servizio') || '';
+
+        const nomiServizi = {
+            'servizio-deposito': 'Deposito Brevetto',
+            'servizio-priorart': 'Ricerca Prior Art',
+            'servizio-rivendicazioni': 'Rivendicazioni',
+            'servizio-tavole': 'Tavole Tecniche',
+            'servizio-monitoraggio': 'Monitoraggio',
+            'servizio-priorart-base': 'Ricerca Prior Art Base',
+            'servizio-priorart-avanzata': 'Ricerca Prior Art Avanzata',
+            'servizio-analisi-brevettabilita': 'Analisi Brevettabilita',
+            'servizio-claims-base': 'Redazione Claims Base',
+            'servizio-claims-pro': 'Redazione Claims Pro',
+            'servizio-traduzione-claims': 'Traduzione Claims',
+            'servizio-monitoraggio-concorrenza': 'Monitoraggio Concorrenza',
+            'servizio-consulenza': 'Consulenza 1:1',
+            'servizio-analisi-tecnica': 'Analisi Tecnica',
+            'servizio-ricerca-figurativa': 'Ricerca Figurativa',
+            'servizio-analisi-nullita': 'Analisi Nullita',
+            'servizio-opposizione': 'Preparazione Opposizione',
+            'servizio-licensing': 'Strategia Licensing',
+            'servizio-valorizzazione': 'Valorizzazione Brevetto',
+            'servizio-due-diligence': 'Due Diligence IP',
+            'servizio-freedom-to-operate': 'Freedom to Operate',
+            'servizio-patentability': 'Patentability Search',
+            'servizio-landscape': 'Landscape Analysis',
+            'servizio-cad': 'Disegno CAD Professionale',
+            'servizio-legale-base': 'Supporto Legale Base'
+        };
+
+        if (servizioId && nomiServizi[servizioId]) {
+            document.getElementById('nome-servizio').textContent = nomiServizi[servizioId];
+        } else {
+            document.getElementById('servizio-info').style.display = 'none';
+        }
+
+        // Verifica dati pratica
+        const pratica = localStorage.getItem('brevettiamo_pratica');
+        if (!pratica) {
+            alert('Nessuna pratica trovata. Torna alla descrizione.');
+            window.location.href = 'descrizione.html?servizio=' + encodeURIComponent(servizioId);
+        }
+
+        // Simulazione elaborazione (in futuro: chiamata API IA)
+        const steps = [
+            { text: 'Analisi del progetto...', detail: 'Stiamo esaminando la descrizione e i documenti caricati', progress: 20 },
+            { text: 'Elaborazione visiva...', detail: 'Analisi di schizzi, disegni e tavole tecniche', progress: 40 },
+            { text: 'Ricerca prior art...', detail: 'Scansione database brevettuali mondiali', progress: 60 },
+            { text: 'Generazione report...', detail: 'Compilazione risultati e raccomandazioni', progress: 80 },
+            { text: 'Revisione finale...', detail: 'Controllo qualita e formattazione output', progress: 100 }
+        ];
+
+        let currentStep = 0;
+
+        function updateStep(index) {
+            // Aggiorna testo
+            document.getElementById('status-text').textContent = steps[index].text;
+            document.getElementById('status-detail').textContent = steps[index].detail;
+            document.getElementById('progress-fill').style.width = steps[index].progress + '%';
+
+            // Aggiorna step list
+            for (let i = 1; i <= 5; i++) {
+                const stepEl = document.getElementById('step-' + i);
+                if (i <= index) {
+                    stepEl.classList.remove('active');
+                    stepEl.classList.add('completed');
+                } else if (i === index + 1) {
+                    stepEl.classList.add('active');
+                }
+            }
+        }
+
+        // Avanza step ogni 3 secondi (simulazione)
+        const interval = setInterval(() => {
+            currentStep++;
+            if (currentStep < steps.length) {
+                updateStep(currentStep);
+            } else {
+                clearInterval(interval);
+                // Completa: vai a risultato
+                setTimeout(() => {
+                    window.location.href = 'risultato.html?servizio=' + encodeURIComponent(servizioId);
+                }, 1500);
+            }
+        }, 3000);
+
+        function annullaElaborazione() {
+            if (confirm('Sei sicuro di voler annullare? I dati inseriti saranno persi.')) {
+                clearInterval(interval);
+                localStorage.removeItem('brevettiamo_pratica');
+                window.location.href = 'descrizione.html?servizio=' + encodeURIComponent(servizioId);
+            }
+        }
+    </script>
+</body>
+</html>
