@@ -4,279 +4,372 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacchetti - BrevettIAmo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1e3a5f;
-            --accent: #e85d04;
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --text: #2d3748;
-            --text-light: #718096;
-            --border: #e2e8f0;
+            --pergamena: #F4EBE1;
+            --pergamena-scura: #E8DCC8;
+            --oro: #C5A059;
+            --oro-chiaro: #D4B87A;
+            --oro-scuro: #9A7B3D;
+            --rosso: #A63A2B;
+            --rosso-scuro: #7A2A1F;
+            --ferro: #4A4A4A;
+            --ferro-chiaro: #6A6A6A;
+            --nero: #1A1A1A;
+            --bianco: #FAF8F5;
+            --ombra: rgba(26, 26, 26, 0.15);
+            --verde: #2D6A4F;
+            --verde-chiaro: #40916C;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: 'Lora', Georgia, serif;
+            background: var(--pergamena);
+            color: var(--ferro);
+            line-height: 1.7;
         }
-        
-        /* HEADER */
+
         header {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--pergamena) 0%, var(--pergamena-scura) 100%);
+            border-bottom: 3px solid var(--oro);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        .header-content {
-            max-width: 1200px;
+
+        .header-inner {
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
+
         .logo {
-            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
             font-size: 1.8rem;
-            color: var(--primary);
-            text-decoration: none;
             font-weight: 700;
+            color: var(--ferro);
+            letter-spacing: 2px;
         }
-        .logo span { color: var(--accent); font-style: italic; }
+
+        .logo-text span {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--oro);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
         nav a {
-            color: var(--text-light);
+            font-family: 'Cinzel', serif;
             text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 600;
+            color: var(--ferro);
             font-size: 0.9rem;
-            transition: color 0.3s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
         }
-        nav a:hover { color: var(--accent); }
-        
-        /* HERO */
+
+        nav a:hover { color: var(--oro); }
+
         .hero {
             text-align: center;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, #2d5a87 100%);
-            color: white;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--pergamena-scura) 0%, var(--pergamena) 100%);
+            border-bottom: 3px solid var(--oro);
         }
+
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cinzel', serif;
             font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            color: var(--ferro);
+            margin-bottom: 1rem;
         }
+
         .hero p {
+            color: var(--ferro-chiaro);
             font-size: 1.1rem;
-            opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
         }
-        
-        /* NOTA */
+
         .nota {
-            max-width: 900px;
+            background: var(--bianco);
+            border: 2px solid var(--oro);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 800px;
             margin: 2rem auto;
-            padding: 1rem 1.5rem;
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: var(--primary);
-        }
-        
-        /* PACCHETTI */
-        .section-title {
             text-align: center;
-            padding: 2rem 2rem 1rem;
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--primary);
+            font-size: 0.9rem;
+            color: var(--ferro-chiaro);
         }
-        
-        .pacchetti-container {
-            max-width: 1000px;
+
+        .nota strong {
+            color: var(--oro);
+            font-family: 'Cinzel', serif;
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--ferro);
+        }
+
+        .section-header p {
+            color: var(--ferro-chiaro);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        .pacchetti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
         }
+
         .pacchetto-card {
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 16px;
+            background: var(--bianco);
+            border: 2px solid var(--pergamena-scura);
             padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s;
             position: relative;
+            transition: all 0.3s ease;
+            text-align: center;
         }
+
+        .pacchetto-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--oro);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .pacchetto-card:hover::before { transform: scaleX(1); }
+
         .pacchetto-card:hover {
+            border-color: var(--oro);
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px var(--ombra);
         }
+
         .pacchetto-card.popolare {
-            border: 2px solid var(--accent);
+            border-color: var(--oro);
             transform: scale(1.05);
         }
+
         .pacchetto-card.popolare:hover {
             transform: scale(1.05) translateY(-5px);
         }
+
         .badge-popolare {
             position: absolute;
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--accent);
-            color: white;
+            background: var(--oro);
+            color: var(--nero);
             padding: 0.4rem 1.2rem;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
-        .pacchetto-card h3 {
-            font-family: 'Playfair Display', serif;
+
+        .pacchetto-nome {
+            font-family: 'Cinzel', serif;
             font-size: 1.5rem;
-            color: var(--primary);
+            color: var(--ferro);
+            margin-bottom: 1rem;
+        }
+
+        .pacchetto-prezzo {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--oro);
             margin-bottom: 0.5rem;
         }
-        .prezzo {
-            font-size: 2.5rem;
-            color: var(--accent);
-            font-weight: 700;
-            margin: 1rem 0;
-        }
-        .prezzo span {
+
+        .pacchetto-prezzo span {
             font-size: 1rem;
-            color: var(--text-light);
-            font-weight: 400;
+            color: var(--ferro-chiaro);
+            font-family: 'Lora', serif;
         }
-        .features {
+
+        .pacchetto-periodo {
+            font-size: 0.85rem;
+            color: var(--ferro-chiaro);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .pacchetto-features {
             list-style: none;
-            text-align: center;
-            margin: 1.5rem 0;
+            text-align: left;
+            margin-bottom: 2rem;
         }
-        .features li {
-            padding: 0.6rem 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-light);
+
+        .pacchetto-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--pergamena-scura);
             font-size: 0.9rem;
+            color: var(--ferro-chiaro);
         }
-        .features li:last-child { border-bottom: none; }
+
+        .pacchetto-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pacchetto-features li::before {
+            content: '✓';
+            color: var(--verde);
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
         .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
+            font-family: 'Cinzel', serif;
+            padding: 0.8rem 2rem;
+            border: 2px solid var(--oro);
+            background: transparent;
+            color: var(--oro);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
         }
+
         .btn:hover {
-            background: var(--accent);
-            transform: scale(1.05);
+            background: var(--oro);
+            color: var(--bianco);
         }
-        .btn-popolare {
-            background: var(--accent);
+
+        .btn-primary {
+            background: var(--oro);
+            color: var(--bianco);
         }
-        .btn-popolare:hover {
-            background: #d14a00;
+
+        .btn-primary:hover {
+            background: var(--oro-scuro);
         }
-        
-        /* FOOTER */
+
         footer {
-            background: var(--primary);
-            color: white;
-            text-align: center;
+            background: var(--ferro);
+            color: var(--pergamena);
             padding: 2rem;
+            text-align: center;
             margin-top: 3rem;
         }
-        footer p { opacity: 0.8; font-size: 0.9rem; }
+
+        footer p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
     </style>
+<base target="_blank">
 </head>
 <body>
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-text">Brevett<span>IA</span>mo</div>
+            </a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="pacchetti.html">Pacchetti</a>
+                <a href="servizi.html">Servizi</a>
+                <a href="abbonamenti.html">Abbonamenti</a>
+            </nav>
+        </div>
+    </header>
 
-<<header>
-    <div class="header-content">
-        <a href="index.html" class="logo">BREVETT<span>I</span>AMO</a>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="pacchetti.html">Pacchetti</a>
-            <a href="servizi.html">Servizi</a>
-            <a href="abbonamenti.html">Abbonamenti</a>
-            <a href="prezzi.html">Prezzi</a>
-        </nav>
+    <div class="hero">
+        <h1>Pacchetti</h1>
+        <p>Scegli il tuo livello di protezione. Dai principianti alle aziende.</p>
     </div>
-</header>
 
-<section class="hero">
-    <h1>Pacchetti</h1>
-    <p>Scegli il tuo livello di protezione. Dai principianti alle aziende.</p>
-</section>
-
-<div class="nota">
-    <strong>Nota:</strong> I prezzi dei pacchetti sono invariati. I servizi singoli e abbonamenti sono aumentati del 20% rispetto alla prima stima.
-</div>
-
-<h2 class="section-title">Pacchetti (Invariati)</h2>
-
-<section class="pacchetti-container">
-    
-    <!-- STARTER -->
-    <div class="pacchetto-card">
-        <h3>Starter</h3>
-        <div class="prezzo">EUR 29<span>/una tantum</span></div>
-        <ul class="features">
-            <li>3 servizi AI selezionati</li>
-            <li>Supporto via email</li>
-            <li>Ideale per chi inizia</li>
-            <li>Accesso immediato</li>
-        </ul>
-        <button class="btn" onclick="alert('Pagamento in arrivo con CIE')">Inizia con Starter</button>
+    <div class="nota">
+        <strong>Nota:</strong> I prezzi dei pacchetti sono invariati. I servizi singoli e abbonamenti sono aumentati del 20% rispetto alla prima stima.
     </div>
-    
-    <!-- PRO -->
-    <div class="pacchetto-card popolare">
-        <div class="badge-popolare">POPOLARE</div>
-        <h3>Pro</h3>
-        <div class="prezzo">EUR 99<span>/una tantum</span></div>
-        <ul class="features">
-            <li>10 servizi AI con priorita</li>
-            <li>Supporto via chat</li>
-            <li>Per professionisti</li>
-            <li>Report avanzati</li>
-        </ul>
-        <button class="btn btn-popolare" onclick="alert('Pagamento in arrivo con CIE')">Inizia con Pro</button>
-    </div>
-    
-    <!-- ENTERPRISE -->
-    <div class="pacchetto-card">
-        <h3>Enterprise</h3>
-        <div class="prezzo">EUR 299<span>/una tantum</span></div>
-        <ul class="features">
-            <li>Tutti i servizi illimitati</li>
-            <li>Consulenza 1:1</li>
-            <li>Per aziende e studi</li>
-            <li>Supporto dedicato</li>
-        </ul>
-        <button class="btn" onclick="alert('Pagamento in arrivo con CIE')">Inizia con Enterprise</button>
-    </div>
-    
-</section>
 
-<<footer>
-    <p>BrevettIAmo 2026 - Protetti da Brevetto UBIM</p>
-    <p style="margin-top: 0.5rem; font-size: 0.8rem;">Tutti i diritti riservati</p>
-</footer>
+    <div class="section-header">
+        <h2>Pacchetti (Invariati)</h2>
+    </div>
 
+    <div class="pacchetti-grid">
+        <div class="pacchetto-card">
+            <div class="pacchetto-nome">Starter</div>
+            <div class="pacchetto-prezzo">EUR 29<span>/una tantum</span></div>
+            <ul class="pacchetto-features">
+                <li>3 servizi AI selezionati</li>
+                <li>Supporto via email</li>
+                <li>Ideale per chi inizia</li>
+                <li>Accesso immediato</li>
+            </ul>
+            <a href="welcome.html" class="btn">Scegli Starter</a>
+        </div>
+
+        <div class="pacchetto-card popolare">
+            <div class="badge-popolare">Popolare</div>
+            <div class="pacchetto-nome">Pro</div>
+            <div class="pacchetto-prezzo">EUR 99<span>/una tantum</span></div>
+            <ul class="pacchetto-features">
+                <li>10 servizi AI con priorita</li>
+                <li>Supporto via chat</li>
+                <li>Per professionisti</li>
+                <li>Report avanzati</li>
+            </ul>
+            <a href="welcome.html" class="btn btn-primary">Scegli Pro</a>
+        </div>
+
+        <div class="pacchetto-card">
+            <div class="pacchetto-nome">Enterprise</div>
+            <div class="pacchetto-prezzo">EUR 299<span>/una tantum</span></div>
+            <ul class="pacchetto-features">
+                <li>Tutti i servizi illimitati</li>
+                <li>Consulenza 1:1</li>
+                <li>Per aziende e studi</li>
+                <li>Supporto dedicato</li>
+            </ul>
+            <a href="welcome.html" class="btn">Scegli Enterprise</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>2026 BrevettIAmo - Tutti i diritti riservati</p>
+    </footer>
 </body>
 </html>
