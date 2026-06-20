@@ -313,6 +313,16 @@
         nomeServizio.textContent = servizioNome || 'Servizio';
         titoloServizio.textContent = 'Risultato: ' + (servizioNome || 'Analisi');
         
+        // Funzione per recuperare risultato da localStorage
+        function recuperaRisultato() {
+            try {
+                const dati = localStorage.getItem('brevettiamo_risultato_ia');
+                return dati ? JSON.parse(dati) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+        
         // Carica risultato
         async function caricaRisultato() {
             if (useFallback) {
@@ -320,7 +330,7 @@
                 return;
             }
             
-            const risultato = IAEngine.recuperaRisultato();
+            const risultato = recuperaRisultato();
             
             if (risultato && risultato.contenuto) {
                 mostraOutputIA(risultato);
