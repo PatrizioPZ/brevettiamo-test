@@ -1,28 +1,19 @@
-// js/ia-engine.js — Motore IA BrevettIAmo con Groq
+// js/ia-engine.js — Motore IA BrevettIAmo con proxy Supabase
 // Gestisce chiamate API, retry, errori, salvataggio risultati
 
 class IAEngine {
     constructor() {
-        this.apiKey = CONFIG.GROQ_API_KEY;
-        this.apiUrl = CONFIG.GROQ_API_URL;
+        this.proxyUrl = CONFIG.PROXY_URL;
         this.modelli = CONFIG.MODELLI;
         this.timeout = CONFIG.TIMEOUT_MS;
         this.maxRetry = CONFIG.MAX_RETRY;
         
         // Verifica configurazione
-        if (!this.apiKey || this.apiKey === 'INSERISCI_QUI_LA_TUA_CHIAVE_GROQ') {
-            console.error('Chiave API Groq non configurata! Modifica config.js');
+        if (!this.proxyUrl || this.proxyUrl === 'INSERISCI_URL_PROXY') {
+            console.error('URL proxy non configurato! Modifica config.js');
         }
     }
     
-    /**
-     * Chiama l'IA per un servizio specifico
-     * @param {string} servizioId - ID del servizio (es. 'servizio-deposito')
-     * @param {string} descrizione - Descrizione dell'utente
-     * @param {Array} files - Array di file uploadati (opzionale)
-     * @param {string} tipoModello - 'testo', 'visione', 'rapido', 'bilanciato'
-     * @returns {Promise<Object>} - Risultato con contenuto, tokens, modello
-     */
     async chiama(servizioId, descrizione, files = [], tipoModello = 'testo') {
         const tentativi = [];
         let ultimoErrore = null;
@@ -33,7 +24,6 @@ class IAEngine {
                 
                 const risultato = await this._eseguiChiamata(servizioId, descrizione, files, tipoModello);
                 
-                // Salva in localStorage
                 this._salvaRisultato(servizioId, descrizione, risultato);
                 
                 return {
@@ -55,20 +45,17 @@ class IAEngine {
                 
                 console.warn('Tentativo ' + (tentativo + 1) + ' fallito:', errore.message);
                 
-                // Se non e l'ultimo tentativo, aspetta prima di riprovare
                 if (tentativo < this.maxRetry) {
-                    const attesa = Math.pow(2, tentativo) * 1000; // 1s, 2s, 4s
+                    const attesa = Math.pow(2, tentativo) * 1000;
                     console.log('Attesa ' + attesa + 'ms prima del retry...');
                     await this._sleep(attesa);
                     
-                    // Prova con modello diverso se il primo fallisce
                     if (tentativo === 1) tipoModello = 'bilanciato';
                     if (tentativo === 2) tipoModello = 'rapido';
                 }
             }
         }
         
-        // Tutti i tentativi falliti
         return {
             success: false,
             errore: ultimoErrore.message,
@@ -77,17 +64,12 @@ class IAEngine {
         };
     }
     
-    /**
-     * Esegue la chiamata API effettiva a Groq
-     */
     async _eseguiChiamata(servizioId, descrizione, files, tipoModello) {
         const modello = this.modelli[tipoModello] || this.modelli.testo;
         
-        // Prepara il prompt
         let promptTemplate = PROMPTS[servizioId] || PROMPTS['default'];
         const prompt = promptTemplate.replace('{descrizione}', descrizione);
         
-        // Prepara i messaggi
         const messages = [
             {
                 role: 'system',
@@ -99,7 +81,6 @@ class IAEngine {
             }
         ];
         
-        // Se ci sono immagini, descrivili nel testo
         if (files && files.length > 0) {
             const filesDesc = files.map(f => '[File: ' + f.nome + ', tipo: ' + f.tipo + ']').join('\n');
             messages[1].content += '\n\nFile allegati:\n' + filesDesc;
@@ -107,23 +88,21 @@ class IAEngine {
         
         const inizio = Date.now();
         
-        // Controller per timeout
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), this.timeout);
         
         try {
-            const response = await fetch(this.apiUrl, {
+            // CHIAMATA AL PROXY SUPABASE (non diretto a Groq)
+            const response = await fetch(this.proxyUrl, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + this.apiKey,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: modello,
                     messages: messages,
                     temperature: CONFIG.DEFAULT_TEMPERATURE,
-                    max_tokens: CONFIG.DEFAULT_MAX_TOKENS,
-                    stream: false
+                    max_tokens: CONFIG.DEFAULT_MAX_TOKENS
                 }),
                 signal: controller.signal
             });
@@ -132,7 +111,7 @@ class IAEngine {
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                throw new Error('API Groq errore ' + response.status + ': ' + (errorData.error?.message || response.statusText));
+                throw new Error('Proxy errore ' + response.status + ': ' + (errorData.error?.message || response.statusText));
             }
             
             const data = await response.json();
@@ -156,9 +135,6 @@ class IAEngine {
         }
     }
     
-    /**
-     * Salva il risultato in localStorage
-     */
     _salvaRisultato(servizioId, descrizione, risultato) {
         const storageKey = 'brevettiamo_risultato_ia';
         const dati = {
@@ -179,9 +155,6 @@ class IAEngine {
         }
     }
     
-    /**
-     * Recupera l'ultimo risultato salvato
-     */
     static recuperaRisultato() {
         try {
             const dati = localStorage.getItem('brevettiamo_risultato_ia');
@@ -191,23 +164,15 @@ class IAEngine {
         }
     }
     
-    /**
-     * Verifica se la chiave API e configurata
-     */
     static isConfigurato() {
-        const key = CONFIG.GROQ_API_KEY;
-        return key && key !== 'INSERISCI_QUI_LA_TUA_CHIAVE_GROQ' && key.length > 20;
+        return CONFIG.PROXY_URL && CONFIG.PROXY_URL.length > 10;
     }
     
-    /**
-     * Utility: sleep
-     */
     _sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 
-// Esporta
 if (typeof window !== 'undefined') {
     window.IAEngine = IAEngine;
 }
