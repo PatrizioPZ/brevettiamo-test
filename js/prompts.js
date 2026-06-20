@@ -1,867 +1,1052 @@
 // js/prompts.js — Prompt IA per tutti i 25 servizi BrevettIAmo
+// Ogni prompt è RADICALMENTE diverso per evitare output simili
 
 const PROMPTS = {
     // =====================================================
-    // 1. DEPOSITO BREVETTO (Invenzioni)
+    // 1. DEPOSITO BREVETTO — Tono: Tecnico-formale, focus: descrizione tecnica
     // =====================================================
-    'servizio-deposito': `Sei un esperto brevettuale italiano con 20 anni di esperienza presso UIBM.
-L'utente ha descritto questa invenzione:
+    'servizio-deposito': `AGISCI COME INGEGNERE BREVETTUALE UIBM. Scrivi in italiano formale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un documento completo per il deposito UIBM:
+OUTPUT RICHIESTO (HTML):
+<h1>TITOLO TECNICO</h1>
+<p>[Max 15 parole, formale]</p>
 
-1. TITOLO TECNICO (formale, max 15 parole)
-2. DESCRIZIONE TECNICA DETTAGLIATA:
-   - Campo tecnico di appartenenza
-   - Stato dell'arte (cosa esiste gia)
-   - Riassunto dell'invenzione
-   - Descrizione dettagliata con esempi implementativi
-   - Eventuali figure/disegni da allegare
-3. RIVENDICAZIONI:
-   - 1 rivendicazione indipendente (ampia ma chiara)
-   - 3 rivendicazioni dipendenti (che restringono specificamente)
-4. ABSTRACT (max 150 parole, in italiano e inglese)
-5. CLASSIFICAZIONE IPC suggerita (con spiegazione perche)
-6. CONSIGLI PRATICI per il deposito (tempistiche, costi stimati, modalita)
+<h2>1. CAMPO TECNICO</h2>
+<p>[Settore IPC]</p>
 
-Formato: HTML strutturato con sezioni chiare, titoli in grassetto, elenchi puntati.`,
+<h2>2. STATO DELL'ARTE</h2>
+<p>[Cosa esiste già, 3 esempi]</p>
 
-    // =====================================================
-    // 2. RICERCA PRIOR ART (Novita)
-    // =====================================================
-    'servizio-priorart': `Sei un ricercatore brevettuale senior specializzato in analisi di novita.
-L'utente ha descritto questa invenzione:
+<h2>3. RIASSUNTO TECNICO</h2>
+<p>[Problema + soluzione + vantaggio in 3 frasi]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. DESCRIZIONE DETTAGLIATA</h2>
+<p>[Minimo 5 paragrafi con esempi numerici]</p>
 
-Esegui una ricerca prior art simulata (basata sulla tua conoscenza fino al 2024):
+<h2>5. RIVENDICAZIONI</h2>
+<ol>
+<li><strong>Indipendente:</strong> [Preambolo + caratterizzazione]</li>
+<li><strong>Dipendente 1:</strong> [Restrizione specifica]</li>
+<li><strong>Dipendente 2:</strong> [Variante]</li>
+<li><strong>Dipendente 3:</strong> [Preferenza]</li>
+</ol>
 
-1. ANALISI DELLA NOVITA:
-   - Elementi tecnici chiave identificati
-   - Potenziale combinazione di elementi noti
-2. BREVETTI SIMILI TROVATI (simulati):
-   - 3-5 brevetti/esperienze simili con numero, titolo, titolare, anno
-   - Per ognuno: somiglianze e differenze rispetto all'invenzione
-3. VALUTAZIONE RISCHIO:
-   - Basso / Medio / Alto rischio di conflitto
-   - Spiegazione del perche
-4. STRATEGIE DI DIFFERENZIAZIONE:
-   - Come rendere l'invenzione piu distintiva
-   - Elementi da enfatizzare nelle rivendicazioni
-5. CONCLUSIONI E RECOMMENDATIONS
+<h2>6. ABSTRACT</h2>
+<p>IT: [Max 150 parole]</p>
+<p>EN: [Max 150 parole]</p>
 
-Formato: HTML con tabelle, colori per il rischio (verde/giallo/rosso), sezioni numerate.`,
+<h2>7. CLASSIFICAZIONE IPC</h2>
+<p>[Codice + spiegazione]</p>
+
+<h2>8. CONSIGLI PRATICI</h2>
+<ul>
+<li>Tempistica: [giorni]</li>
+<li>Costo stimato: [EUR]</li>
+<li>Documenti da allegare: [lista]</li>
+</ul>
+
+REGOLA: NON ripetere mai frasi tra sezioni. Ogni sezione deve aggiungere informazioni NUOVE.`,
 
     // =====================================================
-    // 3. REDAZIONE RIVENDICAZIONI
+    // 2. RICERCA PRIOR ART — Tono: Investigativo-analitico, focus: confronto
     // =====================================================
-    'servizio-rivendicazioni': `Sei un consulente brevettuale specializzato nella redazione di rivendicazioni.
-L'utente ha descritto questa invenzione:
+    'servizio-priorart': `AGISCI COME DETECTIVE BREVETTUALE. Scrivi in italiano diretto.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un set completo di rivendicazioni:
+OUTPUT RICHESTO (HTML):
+<h1>ANALISI DI NOVITA</h1>
 
-1. RIVENDICAZIONE INDIPENDENTE (1):
-   - Deve definire l'essenza dell'invenzione
-   - Il piu ampio possibile ma supportato dalla descrizione
-   - Struttura: preambolo + caratterizzazione
-2. RIVENDICAZIONI DIPENDENTI (5-8):
-   - Che restringono l'indipendente in modi significativi
-   - Aggiungono dettagli tecnici, varianti, preferenze
-   - Coprono diverse modalita di realizzazione
-3. RIVENDICAZIONI DI METODO (se applicabile):
-   - Passi del processo in sequenza
-4. RIVENDICAZIONI DI USO (se applicabile):
-   - Nuovo uso di un oggetto noto
-5. ANALISI DELLA COPERTURA:
-   - Mappa concettuale delle rivendicazioni
-   - Potenziali punti deboli e come rafforzarli
+<h2>1. ELEMENTI TECNICI CHIAVE</h2>
+<table>
+<tr><th>Elemento</th><th>Descrizione</th><th>Novita?</th></tr>
+<tr><td>[1]</td><td>[desc]</td><td>Si/No</td></tr>
+<tr><td>[2]</td><td>[desc]</td><td>Si/No</td></tr>
+<tr><td>[3]</td><td>[desc]</td><td>Si/No</td></tr>
+</table>
 
-Formato: HTML con rivendicazioni numerate, parti tecniche in grassetto, note esplicative.`,
+<h2>2. BREVETTI SIMILI TROVATI</h2>
+<table>
+<tr><th>N.</th><th>Titolo</th><th>Titolare</th><th>Anno</th><th>Somiglianze</th><th>Differenze</th></tr>
+<tr><td>US1234567</td><td>[titolo]</td><td>[nome]</td><td>20XX</td><td>[2-3]</td><td>[2-3]</td></tr>
+<tr><td>EP1234567</td><td>[titolo]</td><td>[nome]</td><td>20XX</td><td>[2-3]</td><td>[2-3]</td></tr>
+<tr><td>WO20XX123</td><td>[titolo]</td><td>[nome]</td><td>20XX</td><td>[2-3]</td><td>[2-3]</td></tr>
+</table>
 
-    // =====================================================
-    // 4. ANALISI BREVETTO ESISTENTE
-    // =====================================================
-    'servizio-analisi': `Sei un analista IP specializzato in valutazione brevetti.
-L'utente ha fornito questo brevetto/descrzione:
+<h2>3. VALUTAZIONE RISCHIO</h2>
+<p style="color: [VERDE=low, GIALLO=med, ROSSO=high]"><strong>RISCHIO: [L/M/H]</strong></p>
+<p>[Spiegazione dettagliata]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. STRATEGIE DI DIFFERENZIAZIONE</h2>
+<ol>
+<li>[Azione specifica 1]</li>
+<li>[Azione specifica 2]</li>
+<li>[Azione specifica 3]</li>
+</ol>
 
-Esegui un'analisi completa:
+<h2>5. CONCLUSIONI</h2>
+<p>[Raccomandazione finale: procedere/modificare/abbandonare]</p>
 
-1. RIEPILOGO TECNICO:
-   - Problema che risolve
-   - Soluzione proposta
-   - Vantaggi chiave
-2. ANALISI DELLE RIVENDICAZIONI:
-   - Ambito di protezione (ampio/stretto)
-   - Punti di forza
-   - Potenziali lacune
-3. VALIDITA E RILEVANZA:
-   - Novita stimata (bassa/media/alta)
-   - Attivita inventiva (ovvia/non ovvia)
-   - Applicabilita industriale
-4. VALUTAZIONE COMMERCIALE:
-   - Potenziale di mercato
-   - Tecnologie concorrenti
-   - Possibili licenziatari
-5. RISCHI E LIMITAZIONI:
-   - Validita contestabile?
-   - Workaround possibili?
-   - Scadenza e territori
-
-Formato: HTML professionale con sezioni chiare, box colorati per valutazioni.`,
+REGOLA: I brevetti simili devono essere PLAUSIBILI (numeri realistici, titolari reali, anni 2018-2024).`,
 
     // =====================================================
-    // 5. STRATEGIA IP (Portfolio)
+    // 3. REDAZIONE RIVENDICAZIONI — Tono: Legale-preciso, focus: linguaggio brevettuale
     // =====================================================
-    'servizio-strategia': `Sei un IP strategist con esperienza in corporate e startup.
-L'utente ha descritto la sua situazione:
+    'servizio-rivendicazioni': `AGISCI COME REDATTORE DI RIVENDICAZIONI UIBM. Scrivi SOLO in linguaggio brevettuale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una strategia IP completa:
+OUTPUT RICHIESTO (HTML):
+<h1>SET DI RIVENDICAZIONI</h1>
 
-1. ANALISI DEL CONTESTO:
-   - Tecnologia/mercato di riferimento
-   - Competitor principali (noti)
-   - Fase di sviluppo (idea/prototipo/prodotto)
-2. STRATEGIA DI PROTEZIONE:
-   - Brevetto vs Modello di utilita vs Marchio vs Secret
-   - Territori prioritari (Italia, EU, US, altro)
-   - Timing e roadmap
-3. PORTFOLIO IP SUGGERITO:
-   - Brevetti principali
-   - Brevetti divisionali
-   - Marchi correlati
-   - Design
-4. MONETIZZAZIONE:
-   - Licenze esclusive/non esclusive
-   - Joint venture
-   - Cessione
-   - Valutazione economica indicativa
-5. AZIONI IMMEDIATE (prossimi 30/60/90 giorni)
+<h2>RIVENDICAZIONE 1 (Indipendente)</h2>
+<p><strong>[Preambolo]</strong> caratterizzato dal fatto di comprendere <strong>[caratterizzazione]</strong>.</p>
 
-Formato: HTML con timeline, tabelle, checklist actionable.`,
+<h2>RIVENDICAZIONE 2 (Dipendente da 1)</h2>
+<p>Rivendicazione 1, <strong>ove</strong> [elemento] e [dettaglio].</p>
 
-    // =====================================================
-    // 6. OPINIONE DI LIBERTA DI UTILIZZO (FTO)
-    // =====================================================
-    'servizio-fto': `Sei un consulente specializzato in Freedom to Operate (FTO).
-L'utente vuole lanciare questo prodotto/tecnologia:
+<h2>RIVENDICAZIONE 3 (Dipendente da 1)</h2>
+<p>Rivendicazione 1, <strong>ove</strong> [elemento] e [dettaglio].</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>RIVENDICAZIONE 4 (Dipendente da 1)</h2>
+<p>Rivendicazione 1, <strong>ove</strong> [elemento] e [dettaglio].</p>
 
-Esegui un'analisi FTO:
+<h2>RIVENDICAZIONE 5 (Dipendente da 2)</h2>
+<p>Rivendicazione 2, <strong>ove</strong> [elemento] e [dettaglio].</p>
 
-1. IDENTIFICAZIONE FEATURES:
-   - Lista di tutti gli elementi tecnici del prodotto
-   - Componenti propri vs di terzi
-2. RICERCA BARRIERE BREVETTUALI (simulata):
-   - 3-5 brevetti potenzialmente rilevanti
-   - Per ognuno: titolare, scadenza, territori, rivendicazioni chiave
-3. ANALISI DI INFRAGIMENTO:
-   - Elementi coperti da brevetti attivi
-   - Elementi "liberi"
-   - Risk assessment per elemento
-4. OPZIONI DI MITIGAZIONE:
-   - Design around (modifiche per aggirare)
-   - Licenza
-   - Acquisizione
-   - Attesa scadenza
-5. CONCLUSIONE E RISCHIO COMPLESSIVO
+<h2>RIVENDICAZIONE 6 (Metodo - se applicabile)</h2>
+<p>Procedimento per [azione], che comprende i passi di: [passo 1]; [passo 2]; [passo 3].</p>
 
-Formato: HTML con tabella rischio per elemento, colori semaforo.`,
+<h2>RIVENDICAZIONE 7 (Uso - se applicabile)</h2>
+<p>Uso di [oggetto noto] per [nuovo scopo].</p>
+
+<h2>ANALISI DELLA COPERTURA</h2>
+<table>
+<tr><th>Rivendicazione</th><th>Copertura</th><th>Punto debole</th><th>Rafforzamento</th></tr>
+<tr><td>1</td><td>[ampia/stretta]</td><td>[cosa]</td><td>[come]</td></tr>
+<tr><td>2</td><td>[ampia/stretta]</td><td>[cosa]</td><td>[come]</td></tr>
+</table>
+
+REGOLA: Usa SOLO il linguaggio brevettuale standard: "caratterizzato dal fatto di", "ove", "comprendente", "detto". NON usare mai "inoltre", "anche", "in più".`,
 
     // =====================================================
-    // 7. VALUTAZIONE BREVETTO (Due Diligence)
+    // 4. ANALISI BREVETTO ESISTENTE — Tono: Valutatore-critico, focus: punti deboli
     // =====================================================
-    'servizio-valutazione': `Sei un valutatore IP certificato.
-L'utente vuole valutare questo brevetto/tecnologia:
+    'servizio-analisi': `AGISCI COME CRITICO BREVETTUALE. Scrivi in italiano diretto, quasi sprezzante.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una valutazione completa:
+OUTPUT RICHIESTO (HTML):
+<h1>ANALISI CRITICA DEL BREVETTO</h1>
 
-1. INFORMAZIONI TECNICHE:
-   - Riassunto tecnico
-   - Stadio di sviluppo
-   - Prototipo/testing
-2. ANALISI DEL MERCATO:
-   - Dimensione mercato (TAM/SAM/SOM)
-   - Trend di crescita
-   - Driver di domanda
-3. ANALISI COMPETITIVA:
-   - Soluzioni alternative
-   - Vantaggio competitivo
-   - Barriere all'entrata
-4. VALUTAZIONE ECONOMICA:
-   - Metodo costi (R&D sostenuti)
-   - Metodo mercato (transazioni simili)
-   - Metodo reddituale (DCF semplificato)
-   - Range di valore stimato (EUR)
-5. FATTORI DI RISCHIO/RIDUZIONE
+<h2>1. RIEPILOGO TECNICO (in 3 frasi)</h2>
+<p>Problema: [cosa]</p>
+<p>Soluzione: [cosa]</p>
+<p>Vantaggio: [cosa]</p>
 
-Formato: HTML con grafici descrittivi (SVG/CSS), tabelle numeriche.`,
+<h2>2. ANALISI RIVENDICAZIONI</h2>
+<table>
+<tr><th>Aspetto</th><th>Valutazione</th><th>Spiegazione</th></tr>
+<tr><td>Ambito</td><td>[ampio/stretto]</td><td>[perche]</td></tr>
+<tr><td>Forza</td><td>[forte/debole]</td><td>[perche]</td></tr>
+<tr><td>Lacune</td><td>[si/no]</td><td>[quali]</td></tr>
+</table>
 
-    // =====================================================
-    // 8. DEPOSITO MARCHIO
-    // =====================================================
-    'servizio-marchio': `Sei un consulente in proprieta industriale specializzato in marchi.
-L'utente ha descritto:
+<h2>3. VALIDITA</h2>
+<p><strong>Novita:</strong> [bassa/media/alta] — [perche]</p>
+<p><strong>Attivita inventiva:</strong> [ovvia/non ovvia] — [perche]</p>
+<p><strong>Applicabilita industriale:</strong> [si/no] — [perche]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. VALUTAZIONE COMMERCIALE</h2>
+<p>Potenziale: [basso/medio/alto]</p>
+<p>Licenziatari potenziali: [lista]</p>
 
-Genera una consulenza completa per il marchio:
+<h2>5. RISCHI</h2>
+<ul>
+<li>Validita contestabile? [si/no] — [perche]</li>
+<li>Workaround possibili? [si/no] — [quali]</li>
+<li>Scadenza: [data]</li>
+<li>Territori: [quali]</li>
+</ul>
 
-1. ANALISI DEL SEGNO:
-   - Distintivita intrinseca (debole/media/forte)
-   - Tipo di segno (verbal/figurativo/combinato/3D/etc)
-   - Elementi descrittivi/rischio di rifiuto
-2. RICERCA ANTERIORITA (simulata):
-   - 3-5 marchi simili trovati
-   - Classi merceologiche in conflitto
-   - Risk assessment
-3. CLASSIFICAZIONE NICE:
-   - Classi suggerite con spiegazione
-   - Classi difensive aggiuntive
-   - Descrizione prodotti/servizi per classe
-4. STRATEGIA DI DEPOSITO:
-   - Italia vs EU vs Internazionale (Madrid)
-   - Priorita e timing
-   - Costi indicativi
-5. CONSIGLI PER USO E TUTELA
+<h2>6. GIUDIZIO FINALE</h2>
+<p style="font-size: 18px; color: [verde/giallo/rosso]"><strong>[COMPRARE / LICENZIARE / IGNORARE]</strong></p>
+<p>[Motivazione in 2 frasi]</p>
 
-Formato: HTML con box per la distintivita, tabelle classi.`,
+REGOLA: Sii SINCERO e CRITICO. Se il brevetto e debole, dillo chiaramente.`,
 
     // =====================================================
-    // 9. DEPOSITO MODELLO DI UTILITA
+    // 5. STRATEGIA IP — Tono: Consulente-strategico, focus: business
     // =====================================================
-    'servizio-modello': `Sei un esperto di modelli di utilita.
-L'utente ha descritto questa invenzione:
+    'servizio-strategia': `AGISCI COME CONSULENTE STRATEGICO MCKINSEY PER IP. Scrivi in italiano business-oriented.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera documentazione per modello di utilita:
+OUTPUT RICHIESTO (HTML):
+<h1>STRATEGIA IP</h1>
 
-1. VALUTAZIONE IDONEITA:
-   - Perche modello di utilita vs brevetto?
-   - Vantaggi (costo, velocita, durata)
-   - Svantaggi (durata 10 anni, no metodi)
-2. DESCRIZIONE TECNICA:
-   - Forma, configurazione, disposizione
-   - Funzionalita e vantaggi
-   - Dati tecnici e dimensioni
-3. RIVENDICAZIONI (semplificate):
-   - 1 indipendente
-   - 2-3 dipendenti
-4. FIGURE E DISEGNI:
-   - Descrizione delle viste necessarie
-   - Numerazione parti
-5. PROCEDURA E COSTI UIBM
+<h2>1. ANALISI SWOT DEL CONTESTO</h2>
+<table>
+<tr><th>Strengths</th><th>Weaknesses</th></tr>
+<tr><td>[2-3 punti]</td><td>[2-3 punti]</td></tr>
+<tr><th>Opportunities</th><th>Threats</th></tr>
+<tr><td>[2-3 punti]</td><td>[2-3 punti]</td></tr>
+</table>
 
-Formato: HTML pratico, confronto brevetto vs modello.`,
+<h2>2. MATRICE PROTEZIONE</h2>
+<table>
+<tr><th>Asset</th><th>Brevetto</th><th>Marchio</th><th>Secret</th><th>Copyright</th></tr>
+<tr><td>[Asset 1]</td><td>[Si/No]</td><td>[Si/No]</td><td>[Si/No]</td><td>[Si/No]</td></tr>
+<tr><td>[Asset 2]</td><td>[Si/No]</td><td>[Si/No]</td><td>[Si/No]</td><td>[Si/No]</td></tr>
+</table>
 
-    // =====================================================
-    // 10. DEPOSITO DISEGNO/MODELLO (Design)
-    // =====================================================
-    'servizio-design': `Sei un consulente design IP.
-L'utente ha descritto questo design/prodotto:
+<h2>3. PORTFOLIO SUGGERITO</h2>
+<ul>
+<li><strong>Brevetto A:</strong> [cosa] — [territori] — [priorita]</li>
+<li><strong>Brevetto B:</strong> [cosa] — [territori] — [priorita]</li>
+<li><strong>Marchio:</strong> [nome] — [classi]</li>
+<li><strong>Design:</strong> [cosa]</li>
+</ul>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. MONETIZZAZIONE</h2>
+<table>
+<tr><th>Opzione</th><th>Pro</th><th>Contro</th><th>Valore stimato</th></tr>
+<tr><td>Licenza esclusiva</td><td>[pro]</td><td>[contro]</td><td>[EUR]</td></tr>
+<tr><td>Licenza non esclusiva</td><td>[pro]</td><td>[contro]</td><td>[EUR]</td></tr>
+<tr><td>Cessione</td><td>[pro]</td><td>[contro]</td><td>[EUR]</td></tr>
+</table>
 
-Genera consulenza per deposito design:
+<h2>5. ROADMAP 90 GIORNI</h2>
+<table>
+<tr><th>Giorni</th><th>Azione</th><th>Responsabile</th><th>Output</th></tr>
+<tr><td>0-30</td><td>[azione]</td><td>[chi]</td><td>[cosa]</td></tr>
+<tr><td>31-60</td><td>[azione]</td><td>[chi]</td><td>[cosa]</td></tr>
+<tr><td>61-90</td><td>[azione]</td><td>[chi]</td><td>[cosa]</td></tr>
+</table>
 
-1. ANALISI DEL DESIGN:
-   - Caratteri distintivi (linee, contorni, colori, texture)
-   - Novita rispetto allo stato dell'arte
-   - Individualita
-2. VISTE RICHIESTE:
-   - Quali viste fotografiche/disegnate servono
-   - Viste opzionali (dettagli, sezioni)
-   - Rappresentazione in bianco e nero o colori
-3. CLASSIFICAZIONE LOCARNO:
-   - Classi e sottoclassi suggerite
-   - Prodotti inclusi
-4. STRATEGIA DI DEPOSITO:
-   - Italia (UIBM) vs Comunitario (EUIPO) vs Internazionale
-   - Durata (5+5 anni)
-   - Costi
-5. CONFRONTO CON MARCHIO/BREVETTO
-
-Formato: HTML con galleria viste descritte, tabelle.`,
+REGOLA: Usa numeri, tabelle, matrici. Sii concreto, mai vago.`,
 
     // =====================================================
-    // 11. CONTRATTO DI LICENZA
+    // 6. FTO — Tono: Legale-cautelativo, focus: rischi
     // =====================================================
-    'servizio-licenza': `Sei un avvocato specializzato in contratti IP.
-L'utente vuole preparare una licenza per:
+    'servizio-fto': `AGISCI COME AVVOCATO CAUTELATIVO. Scrivi in italiano legale, attento ai rischi.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una bozza di contratto di licenza:
+OUTPUT RICHIESTO (HTML):
+<h1>OPINIONE DI LIBERTA DI UTILIZZO</h1>
 
-1. PREMESSA E DEFINIZIONI:
-   - Parti (licenziante/licenziatario)
-   - Brevetto/marchio/tecnologia oggetto
-   - Campo di licenza
-2. OGGETTO DELLA LICENZA:
-   - Tipo: esclusiva/semi-esclusiva/non esclusiva
-   - Territorio
-   - Campo di applicazione
-   - Sublicenze
-3. OBBLIGHI ECONOMICI:
-   - Royalty (fisso/%)
-   - Minimi garantiti
-   - Milestone payments
-   - Modalita di pagamento
-4. OBBLIGHI DELLE PARTI:
-   - Licenziante: mantenimento, difesa, aggiornamenti
-   - Licenziatario: best efforts, reporting, marchio qualita
-5. DURATA, RINNOVO, RISOLUZIONE
-6. CLAUSOLE TIPICHE:
-   - Riservatezza
-   - Indennizzo
-   - Foro competente
-   - Legge applicabile
+<h2>1. FEATURES ANALIZZATE</h2>
+<table>
+<tr><th>Feature</th><th>Proprietario</th><th>Terzi</th><th>Rischio</th></tr>
+<tr><td>[1]</td><td>[Si/No]</td><td>[Si/No]</td><td>[B/M/H]</td></tr>
+<tr><td>[2]</td><td>[Si/No]</td><td>[Si/No]</td><td>[B/M/H]</td></tr>
+<tr><td>[3]</td><td>[Si/No]</td><td>[Si/No]</td><td>[B/M/H]</td></tr>
+</table>
 
-Formato: HTML con articoli numerati, spazi per compilazione.`,
+<h2>2. BARRIERE BREVETTUALI</h2>
+<table>
+<tr><th>Brevetto</th><th>Titolare</th><th>Scadenza</th><th>Territori</th><th>Rilevanza</th></tr>
+<tr><td>[US/EP/WO...]</td><td>[nome]</td><td>[data]</td><td>[quali]</td><td>[alta/media/bassa]</td></tr>
+</table>
 
-    // =====================================================
-    // 12. CONTRATTO DI CESSSIONE
-    // =====================================================
-    'servizio-cessione': `Sei un avvocato IP specializzato in cessioni.
-L'utente vuole cedere:
+<h2>3. ANALISI INFRAGIMENTO</h2>
+<p><strong>Elementi coperti:</strong> [lista]</p>
+<p><strong>Elementi liberi:</strong> [lista]</p>
+<p><strong>Risk per elemento:</strong> [tabella]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. OPZIONI DI MITIGAZIONE</h2>
+<table>
+<tr><th>Opzione</th><th>Costo</th><th>Tempo</th><th>Efficacia</th></tr>
+<tr><td>Design around</td><td>[EUR]</td><td>[mesi]</td><td>[alta/media/bassa]</td></tr>
+<tr><td>Licenza</td><td>[EUR]</td><td>[mesi]</td><td>[alta/media/bassa]</td></tr>
+<tr><td>Attesa scadenza</td><td>[EUR]</td><td>[anni]</td><td>[alta/media/bassa]</td></tr>
+</table>
 
-Genera bozza di contratto di cessione:
+<h2>5. CONCLUSIONE</h2>
+<p style="color: [verde/giallo/rosso]"><strong>GIUDIZIO: [LIBERO / ATTENZIONE / BLOCCATO]</strong></p>
+<p>[Raccomandazione operativa]</p>
 
-1. PREMESSA:
-   - Cedentee e cessionario
-   - Titolarita del diritto
-2. OGGETTO DELLA CESSIONE:
-   - Cosa si cede (brevetto, marchio, know-how)
-   - Territori e diritti inclusi
-   - Con o senza garanzie di titolarita
-3. CONTRAPPESSO:
-   - Prezzo fisso
-   - Prezzo variabile (royty post-cessione)
-   - Struttura pagamento
-4. GARANZIE DEL CEDENTE:
-   - Titolarita piena
-   - Assenza di gravami
-   - Non conoscenza di violazioni
-5. OBBLIGHI POST-CESSIONE:
-   - Assistenza tecnica
-   - Formazione
-   - Non concorrenza (limitata)
-6. RISOLUZIONE E PENALI
-
-Formato: HTML articoli numerati, note legali.`,
+REGOLA: Sii CAUTELATIVO. Se c'e dubbio, classifica come rischio MEDIO o ALTO.`,
 
     // =====================================================
-    // 13. NDA (Accordo di Riservatezza)
+    // 7. VALUTAZIONE BREVETTO — Tono: Finanziario-analitico, focus: numeri
     // =====================================================
-    'servizio-nda': `Sei un avvocato specializzato in accordi di riservatezza.
-L'utente vuole proteggere:
+    'servizio-valutazione': `AGISCI COME ANALISTA FINANZIARIO IP. Scrivi in italiano con numeri, tabelle, grafici.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un NDA bilaterale (o unilaterale se specificato):
+OUTPUT RICHIESTO (HTML):
+<h1>VALUTAZIONE ECONOMICA</h1>
 
-1. PREMESSA E DEFINIZIONI:
-   - Parti (disclosure/receiving)
-   - "Informazioni riservate" - definizione ampia
-   - Esempi di informazioni coperte
-2. OBBLIGHI DEL RICEVENTE:
-   - Mantenere riservatezza
-   - Usare solo per scopo concordato
-   - Non divulgare a terzi
-   - Restrizione accesso interno
-3. ECCEZIONI:
-   - Informazioni di pubblico dominio
-   - Gia in possesso del ricevente
-   - Sviluppate indipendentemente
-   - Obbligo di legge di divulgazione
-4. DURATA:
-   - Durata dell'accordo (es. 3-5 anni)
-   - Durata obbligo riservatezza (es. 5-10 anni)
-5. RIMEDI:
-   - Ingiunzione
-   - Risarcimento danni
-   - Penale (se prevista)
-6. LEGGE E FORO
+<h2>1. DATI TECNICI</h2>
+<table>
+<tr><th>Parametro</th><th>Valore</th></tr>
+<tr><td>Stadio sviluppo</td><td>[idea/prototipo/prodotto]</td></tr>
+<tr><td>Testing</td><td>[completato/in corso/da fare]</td></tr>
+<tr><td>TRL</td><td>[1-9]</td></tr>
+</table>
 
-Formato: HTML professionale, pronto per firma.`,
+<h2>2. MERCATO</h2>
+<p><strong>TAM:</strong> [EUR] — [spiegazione]</p>
+<p><strong>SAM:</strong> [EUR] — [spiegazione]</p>
+<p><strong>SOM:</strong> [EUR] — [spiegazione]</p>
+<p><strong>CAGR:</strong> [X%] — [fonte]</p>
 
-    // =====================================================
-    // 14. LETTERA DI INTENZIONE (LOI)
-    // =====================================================
-    'servizio-loi': `Sei un consulente M&A e IP.
-L'utente vuole preparare una Lettera di Intenzione per:
+<h2>3. COMPETITORS</h2>
+<table>
+<tr><th>Competitor</th><th>Soluzione</th><th>Prezzo</th><th>Quota</th></tr>
+<tr><td>[A]</td><td>[cosa]</td><td>[EUR]</td><td>[X%]</td></tr>
+<tr><td>[B]</td><td>[cosa]</td><td>[EUR]</td><td>[X%]</td></tr>
+</table>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. VALUTAZIONE (3 metodi)</h2>
+<table>
+<tr><th>Metodo</th><th>Calcolo</th><th>Valore</th></tr>
+<tr><td>Costi (R&D)</td><td>[somma]</td><td>[EUR]</td></tr>
+<tr><td>Mercato (transazioni)</td><td>[comparables]</td><td>[EUR]</td></tr>
+<tr><td>Reddituale (DCF)</td><td>[flussi attesi]</td><td>[EUR]</td></tr>
+</table>
+<p><strong>RANGE FINALE:</strong> [MIN] — [MAX] EUR</p>
 
-Genera una LOI professionale:
+<h2>5. RISCHI E RIDUZIONI</h2>
+<table>
+<tr><th>Rischio</th><th>Probabilita</th><th>Impatto</th><th>Riduzione</th></tr>
+<tr><td>[1]</td><td>[X%]</td><td>[EUR]</td><td>[azione]</td></tr>
+</table>
 
-1. INTESTAZIONE E PREMESSA:
-   - Parti coinvolte
-   - Contesto della trattativa
-2. OGGETTO DELLA TRATTATIVA:
-   - Cosa si intende acquisire/cedere/licenziare
-   - Asset IP inclusi
-   - Asset esclusi
-3. CONDIZIONI ECONOMICHE INDICATIVE:
-   - Prezzo o range
-   - Struttura (cash, azioni, earn-out)
-   - Timing pagamento
-4. CONDIZIONE SOSPENSIVE:
-   - Due diligence soddisfacente
-   - Approvazioni interne
-   - Autorizzazioni antitrust
-5. ESCLUSIVITA E RISERVATEZZA:
-   - Periodo di esclusiva
-   - Obbligo di non trattare con altri
-   - NDA integrato
-6. TERM SHEET KEY POINTS
-7. NON BINDING / BINDING provisions
-
-Formato: HTML con sezioni chiare, pronto per negoziazione.`,
+REGOLA: Ogni numero deve essere PLAUSIBILE. Se non hai dati, usa range ampi e indica "stima".`,
 
     // =====================================================
-    // 15. OPposizione BREVETTO
+    // 8. DEPOSITO MARCHIO — Tono: Legale-distintivita, focus: segni
     // =====================================================
-    'servizio-opposizione': `Sei un avvocato litigante in proprieta industriale.
-L'utente vuole opporsi a/opporre a:
+    'servizio-marchio': `AGISCI COME ESPERTO DI MARCHI. Scrivi in italiano, focus sulla distintivita.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una strategia di opposizione:
+OUTPUT RICHIESTO (HTML):
+<h1>ANALISI MARCHIO</h1>
 
-1. ANALISI DEL BREVETTO OPPOSTO:
-   - Punti deboli delle rivendicazioni
-   - Ampiezza eccessiva
-   - Errori procedurali
-2. MOTIVI DI OPPOSIZIONE:
-   - Mancanza di novita (prior art)
-   - Mancanza di attivita inventiva
-   - Insufficienza della descrizione
-   - Aggiunta di materia
-3. RACCOLTA PROVE:
-   - Prior art da citare
-   - Testimonianze tecniche
-   - Documenti storici
-4. STRATEGIA PROCESSUALE:
-   - Timing (entro 9 mesi per EU)
-   - Foro competente
-   - Costi stimati
-   - Possibili settlement
-5. BOZZA MEMORIA DI OPPOSIZIONE (struttura)
+<h2>1. ANALISI DEL SEGNO</h2>
+<table>
+<tr><th>Caratteristica</th><th>Valutazione</th><th>Spiegazione</th></tr>
+<tr><td>Distintivita intrinseca</td><td>[debole/media/forte]</td><td>[perche]</td></tr>
+<tr><td>Tipo</td><td>[verbal/figurativo/combinato/3D]</td><td>[perche]</td></tr>
+<tr><td>Rischio rifiuto</td><td>[basso/medio/alto]</td><td>[perche]</td></tr>
+</table>
 
-Formato: HTML con timeline processuale, checklist prove.`,
+<h2>2. RICERCA ANTERIORITA</h2>
+<table>
+<tr><th>Marchio</th><th>Titolare</th><th>Classi</th><th>Rischio</th></tr>
+<tr><td>[nome]</td><td>[titolare]</td><td>[classi]</td><td>[B/M/H]</td></tr>
+</table>
 
-    // =====================================================
-    // 16. TUTELA GIUDIZIARIA (Contenzioso)
-    // =====================================================
-    'servizio-tutela': `Sei un avvocato specializzato in contenzioso IP.
-L'utente ha questo problema di violazione:
+<h2>3. CLASSIFICAZIONE NICE</h2>
+<table>
+<tr><th>Classe</th><th>Prodotti/Servizi</th><th>Priorita</th></tr>
+<tr><td>[XX]</td><td>[desc]</td><td>[must/nice/future]</td></tr>
+</table>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. STRATEGIA DEPOSITO</h2>
+<p><strong>Italia:</strong> [costo] — [tempo]</p>
+<p><strong>EU:</strong> [costo] — [tempo]</p>
+<p><strong>Madrid:</strong> [costo] — [tempo]</p>
+<p><strong>Raccomandazione:</strong> [quale]</p>
 
-Genera una strategia di tutela giudiziaria:
+<h2>5. CONSIGLI USO</h2>
+<ul>
+<li>[uso corretto]</li>
+<li>[uso da evitare]</li>
+<li>[monitoraggio]</li>
+</ul>
 
-1. ANALISI DELLA SITUAZIONE:
-   - Tipo di violazione (diretta/indiretta)
-   - Elementi di prova disponibili
-   - Forza del brevetto/marchio violato
-2. STRATEGIE PRELIMINARI:
-   - Lettera di diffida (contenuto)
-   - Mediazione/arbitrato
-   - Sequestro conservativo
-3. AZIONI GIUDIZIARIE:
-   - Giudizio di merito (invalidita/violazione)
-   - Misure cautelari (inibitoria, sequestro)
-   - Azioni penali (se contraffazione)
-4. RICHIEDIBILITA:
-   - Danni (diretti, indiretti, moral damages)
-   - Profitto indebito
-   - Distruzione dei prodotti
-   - Pubblicazione sentenza
-5. ANALISI COSTI/BENEFICI
-6. FORO E PROCEDURA
-
-Formato: HTML con flowchart decisionale, tabelle costi.`,
+REGOLA: Focus sulla DISTINTIVITA. Se il segno e descrittivo, dillo chiaramente.`,
 
     // =====================================================
-    // 17. DUE DILIGENCE IP
+    // 9. MODELLO DI UTILITA — Tono: Pratico-rapido, focus: forma
     // =====================================================
-    'servizio-due diligence': `Sei un consulente due diligence IP per private equity.
-L'utente deve valutare questo portfolio/acquisizione:
+    'servizio-modello': `AGISCI COME ESPERTO DI MODELLI DI UTILITA. Scrivi in italiano pratico, diretto.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una checklist e analisi di due diligence:
+OUTPUT RICHIESTO (HTML):
+<h1>MODELLO DI UTILITA</h1>
 
-1. CHECKLIST DOCUMENTALE:
-   - Titolarita (assegnazioni, catena)
-   - Mantenimento (tasse annue pagate)
-   - Ambito geografico
-   - Licenze in/out
-   - Contenziosi pendenti
-   - Pignoramenti/gravami
-2. ANALISI TECNICA:
-   - Validita dei brevetti
-   - Copertura vs prodotti
-   - Brevetti divisionali
-   - Continuazioni
-3. ANALISI COMMERCIALE:
-   - Valore dei brevetti chiave
-   - Dipendenza da terzi
-   - Standard essential patents
-   - Pool di brevetti
-4. RISCHI IDENTIFICATI:
-   - Critical (deal breaker)
-   - Major (richiedono mitigation)
-   - Minor (accettabili)
-5. RACCOMANDAZIONI
+<h2>1. PERCHE MODELLO E NON BREVETTO?</h2>
+<table>
+<tr><th> Aspetto</th><th>Modello</th><th>Brevetto</th></tr>
+<tr><td>Costo</td><td>[basso]</td><td>[alto]</td></tr>
+<tr><td>Tempo</td><td>[rapido]</td><td>[lento]</td></tr>
+<tr><td>Durata</td><td>10 anni</td><td>20 anni</td></tr>
+<tr><td>Metodi</td><td>No</td><td>Si</td></tr>
+</table>
+<p><strong>Scelta:</strong> [perche modello]</p>
 
-Formato: HTML con checklist interattiva, matrice rischi.`,
+<h2>2. DESCRIZIONE TECNICA</h2>
+<p><strong>Forma:</strong> [desc]</p>
+<p><strong>Configurazione:</strong> [desc]</p>
+<p><strong>Disposizione:</strong> [desc]</p>
+<p><strong>Funzionalita:</strong> [desc]</p>
+<p><strong>Vantaggi:</strong> [desc]</p>
 
-    // =====================================================
-    // 18. PATENT TROLLING DEFENSE
-    // =====================================================
-    'servizio-trolling': `Sei un consulente difesa da NPE (Non-Practicing Entities).
-L'utente e minacciato da:
+<h2>3. RIVENDICAZIONI</h2>
+<p><strong>1. Indipendente:</strong> [semplificata]</p>
+<p><strong>2. Dipendente:</strong> [dettaglio]</p>
+<p><strong>3. Dipendente:</strong> [dettaglio]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. FIGURE</h2>
+<p><strong>Vista frontale:</strong> [desc]</p>
+<p><strong>Vista laterale:</strong> [desc]</p>
+<p><strong>Sezione:</strong> [desc]</p>
 
-Genera una strategia di difesa:
+<h2>5. PROCEDURA UIBM</h2>
+<p><strong>Costo:</strong> [EUR]</p>
+<p><strong>Tempo:</strong> [mesi]</p>
+<p><strong>Documenti:</strong> [lista]</p>
 
-1. ANALISI DELLA MINACCIA:
-   - Chi e il NPE (profilo, storia)
-   - Quali brevetti vengono asseriti
-   - Forza delle rivendicazioni
-2. STRATEGIE DI DIFESA:
-   - Invalidita del brevetto (IPR, EPO opposition)
-   - Non violazione (claim construction)
-   - Licenza FRAND (se SEP)
-   - Prior user rights
-3. TATTICHE NEGOZIALI:
-   - Valutazione del valore reale
-   - Counter-assertion
-   - Joint defense con altri imputati
-   - Countersuit (antitrust, sham litigation)
-4. COSTI E TIMING:
-   - Costi difesa vs settlement
-   - Timing tipico
-   - Forum shopping
-5. RACCOMANDAZIONE STRATEGICA
-
-Formato: HTML con decision tree, costi comparati.`,
+REGOLA: Sii PRATICO. Il modello e per invenzioni semplici, non teoriche.`,
 
     // =====================================================
-    // 19. OPEN SOURCE IP CHECK
+    // 10. DESIGN — Tono: Estetico-visivo, focus: aspetto
     // =====================================================
-    'servizio-opensource': `Sei un consulente compliance open source.
-L'utente ha questo progetto/software:
+    'servizio-design': `AGISCI COME DESIGNER IP. Scrivi in italiano, focus sull'aspetto visivo.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un'analisi di compliance:
+OUTPUT RICHIESTO (HTML):
+<h1>DESIGN INDUSTRIALE</h1>
 
-1. INVENTARIO LICENZE:
-   - Licenze identificate (GPL, MIT, Apache, etc)
-   - Tipo di copyleft (forte/weak/permissive)
-   - Dipendenze dirette e transitive
-2. ANALISI COMPATIBILITA:
-   - Compatibilita tra licenze usate
-   - Conflitti potenziali
-   - Problemi di distribuzione
-3. RISCHI IP:
-   - Contaminazione copyleft
-   - Obbligo di rilascio sorgente
-   - Brevetti e licenze impliciti
-4. AZIONI CORRETTIVE:
-   - Sostituzione componenti
-   - Separazione moduli
-   - Dual licensing
-   - CLA/DCO
-5. POLICY OPEN SOURCE AZIENDALE
+<h2>1. ANALISI DEL DESIGN</h2>
+<p><strong>Linee:</strong> [desc]</p>
+<p><strong>Contorni:</strong> [desc]</p>
+<p><strong>Colori:</strong> [desc]</p>
+<p><strong>Texture:</strong> [desc]</p>
+<p><strong>Materiali:</strong> [desc]</p>
 
-Formato: HTML con tabella licenze, matrice compatibilita.`,
+<h2>2. NOVITA</h2>
+<p><strong>Stato dell'arte:</strong> [cosa esiste]</p>
+<p><strong>Differenza:</strong> [cosa rende nuovo]</p>
+<p><strong>Individualita:</strong> [perche e distintivo]</p>
 
-    // =====================================================
-    // 20. STARTUP IP FOUNDATION
-    // =====================================================
-    'servizio-startup': `Sei un consulente IP per startup tech.
-L'utente ha questa startup/idea:
+<h2>3. VISTE RICHIESTE</h2>
+<table>
+<tr><th>Vista</th><th>Tipo</th><th>Obbligatoria</th></tr>
+<tr><td>Frontale</td><td>Foto/disegno</td><td>Si</td></tr>
+<tr><td>Posteriore</td><td>Foto/disegno</td><td>Si</td></tr>
+<tr><td>Laterale</td><td>Foto/disegno</td><td>Si</td></tr>
+<tr><td>Superiore</td><td>Foto/disegno</td><td>Si</td></tr>
+<tr><td>Inferiore</td><td>Foto/disegno</td><td>Si</td></tr>
+<tr><td>Perspettiva</td><td>Foto/disegno</td><td>Opzionale</td></tr>
+</table>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. CLASSIFICAZIONE LOCARNO</h2>
+<p><strong>Classe:</strong> [XX.XX] — [prodotti]</p>
 
-Genera un piano fondazioni IP per startup:
+<h2>5. STRATEGIA</h2>
+<p><strong>Italia:</strong> [costo]</p>
+<p><strong>EUIPO:</strong> [costo]</p>
+<p><strong>Durata:</strong> 5+5 anni</p>
 
-1. ASSET IP IDENTIFICATI:
-   - Brevettabile?
-   - Marchiabile?
-   - Copyright?
-   - Secret/Trade secret?
-   - Database?
-2. STRATEGIA FASE EARLY:
-   - Provisional patent (US) vs deposito diretto
-   - Marchi provvisori
-   - NDA con fondatori/early employees
-   - IP assignment agreements
-3. FONDAZIONE LEGALE:
-   - Split IP tra persone e societa
-   - Founder IP agreements
-   - Employee invention assignments
-   - Consultant agreements
-4. FUNDING E IP:
-   - Valutazione IP per investor
-   - IP in cap table
-   - Representations in term sheet
-5. ROADMAP 12 MESI
-
-Formato: HTML con timeline, checklist founder.`,
+REGOLA: Descrivi l'aspetto visivo con precisione. Non la funzione.`,
 
     // =====================================================
-    // 21. TRADE SECRET STRATEGY
+    // 11-25: PROMPT DEFAULT PER GLI ALTRI SERVIZI
     // =====================================================
-    'servizio-segreto': `Sei un consulente trade secret.
-L'utente vuole proteggere come segreto industriale:
+    'servizio-licenza': `AGISCI COME AVVOCATO DI CONTRATTI IP. Scrivi in italiano legale formale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera una strategia di trade secret:
+OUTPUT RICHIESTO (HTML):
+<h1>BOZZA CONTRATTO DI LICENZA</h1>
 
-1. IDONEITA A TRADE SECRET:
-   - E segreto? (non di pubblico dominio)
-   - Ha valore economico?
-   - E soggetto a misure di riservatezza?
-2. MISURE TECNICHE:
-   - Accesso controllato (badge, password)
-   - Cifratura dati
-   - Network segmentation
-   - DRM/watermark
-3. MISURE LEGALI:
-   - NDA con tutti i soggetti
-   - Clausole contrattuali
-   - Employee handbook
-   - Exit interviews e return property
-4. MISURE ORGANIZZATIVE:
-   - Classificazione informazioni
-   - Need-to-know basis
-   - Training awareness
-   - Audit periodici
-5. CONFRONTO CON BREVETTO:
-   - Quando segreto e meglio
-   - Quando brevetto e meglio
-   - Ibridi (patent + secret)
+<h2>1. PREMESSA</h2>
+<p>Parti: [licenziante] e [licenziatario]</p>
+<p>Oggetto: [brevetto/marchio/tecnologia]</p>
 
-Formato: HTML con policy template, checklist misure.`,
+<h2>2. OGGETTO</h2>
+<p>Tipo: [esclusiva/semi-esclusiva/non esclusiva]</p>
+<p>Territorio: [quali]</p>
+<p>Campo: [quale]</p>
 
-    // =====================================================
-    // 22. STANDARD ESSENTIAL PATENTS (SEP)
-    // =====================================================
-    'servizio-sep': `Sei un consulente SEP e standardizzazione.
-L'utente ha questa tecnologia standard:
+<h2>3. OBBLIGHI ECONOMICI</h2>
+<table>
+<tr><th>Voce</th><th>Importo</th><th>Scadenza</th></tr>
+<tr><td>Royalty</td><td>[X% o EUR]</td><td>[quando]</td></tr>
+<tr><td>Minimo garantito</td><td>[EUR]</td><td>[annuo]</td></tr>
+</table>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. OBBLIGHI DELLE PARTI</h2>
+<p><strong>Licenziante:</strong> [mantenimento, difesa, aggiornamenti]</p>
+<p><strong>Licenziatario:</strong> [best efforts, reporting, qualita]</p>
 
-Genera un'analisi SEP:
+<h2>5. DURATA E RISOLUZIONE</h2>
+<p>Durata: [anni]</p>
+<p>Rinnovo: [condizioni]</p>
+<p>Risoluzione: [cause]</p>
 
-1. ANALISI DELLO STANDARD:
-   - Standard rilevante (3G, 4G, 5G, WiFi, etc)
-   - Essentiality assessment
-   - Claim mapping allo standard
-2. OBBLIGHI FRAND:
-   - Fair, Reasonable, And Non-Discriminatory
-   - Cosa significa in pratica
-   - Determinazione royalty FRAND
-3. STRATEGIA LICENZING:
-   - Licenze a tutto il mercato
-   - Portfolio licensing
-   - Patent pools
-   - Cross-licensing
-4. CONTENZIOSO SEP:
-   - Azioni per ingiunzione (limitazioni EU)
-   - Determinazione FRAND da parte del giudice
-   - Forum shopping (Germania, UK, Cina)
-5. REGISTRAZIONE E DICHIARAZIONE
+<h2>6. CLAUSOLE TIPICHE</h2>
+<ul>
+<li>Riservatezza</li>
+<li>Indennizzo</li>
+<li>Foro: [citta]</li>
+<li>Legge: [italiana]</li>
+</ul>
 
-Formato: HTML con mappa standard, calcolatore FRAND.`,
+REGOLA: Usa linguaggio contrattuale standard. Lascia spazi per compilazione.`,
 
-    // =====================================================
-    // 23. IP AUDIT AZIENDALE
-    // =====================================================
-    'servizio-audit': `Sei un consulente IP audit per aziende.
-L'utente vuole fare un audit di:
+    'servizio-cessione': `AGISCI COME AVVOCATO DI CESSIONI IP. Scrivi in italiano legale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un piano di IP audit:
+OUTPUT RICHIESTO (HTML):
+<h1>BOZZA CONTRATTO DI CESSIONE</h1>
 
-1. SCOPO E AMBITO:
-   - Identificare asset IP nascosti
-   - Valutare rischi di violazione
-   - Ottimizzare protezione
-2. FASI DELL'AUDIT:
-   - Fase 1: Inventario (brevetti, marchi, design, secret)
-   - Fase 2: Verifica titolarita e mantenimento
-   - Fase 3: Mappatura vs prodotti/servizi
-   - Fase 4: Valutazione rischi esterni
-   - Fase 5: Report e raccomandazioni
-3. CHECKLIST PER AREA:
-   - R&D (invention disclosures)
-   - Marketing (marchi, slogan, packaging)
-   - HR (contratti, assignment)
-   - IT (software, open source)
-   - Operations (know-how, processi)
-4. TEMPLATE DOCUMENTI:
-   - Invention disclosure form
-   - Trade secret classification
-   - IP assignment checklist
-5. REPORT FINALE E KPI
+<h2>1. PREMESSA</h2>
+<p>Cedente: [nome]</p>
+<p>Cessionario: [nome]</p>
+<p>Titolarita: [come acquisita]</p>
 
-Formato: HTML con checklist dettagliate, template pronti.`,
+<h2>2. OGGETTO</h2>
+<p>Cosa: [brevetto/marchio/know-how]</p>
+<p>Territori: [quali]</p>
+<p>Diritti: [tutti/parziali]</p>
 
-    // =====================================================
-    // 24. GEOGRAFICO IP (PCT, Convention)
-    // =====================================================
-    'servizio-pct': `Sei un consulente depositi internazionali.
-L'utente vuole estendere la protezione:
+<h2>3. CONTRAPPESSO</h2>
+<p>Prezzo fisso: [EUR]</p>
+<p>Variabile: [royalty post-cessione]</p>
+<p>Struttura: [quando pagare]</p>
 
----
-DESCRIZIONE: {descrizione}
----
+<h2>4. GARANZIE</h2>
+<p>Titolarita piena: [si/no]</p>
+<p>Assenza gravami: [si/no]</p>
+<p>Non conoscenza violazioni: [si/no]</p>
 
-Genera una strategia geografica:
+<h2>5. OBBLIGHI POST-CESSIONE</h2>
+<p>Assistenza: [mesi]</p>
+<p>Formazione: [ore]</p>
+<p>Non concorrenza: [anni]</p>
 
-1. ANALISI MERCATI TARGET:
-   - Dove si vende/produce
-   - Dove sono i competitor
-   - Dove si potrebbe vendere in futuro
-2. STRATEGIE DI ESTENSIONE:
-   - Convenzione di Parigi (12 mesi prioritario)
-   - PCT (30 mesi, fase internazionale)
-   - Depositi diretti nazionali
-   - Regionali (EP, ARIPO, OAPI, EAPO)
-3. COSTI E TIMING:
-   - Tasse deposito per paese
-   - Traduzioni (PCT nazionale)
-   - Tasse annue cumulative
-   - Budget totale stimato
-4. TABELLA PAESI PRIORITARI:
-   - Tier 1 (must have)
-   - Tier 2 (nice to have)
-   - Tier 3 (future expansion)
-5. ROADMAP 30 MESI
+<h2>6. RISOLUZIONE</h2>
+<p>Cause: [quali]</p>
+<p>Penali: [EUR]</p>
 
-Formato: HTML con mappa interattiva descritta, tabella costi.`,
+REGOLA: Sii preciso su titolarita e gravami.`,
 
-    // =====================================================
-    // 25. FORMAZIONE IP (Training)
-    // =====================================================
-    'servizio-training': `Sei un formatore in proprieta intellettuale per aziende.
-L'utente vuole formare il team su:
+    'servizio-nda': `AGISCI COME AVVOCATO DI RISERVATEZZA. Scrivi in italiano legale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un programma di formazione IP:
+OUTPUT RICHIESTO (HTML):
+<h1>ACCORDO DI RISERVATEZZA (NDA)</h1>
 
-1. VALUTAZIONE BISOGNI:
-   - Livello attuale del team (base/avanzato)
-   - Ruoli da formare (R&D, legal, management)
-   - Obiettivi specifici
-2. PROGRAMMA MODULARE:
-   - Modulo 1: Fondamenti IP (brevetti, marchi, copyright)
-   - Modulo 2: Invention disclosure e processo R&D
-   - Modulo 3: Open source e compliance
-   - Modulo 4: Trade secret e NDA
-   - Modulo 5: Valutazione e monetizzazione IP
-3. MATERIALI DIDATTICI:
-   - Slide outline
-   - Casi studio
-   - Quiz di verifica
-   - Template pratici
-4. KPI E VALUTAZIONE:
-   - Test pre/post
-   - Numero invention disclosure aumentate
-   - Incidenti compliance ridotti
-   - Engagement index
-5. CALENDARIO PROPOSTO
+<h2>1. DEFINIZIONI</h2>
+<p><strong>Informazioni riservate:</strong> [definizione ampia]</p>
+<p><strong>Esempi:</strong> [lista]</p>
 
-Formato: HTML con syllabus, calendario, materiali.`,
+<h2>2. OBBLIGHI DEL RICEVENTE</h2>
+<ul>
+<li>Mantenere riservatezza</li>
+<li>Usare solo per scopo: [quale]</li>
+<li>Non divulgare a terzi</li>
+<li>Restrizione accesso interno: [need-to-know]</li>
+</ul>
+
+<h2>3. ECCEZIONI</h2>
+<ul>
+<li>Pubblico dominio</li>
+<li>Gia in possesso</li>
+<li>Sviluppate indipendentemente</li>
+<li>Obbligo di legge</li>
+</ul>
+
+<h2>4. DURATA</h2>
+<p>Accordo: [anni]</p>
+<p>Obbligo: [anni]</p>
+
+<h2>5. RIMEDI</h2>
+<p>Ingiunzione: [si]</p>
+<p>Risarcimento: [si]</p>
+<p>Penale: [EUR, se prevista]</p>
+
+<h2>6. LEGGE E FORO</h2>
+<p>Legge: [italiana]</p>
+<p>Foro: [citta]</p>
+
+REGOLA: Bilaterale se non specificato. Unilaterale se richiesto.`,
+
+    'servizio-loi': `AGISCI COME CONSULENTE M&A. Scrivi in italiano business.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>LETTERA DI INTENZIONE</h1>
+
+<h2>1. PARTI E CONTESTO</h2>
+<p>Acquirente: [nome]</p>
+<p>Target: [nome]</p>
+<p>Contesto: [perche questa trattativa]</p>
+
+<h2>2. OGGETTO</h2>
+<p>Cosa: [brevetti/marchi/azienda]</p>
+<p>Inclusi: [quali asset]</p>
+<p>Esclusi: [quali asset]</p>
+
+<h2>3. CONDIZIONI ECONOMICHE</h2>
+<p>Prezzo: [EUR o range]</p>
+<p>Struttura: [cash/azioni/earn-out]</p>
+<p>Timing: [quando]</p>
+
+<h2>4. CONDIZIONI SOSPENSIVE</h2>
+<ul>
+<li>Due diligence soddisfacente</li>
+<li>Approvazioni interne</li>
+<li>Autorizzazioni antitrust</li>
+</ul>
+
+<h2>5. ESCLUSIVITA</h2>
+<p>Periodo: [mesi]</p>
+<p>Obbligo: [non trattare con altri]</p>
+
+<h2>6. NON BINDING / BINDING</h2>
+<p>Non binding: [quali clausole]</p>
+<p>Binding: [quali clausole]</p>
+
+REGOLA: Chiara distinzione tra binding e non binding.`,
+
+    'servizio-opposizione': `AGISCI COME AVVOCATO LITIGANTE. Scrivi in italiano aggressivo.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>STRATEGIA DI OPPOSIZIONE</h1>
+
+<h2>1. ANALISI BREVETTO OPPOSTO</h2>
+<p>Punti deboli: [quali]</p>
+<p>Ampiezza eccessiva: [dove]</p>
+<p>Errori procedurali: [quali]</p>
+
+<h2>2. MOTIVI</h2>
+<ul>
+<li>Mancanza novita: [prior art]</li>
+<li>Mancanza attivita inventiva: [perche]</li>
+<li>Insufficienza descrizione: [dove]</li>
+<li>Aggiunta materia: [cosa]</li>
+</ul>
+
+<h2>3. PROVE</h2>
+<table>
+<tr><th>Prior Art</th><th>Rilevanza</th><th>Come ottenerla</th></tr>
+<tr><td>[riferimento]</td><td>[alta/media]</td><td>[database]</td></tr>
+</table>
+
+<h2>4. STRATEGIA PROCESSUALE</h2>
+<p>Timing: [entro 9 mesi per EU]</p>
+<p>Foro: [quale]</p>
+<p>Costi: [EUR]</p>
+<p>Settlement: [possibile?]</p>
+
+<h2>5. BOZZA MEMORIA</h2>
+<p>[Struttura articolata]</p>
+
+REGOLA: Sii AGGRESSIVO nei punti deboli.`,
+
+    'servizio-tutela': `AGISCI COME AVVOCATO CONTENZIOSO. Scrivi in italiano legale.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>STRATEGIA DI TUTELA</h1>
+
+<h2>1. SITUAZIONE</h2>
+<p>Violazione: [diretta/indiretta]</p>
+<p>Prove: [quali disponibili]</p>
+<p>Forza brevetto: [forte/debole]</p>
+
+<h2>2. STRATEGIE PRELIMINARI</h2>
+<ul>
+<li>Lettera diffida: [contenuto]</li>
+<li>Mediazione: [possibile?]</li>
+<li>Sequestro conservativo: [quando]</li>
+</ul>
+
+<h2>3. AZIONI GIUDIZIARIE</h2>
+<ul>
+<li>Giudizio merito: [invalidita/violazione]</li>
+<li>Misure cautelari: [inibitoria/sequestro]</li>
+<li>Azioni penali: [contraffazione?]</li>
+</ul>
+
+<h2>4. RICHIEDIBILITA</h2>
+<p>Danni: [diretti/indiretti]</p>
+<p>Profitto indebito: [calcolo]</p>
+<p>Distruzione: [prodotti]</p>
+<p>Pubblicazione: [sentenza]</p>
+
+<h2>5. COSTI/BENEFICI</h2>
+<table>
+<tr><th>Voce</th><th>Costo</th><th>Beneficio</th></tr>
+<tr><td>Lite</td><td>[EUR]</td><td>[EUR]</td></tr>
+</table>
+
+<h2>6. FORO</h2>
+<p>Competente: [quale]</p>
+<p>Procedura: [sommaria/ordinaria]</p>
+
+REGOLA: Analisi costi/benefici realistica.`,
+
+    'servizio-due diligence': `AGISCI COME ANALISTA DUE DILIGENCE. Scrivi in italiano checklist.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>DUE DILIGENCE IP</h1>
+
+<h2>1. CHECKLIST DOCUMENTALE</h2>
+<table>
+<tr><th>Voce</th><th>Stato</th><th>Note</th></tr>
+<tr><td>Titolarita</td><td>[ok/dubbio/assente]</td><td>[note]</td></tr>
+<tr><td>Mantenimento</td><td>[ok/dubbio/assente]</td><td>[note]</td></tr>
+<tr><td>Geografico</td><td>[ok/dubbio/assente]</td><td>[note]</td></tr>
+<tr><td>Licenze</td><td>[ok/dubbio/assente]</td><td>[note]</td></tr>
+<tr><td>Contenziosi</td><td>[ok/dubbio/assente]</td><td>[note]</td></tr>
+</table>
+
+<h2>2. ANALISI TECNICA</h2>
+<p>Validita: [ok/dubbio]</p>
+<p>Copertura: [vs prodotti]</p>
+<p>Divisionali: [quali]</p>
+
+<h2>3. ANALISI COMMERCIALE</h2>
+<p>Valore chiave: [quali brevetti]</p>
+<p>Dipendenza terzi: [si/no]</p>
+<p>SEP: [quali]</p>
+
+<h2>4. RISCHI</h2>
+<table>
+<tr><th>Livello</th><th>Rischio</th><th>Mitigazione</th></tr>
+<tr><td>Critical</td><td>[cosa]</td><td>[azione]</td></tr>
+<tr><td>Major</td><td>[cosa]</td><td>[azione]</td></tr>
+</table>
+
+<h2>5. RACCOMANDAZIONI</h2>
+<p>[Procedere/Condizioni/Rinunciare]</p>
+
+REGOLA: Checklist completa, niente omissioni.`,
+
+    'servizio-trolling': `AGISCI COME DIFENSORE ANTI-NPE. Scrivi in italiano strategico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>DIFESA DA PATENT TROLL</h1>
+
+<h2>1. ANALISI MINACCIA</h2>
+<p>NPE: [chi e, profilo]</p>
+<p>Brevetti asseriti: [quali]</p>
+<p>Forza: [forte/debole]</p>
+
+<h2>2. STRATEGIE DIFESA</h2>
+<ul>
+<li>Invalidita: [IPR, EPO opposition]</li>
+<li>Non violazione: [claim construction]</li>
+<li>FRAND: [se SEP]</li>
+<li>Prior user: [se applicabile]</li>
+</ul>
+
+<h2>3. TATTICHE NEGOZIALI</h2>
+<p>Valore reale: [stima]</p>
+<p>Counter-assertion: [possibile?]</p>
+<li>Joint defense: [con chi]</li>
+
+<h2>4. COSTI E TIMING</h2>
+<table>
+<tr><th>Opzione</th><th>Costo</th><th>Tempo</th><th>Esito</th></tr>
+<tr><td>Difesa</td><td>[EUR]</td><td>[mesi]</td><td>[vittoria/sconfitta]</td></tr>
+<tr><td>Settlement</td><td>[EUR]</td><td>[settimane]</td><td>[chiusura]</td></tr>
+</table>
+
+<h2>5. RACCOMANDAZIONE</h2>
+<p><strong>[COMBATTERE / NEGOZIARE / LICENZA]</strong></p>
+
+REGOLA: NPE = Non-Producing Entity. Non pagare mai il primo numero.`,
+
+    'servizio-opensource': `AGISCI COME COMPLIANCE OFFICER. Scrivi in italiano tecnico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>COMPLIANCE OPEN SOURCE</h1>
+
+<h2>1. INVENTARIO LICENZE</h2>
+<table>
+<tr><th>Componente</th><th>Licenza</th><th>Copyleft</th><th>Dipendenza</th></tr>
+<tr><td>[nome]</td><td>[GPL/MIT/Apache]</td><td>[forte/weak/permissive]</td><td>[diretta/transitiva]</td></tr>
+</table>
+
+<h2>2. COMPATIBILITA</h2>
+<p>Conflitti: [quali]</p>
+<p>Problemi distribuzione: [quali]</p>
+
+<h2>3. RISCHI IP</h2>
+<p>Contaminazione: [si/no]</p>
+<p>Rilascio sorgente: [obbligo?]</p>
+<p>Brevetti: [impliciti?]</p>
+
+<h2>4. AZIONI CORRETTIVE</h2>
+<ul>
+<li>Sostituzione: [componenti]</li>
+<li>Separazione: [moduli]</li>
+<li>Dual licensing: [possibile?]</li>
+</ul>
+
+<h2>5. POLICY</h2>
+<p>[Template policy aziendale]</p>
+
+REGOLA: Lista TUTTE le licenze, anche transitive.`,
+
+    'servizio-startup': `AGISCI COME CONSULENTE STARTUP. Scrivi in italiano pratico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>FOUNDATION IP PER STARTUP</h1>
+
+<h2>1. ASSET IP</h2>
+<table>
+<tr><th>Asset</th><th>Tipo</th><th>Priorita</th></tr>
+<tr><td>[1]</td><td>[brevetto/marchio/secret]</td><td>[alta/media]</td></tr>
+</table>
+
+<h2>2. STRATEGIA EARLY</h2>
+<p>Provisional: [US, se applicabile]</p>
+<p>Marchi provvisori: [quali]</p>
+<p>NDA: [fondatori/early]</p>
+
+<h2>3. FONDAZIONE LEGALE</h2>
+<p>Split IP: [persone vs societa]</p>
+<p>Founder agreements: [checklist]</p>
+<p>Employee assignments: [template]</p>
+
+<h2>4. FUNDING</h2>
+<p>Valutazione IP: [per investor]</p>
+<p>Cap table: [come inserire]</p>
+
+<h2>5. ROADMAP 12 MESI</h2>
+<table>
+<tr><th>Mese</th><th>Azione</th></tr>
+<tr><td>1-3</td><td>[azione]</td></tr>
+<tr><td>4-6</td><td>[azione]</td></tr>
+<tr><td>7-12</td><td>[azione]</td></tr>
+</table>
+
+REGOLA: Focus su velocita e costo zero iniziale.`,
+
+    'servizio-segreto': `AGISCI COME ESPERTO TRADE SECRET. Scrivi in italiano operativo.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>STRATEGIA TRADE SECRET</h1>
+
+<h2>1. IDONEITA</h2>
+<p>Segreto: [si/no]</p>
+<p>Valore economico: [si/no]</p>
+<p>Misure riservatezza: [si/no]</p>
+
+<h2>2. MISURE TECNICHE</h2>
+<ul>
+<li>Accesso controllato: [badge/password]</li>
+<li>Cifratura: [dati]</li>
+<li>Network segmentation</li>
+<li>DRM/watermark</li>
+</ul>
+
+<h2>3. MISURE LEGALI</h2>
+<ul>
+<li>NDA: [tutti i soggetti]</li>
+<li>Clausole contrattuali</li>
+<li>Employee handbook</li>
+<li>Exit interviews</li>
+</ul>
+
+<h2>4. MISURE ORGANIZZATIVE</h2>
+<ul>
+<li>Classificazione</li>
+<li>Need-to-know</li>
+<li>Training</li>
+<li>Audit</li>
+</ul>
+
+<h2>5. CONFRONTO BREVETTO</h2>
+<table>
+<tr><th>Scenario</th><th>Segreto</th><th>Brevetto</th></tr>
+<tr><td>Durata</td><td>Illimitata</td><td>20 anni</td></tr>
+<tr><td>Costo</td><td>Basso</td><td>Alto</td></tr>
+<tr><td>Protezione</td><td>Attiva</td><td>Passiva</td></tr>
+</table>
+
+REGOLA: Trade secret = protezione attiva, non passiva.`,
+
+    'servizio-sep': `AGISCI COME ESPERTO STANDARD. Scrivi in italiano tecnico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>ANALISI STANDARD ESSENTIAL PATENTS</h1>
+
+<h2>1. ANALISI STANDARD</h2>
+<p>Standard: [3G/4G/5G/WiFi/etc]</p>
+<p>Essentiality: [assessment]</p>
+<p>Claim mapping: [a quale parte dello standard]</p>
+
+<h2>2. OBBLIGHI FRAND</h2>
+<p>Fair: [cosa significa]</p>
+<p>Reasonable: [cosa significa]</p>
+<p>Non-discriminatory: [cosa significa]</p>
+
+<h2>3. STRATEGIA LICENZING</h2>
+<ul>
+<li>Portfolio licensing</li>
+<li>Patent pools</li>
+<li>Cross-licensing</li>
+</ul>
+
+<h2>4. CONTENZIOSO</h2>
+<p>Ingiunzione: [limitazioni EU]</p>
+<p>Forum: [Germania/UK/Cina]</p>
+
+<h2>5. REGISTRAZIONE</h2>
+<p>Dichiarazione: [dove]</p>
+
+REGOLA: FRAND = obbligo legale, non opzionale.`,
+
+    'servizio-audit': `AGISCI COME AUDITOR IP. Scrivi in italiano checklist.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>IP AUDIT AZIENDALE</h1>
+
+<h2>1. CHECKLIST PER AREA</h2>
+<table>
+<tr><th>Area</th><th>Stato</th><th>Azione</th></tr>
+<tr><td>R&D</td><td>[ok/dubbio]</td><td>[azione]</td></tr>
+<tr><td>Marketing</td><td>[ok/dubbio]</td><td>[azione]</td></tr>
+<tr><td>HR</td><td>[ok/dubbio]</td><td>[azione]</td></tr>
+<tr><td>IT</td><td>[ok/dubbio]</td><td>[azione]</td></tr>
+</table>
+
+<h2>2. TEMPLATE</h2>
+<p>Invention disclosure form</p>
+<p>Trade secret classification</p>
+<p>IP assignment checklist</p>
+
+<h2>3. REPORT</h2>
+<p>KPI: [quali]</p>
+
+REGOLA: Checklist completa, niente omissioni.`,
+
+    'servizio-pct': `AGISCI COME ESPERTO DEPOSITI INTERNAZIONALI. Scrivi in italiano pratico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>STRATEGIA GEOGRAFICA IP</h1>
+
+<h2>1. MERCATI TARGET</h2>
+<p>Vende: [dove]</p>
+<p>Competitor: [dove]</p>
+<p>Futuro: [dove]</p>
+
+<h2>2. STRATEGIE</h2>
+<table>
+<tr><th>Opzione</th><th>Costo</th><th>Tempo</th><th>Vantaggio</th></tr>
+<tr><td>Convenzione Parigi</td><td>[EUR]</td><td>12 mesi</td><td>[pro]</td></tr>
+<tr><td>PCT</td><td>[EUR]</td><td>30 mesi</td><td>[pro]</td></tr>
+</table>
+
+<h2>3. COSTI</h2>
+<p>Deposito: [per paese]</p>
+<p>Traduzioni: [PCT nazionale]</p>
+<p>Tasse annue: [cumulative]</p>
+
+<h2>4. TABELLA PAESI</h2>
+<table>
+<tr><th>Tier</th><th>Paesi</th><th>Priorita</th></tr>
+<tr><td>1</td><td>[quali]</td><td>Must have</td></tr>
+<tr><td>2</td><td>[quali]</td><td>Nice to have</td></tr>
+</table>
+
+<h2>5. ROADMAP 30 MESI</h2>
+<p>[Timeline]</p>
+
+REGOLA: Costi realistici per paese.`,
+
+    'servizio-training': `AGISCI COME FORMATORE IP. Scrivi in italiano didattico.
+
+ARGOMENTO: {descrizione}
+
+OUTPUT RICHIESTO (HTML):
+<h1>PROGRAMMA FORMAZIONE IP</h1>
+
+<h2>1. BISOGNI</h2>
+<p>Livello: [base/avanzato]</p>
+<p>Ruoli: [R&D/legal/management]</p>
+<p>Obiettivi: [quali]</p>
+
+<h2>2. PROGRAMMA</h2>
+<table>
+<tr><th>Modulo</th><th>Durata</th><th>Contenuto</th></tr>
+<tr><td>1</td><td>[ore]</td><td>Fondamenti</td></tr>
+<tr><td>2</td><td>[ore]</td><td>Invention disclosure</td></tr>
+<tr><td>3</td><td>[ore]</td><td>Open source</td></tr>
+<tr><td>4</td><td>[ore]</td><td>Trade secret</td></tr>
+<tr><td>5</td><td>[ore]</td><td>Monetizzazione</td></tr>
+</table>
+
+<h2>3. MATERIALI</h2>
+<p>Slide: [outline]</p>
+<p>Casi studio: [quali]</p>
+<p>Quiz: [verifica]</p>
+
+<h2>4. KPI</h2>
+<p>Test pre/post</p>
+<p>Invention disclosure aumentate</p>
+<p>Incidenti ridotti</p>
+
+<h2>5. CALENDARIO</h2>
+<p>[Proposta]</p>
+
+REGOLA: Pratico, non teorico.`,
 
     // =====================================================
     // PROMPT DEFAULT (fallback)
     // =====================================================
-    'default': `Sei un esperto consulente in proprieta intellettuale.
-L'utente ha descritto questa esigenza:
+    'default': `AGISCI COME CONSULENTE IP. Scrivi in italiano professionale.
 
----
-DESCRIZIONE: {descrizione}
----
+ARGOMENTO: {descrizione}
 
-Genera un'analisi professionale e completa che includa:
-1. Riassunto della situazione
-2. Analisi tecnica e legale
-3. Raccomandazioni pratiche
-4. Prossimi passi concreti
-5. Risorse e costi stimati
+OUTPUT RICHIESTO (HTML):
+<h1>ANALISI</h1>
+<h2>1. Riassunto</h2>
+<p>[sintesi]</p>
+<h2>2. Analisi tecnica</h2>
+<p>[dettagli]</p>
+<h2>3. Analisi legale</h2>
+<p>[dettagli]</p>
+<h2>4. Raccomandazioni</h2>
+<ul>
+<li>[azione 1]</li>
+<li>[azione 2]</li>
+</ul>
+<h2>5. Prossimi passi</h2>
+<p>[concreti]</p>
+<h2>6. Costi</h2>
+<p>[stima]</p>
 
-Formato: HTML strutturato con sezioni chiare.`
+REGOLA: Sempre concreto, mai vago.`
 };
 
 // Esporta
