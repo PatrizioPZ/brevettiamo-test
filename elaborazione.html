@@ -165,6 +165,14 @@
     <script src="js/ia-engine.js"></script>
     
     <script>
+        // ============================================
+        // PULIZIA LOCALSTORAGE - FORZA NUOVA CHIAMATA
+        // ============================================
+        localStorage.removeItem('brevettiamo_risultato_ia');
+        localStorage.removeItem('brevettiamo_ia_meta');
+        localStorage.removeItem('brevettiamo_use_fallback');
+        console.log('Cache pulita - forzo nuova chiamata IA');
+        
         // Recupera dati dalla pagina precedente
         const servizioId = localStorage.getItem('brevettiamo_servizio_id');
         const servizioNome = localStorage.getItem('brevettiamo_servizio_nome');
@@ -188,7 +196,7 @@
         const messaggiProgresso = [
             { pct: 10, msg: 'Analisi della descrizione...', detail: 'Estrazione elementi tecnici chiave' },
             { pct: 25, msg: 'Preparazione del prompt...', detail: 'Selezione modello IA ottimale' },
-            { pct: 40, msg: 'Connessione con l\'IA...', detail: 'Handshake con Groq API' },
+            { pct: 40, msg: 'Connessione con l\'IA...', detail: 'Handshake con proxy Supabase' },
             { pct: 55, msg: 'Generazione in corso...', detail: 'Elaborazione documento professionale' },
             { pct: 70, msg: 'Raffinamento output...', detail: 'Formattazione e strutturazione' },
             { pct: 85, msg: 'Verifica qualita...', detail: 'Controllo completezza e coerenza' },
@@ -205,14 +213,12 @@
                 return;
             }
             
-            // Verifica chiave API
+            // Verifica proxy configurato
             if (!IAEngine.isConfigurato()) {
                 mostraErrore(
-                    'Chiave API non configurata',
-                    'Modifica il file config.js e inserisci la tua chiave Groq API.\n\nIstruzioni:\n1. Apri config.js\n2. Sostituisci INSERISCI_QUI_LA_TUA_CHIAVE_GROQ con la tua chiave\n3. Ricarica la pagina'
+                    'Proxy non configurato',
+                    'Verifica che config.js contenga PROXY_URL corretto.'
                 );
-                infoBox.style.display = 'block';
-                infoText.textContent = 'Ottieni una chiave gratuita su console.groq.com';
                 return;
             }
             
