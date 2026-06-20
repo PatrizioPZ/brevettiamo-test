@@ -23,11 +23,7 @@
             --verde-chiaro: #40916C;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Lora', Georgia, serif;
@@ -36,7 +32,6 @@
             line-height: 1.7;
         }
 
-        /* HEADER */
         header {
             background: linear-gradient(135deg, var(--pergamena) 0%, var(--pergamena-scura) 100%);
             border-bottom: 3px solid var(--oro);
@@ -92,11 +87,8 @@
             transition: all 0.3s ease;
         }
 
-        nav a:hover {
-            color: var(--oro);
-        }
+        nav a:hover { color: var(--oro); }
 
-        /* HERO */
         .hero {
             text-align: center;
             padding: 3rem 2rem;
@@ -118,7 +110,6 @@
             margin: 0 auto;
         }
 
-        /* SERVICES SECTION */
         .services-section {
             padding: 4rem 2rem;
             max-width: 1400px;
@@ -168,9 +159,7 @@
             transition: transform 0.3s ease;
         }
 
-        .service-card:hover::before {
-            transform: scaleX(1);
-        }
+        .service-card:hover::before { transform: scaleX(1); }
 
         .service-card:hover {
             border-color: var(--oro);
@@ -200,15 +189,8 @@
             letter-spacing: 1px;
         }
 
-        .status-beta {
-            background: var(--oro);
-            color: var(--nero);
-        }
-
-        .status-suspended {
-            background: var(--rosso);
-            color: var(--bianco);
-        }
+        .status-beta { background: var(--oro); color: var(--nero); }
+        .status-suspended { background: var(--rosso); color: var(--bianco); }
 
         .service-desc {
             color: var(--ferro-chiaro);
@@ -216,9 +198,7 @@
             margin-bottom: 1rem;
         }
 
-        .service-reliability {
-            margin-bottom: 1rem;
-        }
+        .service-reliability { margin-bottom: 1rem; }
 
         .reliability-label {
             font-size: 0.75rem;
@@ -241,13 +221,8 @@
             transition: width 1s ease;
         }
 
-        .reliability-high {
-            background: var(--verde);
-        }
-
-        .reliability-medium {
-            background: var(--oro);
-        }
+        .reliability-high { background: var(--verde); }
+        .reliability-medium { background: var(--oro); }
 
         .reliability-text {
             font-size: 0.8rem;
@@ -272,10 +247,7 @@
             margin-bottom: 0.3rem;
         }
 
-        .savings-value {
-            color: var(--verde);
-            font-weight: 600;
-        }
+        .savings-value { color: var(--verde); font-weight: 600; }
 
         .service-price {
             font-family: 'Cinzel', serif;
@@ -290,10 +262,7 @@
             font-family: 'Lora', serif;
         }
 
-        .service-cta {
-            width: 100%;
-            text-align: center;
-        }
+        .service-cta { width: 100%; text-align: center; }
 
         .btn {
             font-family: 'Cinzel', serif;
@@ -310,25 +279,13 @@
             display: inline-block;
         }
 
-        .btn:hover {
-            background: var(--oro);
-            color: var(--bianco);
-        }
+        .btn:hover { background: var(--oro); color: var(--bianco); }
 
-        .btn-primary {
-            background: var(--oro);
-            color: var(--bianco);
-        }
-
-        .btn-primary:hover {
-            background: var(--oro-scuro);
-        }
+        .btn-primary { background: var(--oro); color: var(--bianco); }
+        .btn-primary:hover { background: var(--oro-scuro); }
 
         /* TOOLTIP HOVER */
-        [data-tooltip] {
-            position: relative;
-            cursor: help;
-        }
+        [data-tooltip] { position: relative; cursor: help; }
 
         [data-tooltip]::after {
             content: attr(data-tooltip);
@@ -420,10 +377,7 @@
             transition: all 0.2s;
         }
 
-        .btn-chiudi:hover {
-            background: var(--oro);
-            color: var(--bianco);
-        }
+        .btn-chiudi:hover { background: var(--oro); color: var(--bianco); }
 
         .btn-inizia {
             padding: 6px 14px;
@@ -438,9 +392,7 @@
             transition: all 0.2s;
         }
 
-        .btn-inizia:hover {
-            background: var(--oro);
-        }
+        .btn-inizia:hover { background: var(--oro); }
 
         @media (max-width: 768px) {
             [data-tooltip]::after {
@@ -451,12 +403,9 @@
                 max-width: none;
                 bottom: calc(100% + 10px);
             }
-            [data-tooltip]::before {
-                display: none;
-            }
+            [data-tooltip]::before { display: none; }
         }
 
-        /* FOOTER */
         footer {
             background: var(--ferro);
             color: var(--pergamena);
@@ -465,10 +414,7 @@
             margin-top: 3rem;
         }
 
-        footer p {
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
+        footer p { font-size: 0.8rem; opacity: 0.7; }
     </style>
 <base target="_blank">
 <base target="_blank">
@@ -530,33 +476,27 @@
             const dati = TOOLTIP_TESTI[id];
             if (!dati) return;
 
-            // Tooltip hover
             card.setAttribute('data-tooltip', dati.light);
 
-            // Click per espandere
             card.addEventListener('click', function(e) {
-                // Se clicco su link/bottone, non fare niente
                 if (e.target.closest('a') || e.target.closest('button')) return;
 
-                // Toggle pannello
                 let pannello = this.querySelector('.tooltip-pannello');
                 if (pannello) {
                     pannello.remove();
                     return;
                 }
 
-                // Crea pannello
                 pannello = document.createElement('div');
                 pannello.className = 'tooltip-pannello';
                 pannello.innerHTML = formattaTesto(dati.full) + 
                     '<div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">' +
-                    '<button class="btn-chiudi" id="btn-chiudi-' + id + '">Chiudi</button>' +
+                    '<button class="btn-chiudi">Chiudi</button>' +
                     '<a href="welcome.html" class="btn-inizia">Inizia Ora</a>' +
                     '</div>';
 
                 this.appendChild(pannello);
 
-                // Aggiungiamo event listener al bottone Chiudi
                 pannello.querySelector('.btn-chiudi').addEventListener('click', function() {
                     pannello.remove();
                 });
@@ -565,13 +505,11 @@
     }
 
     function formattaTesto(testo) {
-        let html = testo.replace(/
-/g, '<br>');
-        html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        var html = testo.split("\n").join("<br>");
+        html = html.split("**").join("§§§").replace(/§§§([^§]+)§§§/g, "<strong>$1</strong>");
         return html;
     }
 
-    // Avvio
     caricaTooltipTesti();
     </script>
 
