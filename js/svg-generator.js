@@ -8,11 +8,6 @@ class SVGGenerator {
         this.scale = 1;
     }
     
-    /**
-     * Genera tavola tecnica SVG da specifiche IA
-     * @param {Object} specs - Specifiche estratte dall'IA
-     * @returns {string} - SVG HTML
-     */
     generaTavola(specs) {
         const oggetto = (specs && specs.oggetto) ? specs.oggetto : 'OGGETTO';
         const viste = (specs && specs.viste) ? specs.viste : [];
@@ -41,9 +36,8 @@ class SVGGenerator {
                 svg += this.disegnaVista(vista, x, y, vistaWidth, vistaHeight);
             });
         } else {
-            // Viste default
-            svg += this.disegnaVista({ nome: 'VISTA FRONTALE' }, 10, yPos, vistaWidth, vistaHeight);
-            svg += this.disegnaVista({ nome: 'VISTA LATERALE' }, 105, yPos, vistaWidth, vistaHeight);
+            svg += this.disegnaVista({ nome: 'FRONTALE' }, 10, yPos, vistaWidth, vistaHeight);
+            svg += this.disegnaVista({ nome: 'LATERALE' }, 105, yPos, vistaWidth, vistaHeight);
             svg += this.disegnaVista({ nome: 'SEZIONE A-A' }, 10, yPos + 70, vistaWidth, vistaHeight);
         }
         
@@ -61,8 +55,9 @@ class SVGGenerator {
     disegnaVista(vista, x, y, w, h) {
         let svg = '<g transform="translate(' + x + ', ' + y + ')">';
         
-        // Titolo vista
-        svg += '<text x="' + (w/2) + '" y="-2" text-anchor="middle" font-size="3" font-weight="bold" font-family="Arial">' + (vista.nome || 'VISTA') + '</text>';
+        // FIX: Evita doppio "VISTA"
+        const nomeVista = (vista.nome || 'VISTA').replace(/^VISTA\s*/i, '');
+        svg += '<text x="' + (w/2) + '" y="-2" text-anchor="middle" font-size="3" font-weight="bold" font-family="Arial">VISTA ' + nomeVista + '</text>';
         
         // Bordo vista
         svg += '<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="none" stroke="#333" stroke-width="0.5"/>';
@@ -73,8 +68,7 @@ class SVGGenerator {
                 svg += this.disegnaElemento(el);
             });
         } else {
-            // Placeholder geometrico generico
-            svg += this.disegnaPlaceholder(vista.nome, w, h);
+            svg += this.disegnaPlaceholder(nomeVista, w, h);
         }
         
         // Quote
@@ -110,25 +104,19 @@ class SVGGenerator {
         const cx = w / 2;
         const cy = h / 2;
         
-        // Disegna una forma geometrica base in base alla vista
-        if (nomeVista && nomeVista.indexOf('FRONTALE') !== -1) {
-            // Rettangolo con dettagli
+        if (nomeVista.indexOf('FRONTALE') !== -1) {
             svg += '<rect x="' + (cx-25) + '" y="' + (cy-20) + '" width="50" height="40" fill="none" stroke="#000" stroke-width="0.8"/>';
             svg += '<line x1="' + (cx-15) + '" y1="' + (cy-10) + '" x2="' + (cx+15) + '" y2="' + (cy-10) + '" stroke="#000" stroke-width="0.3" stroke-dasharray="2,1"/>';
             svg += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="none" stroke="#000" stroke-width="0.5"/>';
-        } else if (nomeVista && nomeVista.indexOf('LATERALE') !== -1) {
-            // Profilo laterale
+        } else if (nomeVista.indexOf('LATERALE') !== -1) {
             svg += '<rect x="' + (cx-15) + '" y="' + (cy-20) + '" width="30" height="40" fill="none" stroke="#000" stroke-width="0.8"/>';
             svg += '<line x1="' + cx + '" y1="' + (cy-20) + '" x2="' + cx + '" y2="' + (cy+20) + '" stroke="#000" stroke-width="0.3" stroke-dasharray="2,1"/>';
-        } else if (nomeVista && nomeVista.indexOf('SEZIONE') !== -1) {
-            // Sezione con tratteggio
+        } else if (nomeVista.indexOf('SEZIONE') !== -1) {
             svg += '<rect x="' + (cx-20) + '" y="' + (cy-15) + '" width="40" height="30" fill="#e0e0e0" stroke="#000" stroke-width="0.8"/>';
-            // Tratteggio sezione
             for (let i = -15; i < 15; i += 4) {
                 svg += '<line x1="' + (cx-20) + '" y1="' + (cy+i) + '" x2="' + (cx+20) + '" y2="' + (cy+i+3) + '" stroke="#666" stroke-width="0.2"/>';
             }
         } else {
-            // Prospettiva / default
             svg += '<rect x="' + (cx-20) + '" y="' + (cy-15) + '" width="40" height="30" fill="none" stroke="#000" stroke-width="0.8"/>';
             svg += '<line x1="' + (cx-20) + '" y1="' + (cy-15) + '" x2="' + (cx+10) + '" y2="' + (cy-25) + '" stroke="#000" stroke-width="0.5"/>';
             svg += '<line x1="' + (cx+20) + '" y1="' + (cy-15) + '" x2="' + (cx+30) + '" y2="' + (cy-25) + '" stroke="#000" stroke-width="0.5"/>';
@@ -137,8 +125,9 @@ class SVGGenerator {
             svg += '<line x1="' + (cx+30) + '" y1="' + (cy-25) + '" x2="' + (cx+30) + '" y2="' + (cy+5) + '" stroke="#000" stroke-width="0.5"/>';
         }
         
-        // Indicatore "VISTA" centrale
-        svg += '<text x="' + cx + '" y="' + (cy+35) + '" text-anchor="middle" font-size="2.5" fill="#999" font-family="Arial">[VISTA ' + (nomeVista || '') + ']</text>';
+        // FIX: Evita doppio "VISTA" nel placeholder
+        const nomePulito = nomeVista.replace(/^VISTA\s*/i, '');
+        svg += '<text x="' + cx + '" y="' + (cy+35) + '" text-anchor="middle" font-size="2.5" fill="#999" font-family="Arial">[VISTA ' + nomePulito + ']</text>';
         
         return svg;
     }
@@ -149,7 +138,6 @@ class SVGGenerator {
         svg += '<line x1="0" y1="2" x2="80" y2="2" stroke="#000" stroke-width="0.3"/>';
         
         if (!parti || parti.length === 0) {
-            // Parti default
             const partiDefault = [
                 { numero: 1, nome: 'Corpo principale' },
                 { numero: 2, nome: 'Elemento mobile' },
@@ -174,10 +162,6 @@ class SVGGenerator {
         return svg;
     }
     
-    /**
-     * Estrae specifiche dal testo IA generato
-     * Parsing avanzato del testo HTML per estrarre oggetto, viste, parti, dimensioni
-     */
     static estraiSpecifiche(testoIA) {
         const specs = {
             oggetto: '',
@@ -186,12 +170,9 @@ class SVGGenerator {
             dimensioni: {}
         };
         
-        // Rimuovi HTML per parsing testo
         const testoPulito = testoIA.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
         
-        // === ESTRAI OGGETTO (più metodi) ===
-        
-        // Metodo 1: Cerca "Oggetto:" o "TITOLO TECNICO" o "Tavola tecnica - XXX"
+        // Estrai oggetto
         let matchOggetto = testoIA.match(/TITOLO TECNICO<\/h1>\s*<p>([^<]+)/i) ||
                           testoIA.match(/<h1>([^<]{5,60})<\/h1>/i) ||
                           testoIA.match(/Oggetto:<\/strong>\s*([^<]+)/i);
@@ -200,7 +181,6 @@ class SVGGenerator {
             specs.oggetto = matchOggetto[1].trim();
         }
         
-        // Metodo 2: Cerca nel testo pulito frasi tipo "Il [nome] è costituito da..."
         if (!specs.oggetto) {
             const matchOggetto2 = testoPulito.match(/[Ll]a?\s+([a-zA-Z\s]{10,50}(?:con|per|da|che))\s+(?:è|e|sono)/i);
             if (matchOggetto2) {
@@ -208,42 +188,41 @@ class SVGGenerator {
             }
         }
         
-        // Metodo 3: Prima riga/riga dopo il titolo
         if (!specs.oggetto) {
             const righe = testoPulito.split(/[.!?]/).filter(r => r.trim().length > 10);
             if (righe.length > 0) {
                 const primaRiga = righe[0].trim();
-                // Prendi le prime 3-4 parole significative
                 const parole = primaRiga.split(/\s+/).filter(p => p.length > 2);
                 specs.oggetto = parole.slice(0, 6).join(' ');
             }
         }
         
-        // Fallback
         if (!specs.oggetto || specs.oggetto.length < 3) {
             specs.oggetto = 'OGGETTO BREVETTUALE';
         }
         
-        // Limita lunghezza
         if (specs.oggetto.length > 50) {
             specs.oggetto = specs.oggetto.substring(0, 50) + '...';
         }
         
-        // === ESTRAI PARTI ===
+        // FIX: Estrai parti con filtro costi
         const regexParti = /(\d+)[\.\)]\s*([^\n<]{3,50}?)(?=\n|<|$)/g;
         let match;
         while ((match = regexParti.exec(testoPulito)) !== null) {
             const nome = match[2].trim();
+            const numero = match[1];
+            // FIX: Esclude costi, anni, sezioni generiche
             if (nome.length > 2 && nome.length < 50 && 
                 nome.indexOf('ANALISI') === -1 && nome.indexOf('TITOLO') === -1 && 
-                nome.indexOf('DESCRIZIONE') === -1 && nome.indexOf('CONCLUSIONI') === -1) {
-                specs.parti.push({ numero: match[1], nome: nome });
+                nome.indexOf('DESCRIZIONE') === -1 && nome.indexOf('CONCLUSIONI') === -1 &&
+                nome.indexOf('euro') === -1 && nome.indexOf('cost') === -1 &&
+                nome.indexOf('000') === -1 && 
+                parseInt(numero) < 100 && parseInt(numero) > 0) {
+                specs.parti.push({ numero: numero, nome: nome });
             }
         }
         
-        // Se non trova parti, crea default basate sul testo
         if (specs.parti.length === 0) {
-            // Cerca sostantivi nel testo che potrebbero essere parti
             const paroleChiave = ['corpo', 'elemento', 'fissaggio', 'pomello', 'gancio', 'struttura', 'mecanismo', 'parte'];
             let numParte = 1;
             paroleChiave.forEach(parola => {
@@ -253,7 +232,6 @@ class SVGGenerator {
                 }
             });
             
-            // Se ancora vuoto, parti generiche
             if (specs.parti.length === 0) {
                 specs.parti = [
                     { numero: 1, nome: 'Corpo principale' },
@@ -263,24 +241,22 @@ class SVGGenerator {
             }
         }
         
-        // === ESTRAI VISTE ===
+        // Estrai viste
         const visteNomi = ['FRONTALE', 'LATERALE', 'SUPERIORE', 'SEZIONE', 'PROSPETTIVA', 'ASSONOMETRICA', 'POSTERIORE', 'INFERIORE'];
         visteNomi.forEach(nome => {
             if (testoPulito.toUpperCase().indexOf(nome) !== -1) {
-                specs.viste.push({ nome: 'VISTA ' + nome });
+                specs.viste.push({ nome: nome });
             }
         });
         
-        // Se non trova viste, default
         if (specs.viste.length === 0) {
             specs.viste = [
-                { nome: 'VISTA FRONTALE' },
-                { nome: 'VISTA LATERALE' },
+                { nome: 'FRONTALE' },
+                { nome: 'LATERALE' },
                 { nome: 'SEZIONE A-A' }
             ];
         }
         
-        // Limita a max 4 viste
         if (specs.viste.length > 4) {
             specs.viste = specs.viste.slice(0, 4);
         }
@@ -289,7 +265,6 @@ class SVGGenerator {
     }
 }
 
-// Esporta
 if (typeof window !== 'undefined') {
     window.SVGGenerator = SVGGenerator;
 }
