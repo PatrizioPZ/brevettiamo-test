@@ -46,8 +46,12 @@ class UIBMVerificatore {
     verificaCoerenzaNumerazione(testo) {
         const numeri = testo.match(/\b\d{3}\b/g);
         if (numeri) {
-            const unici = [...new Set(numeri)];
-            this.info.push('Numeri trovati: ' + unici.join(', ') + ' — verificare coerenza tra documenti');
+            // FIX: Filtra sequenze di zeri (costi tipo 5.000) e numeri troppo grandi
+            const numeriValidi = numeri.filter(n => n !== '000' && parseInt(n) < 900 && parseInt(n) > 0);
+            if (numeriValidi.length > 0) {
+                const unici = [...new Set(numeriValidi)];
+                this.info.push('Numeri trovati: ' + unici.join(', ') + ' — verificare coerenza tra documenti');
+            }
         }
     }
     
