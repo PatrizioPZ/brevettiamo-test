@@ -1796,23 +1796,93 @@ function gestisciFile(input) {
 }
 
 function processFile(file) {
+  log("Processando file: " + file.name + " tipo:" + file.type + " size:" + Math.round(file.size/1024) + "KB", "info");
   var validTypes = ['image/jpeg','image/jpg','image/png','image/webp','image/svg+xml','application/pdf'];
   var maxSize = 5 * 1024 * 1024;
-  if (validTypes.indexOf(file.type) === -1 && !file.name.match(/\.(jpg|jpeg|png|webp|svg|pdf)$/i)) {
-    log("Formato non supportato: " + file.name, "error"); return;
+
+  // GESTIONE PDF - mostra placeholder invece di anteprima
+  if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+    log("PDF rilevato, preparo placeholder...", "info");
+    var img = document.getElementById("img-preview");
+    // SVG placeholder per PDF
+    var pdfPlaceholder = 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#f0f0f0" stroke="#ccc" stroke-width="2"/><text x="100" y="80" text-anchor="middle" font-family="Arial" font-size="16" fill="#666">PDF Document</text><text x="100" y="110" text-anchor="middle" font-family="Arial" font-size="12" fill="#999">' + file.name + '</text><text x="100" y="140" text-anchor="middle" font-family="Arial" font-size="10" fill="#999">' + Math.round(file.size/1024) + ' KB</text></svg>');
+    img.src = pdfPlaceholder;
+    img.onload = function() {
+      var preview = document.getElementById("preview-schizzo");
+      var dropzone = document.getElementById("drop-zone");
+      if (preview) preview.style.display = "block";
+      if (dropzone) dropzone.style.display = "none";
+      log("PDF caricato (placeholder)", "success");
+    };
+    return;
+  }
+
+  // Check estensione se type e vuoto o non valido
+  var ext = file.name.split('.').pop().toLowerCase();
+  var validExts = ['jpg','jpeg','png','webp','svg','pdf'];
+  var isValidExt = validExts.indexOf(ext) >= 0;
+  var isValidType = validTypes.indexOf(file.type) >= 0;
+
+  if (!isValidType && !isValidExt) {
+    log("Formato non supportato: " + file.name + " (type:" + file.type + ")", "error"); 
+    return;
   }
   if (file.size > maxSize) {
-    log("File troppo grande (max 5MB)", "error"); return;
+    log("File troppo grande: " + Math.round(file.size/1024) + "KB (max 5MB)", "error"); 
+    return;
   }
+
   var reader = new FileReader();
+  reader.onerror = function(e) {
+    log("Errore lettura file: " + (e.target.error ? e.target.error.message : "sconosciuto"), "error");
+  };
+  reader.onabort = function() {
+    log("Lettura file abortita", "warn");
+  };
+  reader.onloadstart = function() {
+    log("Lettura file iniziata...", "info");
+  };
   reader.onload = function(e) {
+    log("File letto, length: " + e.target.result.length, "info");
     var img = document.getElementById("img-preview");
-    img.src = e.target.result;
+    if (!img) {
+      log("ERRORE: img-preview non trovato nel DOM", "error");
+      return;
+    }
+
+    // Rimuovi eventuali handler precedenti
+    img.onload = null;
+    img.onerror = null;
+
     img.onload = function() {
-      log("Immagine caricata: " + img.naturalWidth + "x" + img.naturalHeight, "success");
+      log("Immagine renderizzata: " + img.naturalWidth + "x" + img.naturalHeight, "success");
+      var preview = document.getElementById("preview-schizzo");
+      var dropzone = document.getElementById("drop-zone");
+      if (preview) preview.style.display = "block";
+      if (dropzone) dropzone.style.display = "none";
     };
-    document.getElementById("preview-schizzo").style.display = "block";
-    document.getElementById("drop-zone").style.display = "none";
+
+    img.onerror = function() {
+      log("Errore renderizzazione immagine", "error");
+      // Prova a mostrare comunque
+      var preview = document.getElementById("preview-schizzo");
+      var dropzone = document.getElementById("drop-zone");
+      if (preview) preview.style.display = "block";
+      if (dropzone) dropzone.style.display = "none";
+    };
+
+    img.src = e.target.result;
+
+    // Fallback: se onload non si attiva entro 3 secondi, mostra comunque
+    setTimeout(function() {
+      if (img.naturalWidth === 0) {
+        log("Timeout caricamento immagine, mostro comunque", "warn");
+        var preview = document.getElementById("preview-schizzo");
+        var dropzone = document.getElementById("drop-zone");
+        if (preview) preview.style.display = "block";
+        if (dropzone) dropzone.style.display = "none";
+      }
+    }, 3000);
   };
   reader.readAsDataURL(file);
 }
