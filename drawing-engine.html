@@ -78,6 +78,7 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 .search-box input { flex: 1; min-width: 200px; margin-bottom: 0; }
 @media (max-width: 768px) { .figure-grid { grid-template-columns: 1fr; } .steps { flex-direction: column; align-items: center; } .step { width: 100%; justify-content: center; } }
 </style>
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -97,6 +98,17 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 <div id="panel-step1">
   <div class="panel">
     <h2>1.1 Configurazione API</h2>
+    <div style="background: rgba(255, 170, 0, 0.1); border: 1px solid var(--warning); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+      <div style="color: var(--warning); font-size: 13px; margin-bottom: 10px;">
+        <strong>ATTENZIONE:</strong> Inserisci la tua API Key di OpenRouter. Non verra salvata su server ma solo localmente nel tuo browser.
+      </div>
+      <input type="password" id="api-key-input" placeholder="sk-or-v1-..." style="margin-bottom: 8px;" oninput="verificaApiKeyInput()">
+      <div style="display: flex; gap: 10px;">
+        <button class="btn small" onclick="salvaApiKeyDaInput()">Salva Key</button>
+        <button class="btn small secondary" onclick="rimuoviApiKey()">Rimuovi</button>
+      </div>
+      <div id="api-key-status" style="margin-top: 8px; font-size: 12px; color: var(--text-muted);"></div>
+    </div>
     <div class="model-select">
       <label>Seleziona Modello AI (Free Tier - Giugno 2026)</label>
       <select id="modello-ai">
@@ -301,7 +313,28 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-var OPENROUTER_KEY = atob("c2stb3ItdjEtM2I5ZDdjZTlmNmFiM2RiMWUzMzQwNzgyODMzOGQzNWFhZDEwYmRhNTk3Y2ExYmFjNGVlMTk1MDU3MmU0YmQxMw==");
+var OPENROUTER_KEY = localStorage.getItem("brevettiamo_api_key") || "";
+
+function salvaApiKey(key) {
+  if (!key || key.indexOf("sk-or") !== 0) {
+    log("API Key non valida (deve iniziare con sk-or)", "error");
+    return false;
+  }
+  OPENROUTER_KEY = key;
+  localStorage.setItem("brevettiamo_api_key", key);
+  log("API Key salvata in modo sicuro", "success");
+  return true;
+}
+
+function rimuoviApiKey() {
+  OPENROUTER_KEY = "";
+  localStorage.removeItem("brevettiamo_api_key");
+  log("API Key rimossa", "warn");
+}
+
+function getApiKey() {
+  return OPENROUTER_KEY;
+}
 
 var currentStep = 1;
 var figureData = [];
@@ -347,28 +380,65 @@ function goToStep(n) {
 }
 
 function verificaApiKey() {
-  if (OPENROUTER_KEY && OPENROUTER_KEY.indexOf("sk-or") === 0) {
-    fetch("https://openrouter.ai/api/v1/auth/key", {method:"GET",headers:{"Authorization":"Bearer "+OPENROUTER_KEY}})
-    .then(function(res) {
-      if (res.ok) {
-        document.getElementById("api-status").textContent = "OK - Key valida";
-        document.getElementById("api-status").style.color = "#00ff88";
-        log("API Key verificata", "success");
-      } else {
-        document.getElementById("api-status").textContent = "Errore - Key scaduta (" + res.status + ")";
-        document.getElementById("api-status").style.color = "#ff4444";
-        log("API Key non valida", "error");
-      }
-    })
-    .catch(function(err) {
-      document.getElementById("api-status").textContent = "Errore connessione";
-      document.getElementById("api-status").style.color = "#ffaa00";
-      log("Errore connessione: " + err.message, "warn");
-    });
-  } else {
+  if (!OPENROUTER_KEY) {
+    document.getElementById("api-status").textContent = "Inserisci API Key nello Step 1";
+    document.getElementById("api-status").style.color = "#ffaa00";
+    log("API Key mancante - inseriscila nello Step 1", "warn");
+    return;
+  }
+  if (OPENROUTER_KEY.indexOf("sk-or") !== 0) {
     document.getElementById("api-status").textContent = "Errore - Key non valida";
     document.getElementById("api-status").style.color = "#ff4444";
-    log("API Key non valida", "error");
+    log("API Key non valida (deve iniziare con sk-or)", "error");
+    return;
+  }
+  fetch("https://openrouter.ai/api/v1/auth/key", {method:"GET",headers:{"Authorization":"Bearer "+OPENROUTER_KEY}})
+  .then(function(res) {
+    if (res.ok) {
+      document.getElementById("api-status").textContent = "OK - Key valida";
+      document.getElementById("api-status").style.color = "#00ff88";
+      log("API Key verificata", "success");
+    } else {
+      document.getElementById("api-status").textContent = "Errore - Key scaduta (" + res.status + ")";
+      document.getElementById("api-status").style.color = "#ff4444";
+      log("API Key non valida", "error");
+    }
+  })
+  .catch(function(err) {
+    document.getElementById("api-status").textContent = "Errore connessione";
+    document.getElementById("api-status").style.color = "#ffaa00";
+    log("Errore connessione: " + err.message, "warn");
+  });
+}
+
+function verificaApiKeyInput() {
+  var input = document.getElementById("api-key-input");
+  var status = document.getElementById("api-key-status");
+  if (!input || !status) return;
+  var val = input.value;
+  if (!val) {
+    status.textContent = "Inserisci la tua API Key OpenRouter";
+    status.style.color = "var(--text-muted)";
+  } else if (val.indexOf("sk-or") === 0) {
+    status.textContent = "Formato valido (inizia con sk-or)";
+    status.style.color = "#00ff88";
+  } else {
+    status.textContent = "Formato non valido - deve iniziare con sk-or";
+    status.style.color = "#ff4444";
+  }
+}
+
+function salvaApiKeyDaInput() {
+  var input = document.getElementById("api-key-input");
+  if (!input || !input.value) {
+    log("Inserisci una API Key", "warn");
+    return;
+  }
+  if (salvaApiKey(input.value)) {
+    input.value = ""; // Pulisci per sicurezza
+    document.getElementById("api-key-status").textContent = "API Key salvata con successo!";
+    document.getElementById("api-key-status").style.color = "#00ff88";
+    verificaApiKey();
   }
 }
 
@@ -2108,6 +2178,18 @@ function downloadPDF() {
 function downloadZIP() {
   log("ZIP richiede JSZip. Usa SVG o PDF.", "warn");
   downloadSVG();
+}
+
+// Inizializza API Key da localStorage all'avvio
+if (OPENROUTER_KEY) {
+  log("API Key caricata da localStorage", "info");
+  var apiStatus = document.getElementById("api-status");
+  if (apiStatus) {
+    apiStatus.textContent = "Key caricata - clicca Verifica per confermare";
+    apiStatus.style.color = "#00d4ff";
+  }
+} else {
+  log("API Key non trovata - inseriscila nello Step 1", "warn");
 }
 
 log("BrevettIAmo 3.0 pronto. Pattern: " + patternAttivi.length, "success");
