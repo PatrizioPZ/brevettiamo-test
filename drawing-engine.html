@@ -79,6 +79,7 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 @media (max-width: 768px) { .figure-grid { grid-template-columns: 1fr; } .steps { flex-direction: column; align-items: center; } .step { width: 100%; justify-content: center; } }
 </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -97,14 +98,17 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 
 <div id="panel-step1">
   <div class="panel">
-    <h2>1.1 Configurazione API</h2>
-    <div style="background: rgba(255, 170, 0, 0.1); border: 1px solid var(--warning); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
-      <div style="color: var(--warning); font-size: 13px; margin-bottom: 10px;">
-        <strong>ATTENZIONE:</strong> Inserisci la tua API Key di OpenRouter. Non verra salvata su server ma solo localmente nel tuo browser.
+    <h2>1.1 Configurazione API (Sicura via Vercel)</h2>
+    <div style="background: rgba(0, 255, 136, 0.05); border: 1px solid var(--success); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+      <div style="color: var(--success); font-size: 13px; margin-bottom: 10px;">
+        <strong>SICURO:</strong> Le API key vengono caricate automaticamente dal server Vercel. Non sono mai esposte nel codice.
       </div>
-      <input type="password" id="api-key-input" placeholder="sk-or-v1-..." style="margin-bottom: 8px;" oninput="verificaApiKeyInput()">
+      <div style="color: var(--text-secondary); font-size: 12px; margin-bottom: 10px;">
+        Server: brevettiamo-backend-api.vercel.app<br>
+        Le key sono protette da CORS (solo patriziopz.github.io)
+      </div>
       <div style="display: flex; gap: 10px;">
-        <button class="btn small" onclick="salvaApiKeyDaInput()">Salva Key</button>
+        <button class="btn small" onclick="caricaApiKeys()">Ricarica Key</button>
         <button class="btn small secondary" onclick="rimuoviApiKey()">Rimuovi</button>
       </div>
       <div id="api-key-status" style="margin-top: 8px; font-size: 12px; color: var(--text-muted);"></div>
@@ -123,7 +127,7 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
         <option value="x-ai/grok-3-mini-beta:free">Grok 3 Mini (Fast, 131K)</option>
       </select>
     </div>
-    <p style="color:var(--text-secondary);font-size:13px;margin-bottom:10px;">API Key caricata automaticamente. Clicca "Verifica" per confermare.</p>
+    <p style="color:var(--text-secondary);font-size:13px;margin-bottom:10px;">API Key caricate automaticamente da Vercel. Clicca "Verifica" per confermare.</p>
     <button class="btn" onclick="verificaApiKey()">Verifica API Key</button>
     <span id="api-status" style="color:var(--text-muted);margin-left:15px;font-size:13px;"></span>
   </div>
@@ -313,8 +317,85 @@ tr:nth-child(even) { background: rgba(30, 58, 95, 0.3); }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-var OPENROUTER_KEY = localStorage.getItem("brevettiamo_api_key") || "";
+// ============================================================
+// GESTIONE API KEY VIA VERCEL FUNCTION (SICURO - NO KEY ESPOSTE)
+// ============================================================
+var OPENROUTER_KEY = "";
+var GROQ_KEY = "";
+var API_KEYS_CARICATE = false;
 
+const VERCEL_API_URL = "https://brevettiamo-backend-api.vercel.app/api/get-api-key";
+
+async function caricaApiKeys() {
+  if (API_KEYS_CARICATE) return true;
+  log("Caricamento API key da Vercel...", "info");
+
+  try {
+    // Carica OpenRouter key
+    var res1 = await fetch(VERCEL_API_URL + "?type=openrouter", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (!res1.ok) throw new Error("OpenRouter " + res1.status);
+    var data1 = await res1.json();
+    if (data1.key) {
+      OPENROUTER_KEY = data1.key;
+      log("OpenRouter key caricata", "success");
+    }
+
+    // Carica Groq key
+    var res2 = await fetch(VERCEL_API_URL + "?type=groq", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (!res2.ok) throw new Error("Groq " + res2.status);
+    var data2 = await res2.json();
+    if (data2.key) {
+      GROQ_KEY = data2.key;
+      log("Groq key caricata", "success");
+    }
+
+    API_KEYS_CARICATE = true;
+
+    // Aggiorna UI
+    var apiStatus = document.getElementById("api-status");
+    if (apiStatus) {
+      apiStatus.textContent = "OK - Key caricate da Vercel";
+      apiStatus.style.color = "#00ff88";
+    }
+
+    log("API key caricate con successo da Vercel", "success");
+    return true;
+  } catch (err) {
+    log("Errore caricamento API key: " + err.message, "error");
+
+    // Fallback: usa localStorage se presente (per test locali)
+    var fallback = localStorage.getItem("brevettiamo_api_key");
+    if (fallback && fallback.indexOf("sk-or") === 0) {
+      OPENROUTER_KEY = fallback;
+      log("Fallback: key da localStorage", "warn");
+      API_KEYS_CARICATE = true;
+      return true;
+    }
+
+    var apiStatus = document.getElementById("api-status");
+    if (apiStatus) {
+      apiStatus.textContent = "Errore: " + err.message;
+      apiStatus.style.color = "#ff4444";
+    }
+    return false;
+  }
+}
+
+function getApiKey() {
+  return OPENROUTER_KEY;
+}
+
+function getGroqKey() {
+  return GROQ_KEY;
+}
+
+// Manteniamo funzioni legacy per compatibilita
 function salvaApiKey(key) {
   if (!key || key.indexOf("sk-or") !== 0) {
     log("API Key non valida (deve iniziare con sk-or)", "error");
@@ -322,18 +403,15 @@ function salvaApiKey(key) {
   }
   OPENROUTER_KEY = key;
   localStorage.setItem("brevettiamo_api_key", key);
-  log("API Key salvata in modo sicuro", "success");
+  log("API Key salvata in localStorage (fallback)", "success");
   return true;
 }
 
 function rimuoviApiKey() {
   OPENROUTER_KEY = "";
+  GROQ_KEY = "";
   localStorage.removeItem("brevettiamo_api_key");
-  log("API Key rimossa", "warn");
-}
-
-function getApiKey() {
-  return OPENROUTER_KEY;
+  log("API Key rimosse", "warn");
 }
 
 var currentStep = 1;
@@ -380,10 +458,23 @@ function goToStep(n) {
 }
 
 function verificaApiKey() {
+  if (!API_KEYS_CARICATE) {
+    log("Caricamento key in corso...", "info");
+    caricaApiKeys().then(function(ok) {
+      if (ok) {
+        verificaApiKey(); // Richiama se stessa dopo caricamento
+      } else {
+        document.getElementById("api-status").textContent = "Errore caricamento key";
+        document.getElementById("api-status").style.color = "#ff4444";
+      }
+    });
+    return;
+  }
+
   if (!OPENROUTER_KEY) {
-    document.getElementById("api-status").textContent = "Inserisci API Key nello Step 1";
+    document.getElementById("api-status").textContent = "Key non caricata";
     document.getElementById("api-status").style.color = "#ffaa00";
-    log("API Key mancante - inseriscila nello Step 1", "warn");
+    log("API Key mancante", "warn");
     return;
   }
   if (OPENROUTER_KEY.indexOf("sk-or") !== 0) {
@@ -395,7 +486,7 @@ function verificaApiKey() {
   fetch("https://openrouter.ai/api/v1/auth/key", {method:"GET",headers:{"Authorization":"Bearer "+OPENROUTER_KEY}})
   .then(function(res) {
     if (res.ok) {
-      document.getElementById("api-status").textContent = "OK - Key valida";
+      document.getElementById("api-status").textContent = "OK - Key valida (Vercel)";
       document.getElementById("api-status").style.color = "#00ff88";
       log("API Key verificata", "success");
     } else {
@@ -411,36 +502,7 @@ function verificaApiKey() {
   });
 }
 
-function verificaApiKeyInput() {
-  var input = document.getElementById("api-key-input");
-  var status = document.getElementById("api-key-status");
-  if (!input || !status) return;
-  var val = input.value;
-  if (!val) {
-    status.textContent = "Inserisci la tua API Key OpenRouter";
-    status.style.color = "var(--text-muted)";
-  } else if (val.indexOf("sk-or") === 0) {
-    status.textContent = "Formato valido (inizia con sk-or)";
-    status.style.color = "#00ff88";
-  } else {
-    status.textContent = "Formato non valido - deve iniziare con sk-or";
-    status.style.color = "#ff4444";
-  }
-}
 
-function salvaApiKeyDaInput() {
-  var input = document.getElementById("api-key-input");
-  if (!input || !input.value) {
-    log("Inserisci una API Key", "warn");
-    return;
-  }
-  if (salvaApiKey(input.value)) {
-    input.value = ""; // Pulisci per sicurezza
-    document.getElementById("api-key-status").textContent = "API Key salvata con successo!";
-    document.getElementById("api-key-status").style.color = "#00ff88";
-    verificaApiKey();
-  }
-}
 
 function getModelloSelezionato() { return document.getElementById("modello-ai").value; }
 
@@ -2180,17 +2242,14 @@ function downloadZIP() {
   downloadSVG();
 }
 
-// Inizializza API Key da localStorage all'avvio
-if (OPENROUTER_KEY) {
-  log("API Key caricata da localStorage", "info");
-  var apiStatus = document.getElementById("api-status");
-  if (apiStatus) {
-    apiStatus.textContent = "Key caricata - clicca Verifica per confermare";
-    apiStatus.style.color = "#00d4ff";
+// Inizializza API Key da Vercel all'avvio
+caricaApiKeys().then(function(ok) {
+  if (ok) {
+    log("API Key caricate da Vercel", "success");
+  } else {
+    log("API Key non caricate - clicca Ricarica Key", "warn");
   }
-} else {
-  log("API Key non trovata - inseriscila nello Step 1", "warn");
-}
+});
 
 log("BrevettIAmo 3.0 pronto. Pattern: " + patternAttivi.length, "success");
 </script>
