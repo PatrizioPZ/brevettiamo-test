@@ -143,10 +143,17 @@ async function redirectAfterLogin(userId){
     if(role==='admin'){
       window.location.href='admin.html';
     }else{
-window.location.href='welcome.html';
+      // Gestisci redirect con parametro servizio
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect') || 'welcome.html';
+      const servizio = urlParams.get('servizio');
+      window.location.href = redirect + (servizio ? '?servizio=' + servizio : '');
     }
   }catch(e){
-window.location.href='welcome.html';
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirect = urlParams.get('redirect') || 'welcome.html';
+    const servizio = urlParams.get('servizio');
+    window.location.href = redirect + (servizio ? '?servizio=' + servizio : '');
   }
 }
 
