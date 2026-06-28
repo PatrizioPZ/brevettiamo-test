@@ -430,13 +430,13 @@
 
         function avviaElaborazione() {
                     // NUOVO: Redirect per servizi disegni
-        if (servizioId === 'tavole-tecniche') {
+       if (servizioId === 'servizio-tavole') {
             localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
             localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
             window.location.href = 'tavole-tecniche-lite.html';
             return;
         }
-        if (servizioId === 'disegni-cad') {
+        if (servizioId === 'servizio-cad') {
             localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
             localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
             window.location.href = 'disegni-cad-lite.html';
