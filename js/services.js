@@ -61,8 +61,8 @@ const SERVIZI = [
         risparmio: '-75% (mercato: 300-800)',
         prezzo: 'Incluso',
         prezzoNote: "in L'OCCHIO",
-        cta: "Scopri L'OCCHIO",
-        ctaLink: 'occhio-landing.html',
+        cta: 'Inizia Ora',
+        ctaLink: 'welcome.html?servizio=servizio-tavole',
         ctaDisabled: false
     },
     {
