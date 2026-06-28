@@ -359,7 +359,9 @@
             'servizio-patentability': 'Patentability Search',
             'servizio-landscape': 'Landscape Analysis',
             'servizio-cad': 'Disegno CAD Professionale',
-            'servizio-legale-base': 'Supporto Legale Base'
+            'servizio-legale-base': 'Supporto Legale Base',
+            'tavole-tecniche': 'Tavole Tecniche UIBM',
+            'disegni-cad': 'Disegni CAD Professionali'
         };
 
         if (servizioId && nomiServizi[servizioId]) {
@@ -428,6 +430,19 @@
         }
 
         function avviaElaborazione() {
+                    // NUOVO: Redirect per servizi disegni
+        if (servizioId === 'tavole-tecniche') {
+            localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
+            localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
+            window.location.href = 'tavole-tecniche-lite.html';
+            return;
+        }
+        if (servizioId === 'disegni-cad') {
+            localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
+            localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
+            window.location.href = 'disegni-cad-lite.html';
+            return;
+        }
             const descrizione = document.getElementById('descrizione').value.trim();
 
             if (!descrizione) {
