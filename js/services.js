@@ -14,7 +14,7 @@ const SERVIZI = [
         prezzo: '299',
         prezzoNote: '/primo deposito',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -30,7 +30,7 @@ const SERVIZI = [
         prezzo: '199',
         prezzoNote: '/ricerca',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -46,7 +46,7 @@ const SERVIZI = [
         prezzo: '149',
         prezzoNote: '/set rivendicazioni',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -94,7 +94,7 @@ const SERVIZI = [
         prezzo: '15',
         prezzoNote: '/ricerca',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -110,7 +110,7 @@ const SERVIZI = [
         prezzo: '23',
         prezzoNote: '/ricerca',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -126,7 +126,7 @@ const SERVIZI = [
         prezzo: '18',
         prezzoNote: '/analisi',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -142,7 +142,7 @@ const SERVIZI = [
         prezzo: '23',
         prezzoNote: '/claims',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -158,7 +158,7 @@ const SERVIZI = [
         prezzo: '47',
         prezzoNote: '/claims',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -174,7 +174,7 @@ const SERVIZI = [
         prezzo: '14',
         prezzoNote: '/traduzione',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -190,7 +190,7 @@ const SERVIZI = [
         prezzo: '35',
         prezzoNote: '/mese',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -206,9 +206,8 @@ const SERVIZI = [
         prezzo: '59',
         prezzoNote: '/sessione',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
-
     },
     {
         id: 'servizio-analisi-tecnica',
@@ -223,7 +222,7 @@ const SERVIZI = [
         prezzo: '29',
         prezzoNote: '/analisi',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -239,7 +238,7 @@ const SERVIZI = [
         prezzo: '23',
         prezzoNote: '/ricerca',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -255,7 +254,7 @@ const SERVIZI = [
         prezzo: '35',
         prezzoNote: '/analisi',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -271,7 +270,7 @@ const SERVIZI = [
         prezzo: '47',
         prezzoNote: '/opposizione',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -287,7 +286,7 @@ const SERVIZI = [
         prezzo: '59',
         prezzoNote: '/strategia',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -303,7 +302,7 @@ const SERVIZI = [
         prezzo: '99',
         prezzoNote: '/valutazione',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -319,7 +318,7 @@ const SERVIZI = [
         prezzo: '149',
         prezzoNote: '/due-diligence',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -335,7 +334,7 @@ const SERVIZI = [
         prezzo: '79',
         prezzoNote: '/analisi',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -351,7 +350,7 @@ const SERVIZI = [
         prezzo: '18',
         prezzoNote: '/ricerca',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -367,7 +366,7 @@ const SERVIZI = [
         prezzo: '59',
         prezzoNote: '/analisi',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     },
     {
@@ -399,7 +398,7 @@ const SERVIZI = [
         prezzo: '39',
         prezzoNote: '/consulenza',
         cta: 'Inizia Ora',
-        ctaLink: 'regista/index.html?servizio=
+        ctaLink: 'welcome.html',
         ctaDisabled: false
     }
 ];
