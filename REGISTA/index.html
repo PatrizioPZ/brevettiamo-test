@@ -259,18 +259,7 @@ let utenteLoggato = null;
 document.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
     servizioCorrente = params.get('servizio');
-    
-    const userData = localStorage.getItem('brevettiamo_user');
-    if (userData) {
-        try {
-            utenteLoggato = JSON.parse(userData);
-            mostraMenu();
-        } catch(e) {
-            localStorage.removeItem('brevettiamo_user');
-        }
-    } else {
-        mostraLogin();
-    }
+    mostraLogin();
 });
 
 function login() {
@@ -287,18 +276,11 @@ function login() {
     utenteLoggato = {
         email: email,
         id: 'user_' + Date.now(),
-        token: 'fake_token_' + Math.random().toString(36).substr(2),
         loginTime: Date.now()
     };
     
     localStorage.setItem('brevettiamo_user', JSON.stringify(utenteLoggato));
-    
-    msg.textContent = 'Accesso effettuato!';
-    msg.style.color = '#2c5f2d';
-    
-    setTimeout(function() {
-        mostraMenu();
-    }, 500);
+    mostraMenu();
 }
 
 function logout() {
@@ -345,6 +327,10 @@ function mostraMenu() {
         card.onclick = function() { avviaServizio(id); };
         grid.appendChild(card);
     });
+    
+    if (servizioCorrente && SERVIZI[servizioCorrente]) {
+        avviaServizio(servizioCorrente);
+    }
 }
 
 function avviaServizio(servizioId) {
