@@ -208,6 +208,7 @@ const SERVIZI = [
         cta: 'Inizia Ora',
         ctaLink: 'regista/index.html?servizio=
         ctaDisabled: false
+
     },
     {
         id: 'servizio-analisi-tecnica',
