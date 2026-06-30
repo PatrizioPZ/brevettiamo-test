@@ -14,7 +14,7 @@ const SERVIZI = [
         prezzo: '299',
         prezzoNote: '/primo deposito',
         cta: 'Inizia Ora',
-        ctaLink: 'welcome.html',
+        ctaLink: 'REGISTA/index.html',
         ctaDisabled: false
     },
     {
