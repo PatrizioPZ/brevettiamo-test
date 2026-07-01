@@ -313,10 +313,19 @@
             <div class="file-list" id="file-list"></div>
         </div>
 
-        <!-- SEZIONE 3: NOTE AGGIUNTIVE -->
+        <!-- SEZIONE 3: RIVENDICAZIONI (OPZIONALE) -->
         <div class="sezione">
             <div class="sezione-titolo">
                 <span class="numero">3</span>
+                Rivendicazioni (opzionale)
+            </div>
+            <textarea id="rivendicazioni" placeholder="Se hai gia delle idee sulle rivendicazioni, scrivile qui. Altrimenti l'IA le generera automaticamente.&#10;&#10;Esempio:&#10;1. Un sistema che comprende...&#10;2. Il sistema secondo la rivendicazione 1, in cui..." style="min-height: 150px;"></textarea>
+        </div>
+
+        <!-- SEZIONE 4: NOTE AGGIUNTIVE -->
+        <div class="sezione">
+            <div class="sezione-titolo">
+                <span class="numero">4</span>
                 Note aggiuntive (opzionale)
             </div>
             <textarea id="note" placeholder="Hai gia fatto ricerche? Conosci brevetti simili? Hai scadenze particolari? Scrivi qui qualsiasi informazione utile per l'analisi." style="min-height: 100px;"></textarea>
@@ -429,19 +438,6 @@
         }
 
         function avviaElaborazione() {
-                    // NUOVO: Redirect per servizi disegni
-       if (servizioId === 'servizio-tavole') {
-            localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
-            localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
-            window.location.href = 'tavole-tecniche-lite.html';
-            return;
-        }
-        if (servizioId === 'servizio-cad') {
-            localStorage.setItem('brevettiamo_descrizione', document.getElementById('descrizione').value.trim());
-            localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
-            window.location.href = 'disegni-cad-lite.html';
-            return;
-        }
             const descrizione = document.getElementById('descrizione').value.trim();
 
             if (!descrizione) {
@@ -454,6 +450,7 @@
             localStorage.setItem('brevettiamo_servizio_id', servizioId);
             localStorage.setItem('brevettiamo_servizio_nome', nomiServizi[servizioId] || '');
             localStorage.setItem('brevettiamo_descrizione', descrizione);
+            localStorage.setItem('brevettiamo_rivendicazioni', document.getElementById('rivendicazioni').value.trim());
             localStorage.setItem('brevettiamo_note', document.getElementById('note').value.trim());
             localStorage.setItem('brevettiamo_files', JSON.stringify(filesCaricati.map(f => ({ name: f.name, size: f.size, type: f.type }))));
 
