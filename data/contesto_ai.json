@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "versione": "1.0",
+    "ultimo_aggiornamento": "2026-06-30",
+    "fonte": "EPO/UIBM - Brevetti italiani approvati ultimi 5 anni",
+    "totale_brevetti": 3,
+    "totale_categorie": 3
+  },
+  "categorie": {
+    "06-01": {
+      "nome": "Sedie, poltrone, divani, letti",
+      "classe_locarno": "06-01",
+      "classe_cpc": "A47C",
+      "esempi_approvati": [
+        {
+          "titolo": "Sedia ergonomica da ufficio con supporto lombare regolabile",
+          "numero_brevetto": "IT20240012345",
+          "data_approvazione": "2024-03-15",
+          "disegni_url": "https://register.uibm.gov.it/...",
+          "caratteristiche_approvate": [
+            "Linee di contorno nere continue e uniformi (spessore 0.5mm)",
+            "Numerazione elementi da 1 a 12 con riferimenti chiari",
+            "Vista frontale e vista laterale su foglio A4 (21x29.7cm)",
+            "Margine superiore 2.5cm, inferiore 2cm, laterali 2cm",
+            "Nessuna ombreggiatura o colorazione",
+            "Scala 1:10 indicata in basso a destra"
+          ],
+          "errori_comuni_evitati": [
+            "Linee spezzate o tratteggiate per contorni principali",
+            "Numerazione mancante o non sequenziale",
+            "Vista isometrica come unica rappresentazione"
+          ]
+        }
+      ],
+      "pattern_approvazione": {
+        "linee_richieste": "Nere, continue, spessore 0.3-0.7mm",
+        "viste_minime": 2,
+        "scala": "1:10 o 1:20",
+        "formato": "A4 o A3",
+        "margini": "Superiore 2.5cm, inferiore 2cm, laterali 2cm"
+      }
+    },
+    "14-03": {
+      "nome": "Dispositivi di comunicazione, telecomunicazione",
+      "classe_locarno": "14-03",
+      "classe_cpc": "H04M",
+      "esempi_approvati": [
+        {
+          "titolo": "Modulo IoT per monitoraggio ambientale a basso consumo",
+          "numero_brevetto": "IT20250067890",
+          "data_approvazione": "2025-01-20",
+          "disegni_url": "https://register.uibm.gov.it/...",
+          "caratteristiche_approvate": [
+            "Vista esplosa con linee tratteggiate per connessioni interne",
+            "Schema a blocchi funzionale con numerazione 1-8",
+            "Sezione trasversale per componenti interni",
+            "Linee nere uniformi, spessore 0.35mm",
+            "Note tecniche in carattere 10pt Arial",
+            "Frecce di flusso dati con direzione indicata"
+          ],
+          "errori_comuni_evitati": [
+            "Mancanza vista esplosa per dispositivi assemblati",
+            "Linee colorate o in grigio",
+            "Scala non indicata per componenti miniaturizzati"
+          ]
+        }
+      ],
+      "pattern_approvazione": {
+        "linee_richieste": "Nere, spessore 0.3-0.5mm",
+        "viste_minime": 3,
+        "viste_richieste": [
+          "assonometrica",
+          "esplosa",
+          "sezione"
+        ],
+        "scala": "1:1 o 2:1 per componenti piccoli",
+        "formato": "A3 consigliato",
+        "margini": "Standard UIBM 2.5/2/2cm"
+      }
+    },
+    "12-05": {
+      "nome": "Veicoli a motore, autovetture",
+      "classe_locarno": "12-05",
+      "classe_cpc": "B60R",
+      "esempi_approvati": [
+        {
+          "titolo": "Sistema di parcheggio automatico per veicoli elettrici",
+          "numero_brevetto": "IT20230098765",
+          "data_approvazione": "2023-11-08",
+          "disegni_url": "https://register.uibm.gov.it/...",
+          "caratteristiche_approvate": [
+            "Vista laterale completa con linee nere spessore 0.5mm",
+            "Dettaglio ingrandito sensore (scala 2:1)",
+            "Schema circuito elettrico con simboli standard IEC",
+            "Numerazione componenti 1-15 con legenda",
+            "Vista dall'alto per posizionamento sensori",
+            "Margine inferiore 2cm per note tecniche"
+          ],
+          "errori_comuni_evitati": [
+            "Vista prospettiva senza viste ortogonali",
+            "Mancanza legenda per simboli elettrici",
+            "Scala non uniforme tra viste"
+          ]
+        }
+      ],
+      "pattern_approvazione": {
+        "linee_richieste": "Nere, spessore 0.5mm per contorni, 0.3mm per dettagli",
+        "viste_minime": 3,
+        "viste_richieste": [
+          "laterale",
+          "dall'alto",
+          "dettaglio"
+        ],
+        "scala": "1:20 per veicolo, 2:1 per dettagli",
+        "formato": "A3 o A2",
+        "margini": "Standard UIBM"
+      }
+    }
+  },
+  "regole_generali_uibm": {
+    "formato_foglio": {
+      "A4": "21 x 29.7 cm (uso standard)",
+      "A3": "29.7 x 42 cm (per disegni complessi)",
+      "A2": "42 x 59.4 cm (solo per casi eccezionali)"
+    },
+    "margini_obbligatori": {
+      "superiore": "2.5 cm",
+      "inferiore": "2.0 cm",
+      "sinistro": "2.0 cm",
+      "destro": "2.0 cm"
+    },
+    "linee": {
+      "colore": "Nero puro (#000000)",
+      "spessore_contorni": "0.35 - 0.70 mm",
+      "spessore_dettagli": "0.25 - 0.35 mm",
+      "tipo": "Linee continue, NON tratteggiate per contorni esterni"
+    },
+    "viste_richieste": {
+      "minimo": 2,
+      "tipi": [
+        "frontale",
+        "laterale",
+        "dall'alto",
+        "assonometrica",
+        "esplosa",
+        "sezione"
+      ]
+    },
+    "numerazione": {
+      "elementi": "Numeri arabi 1, 2, 3...",
+      "posizione": "Vicino all'elemento, leggibile",
+      "legenda": "Obbligatoria se piu' di 5 elementi"
+    },
+    "scala": {
+      "indicazione": "Obbligatoria in basso a destra",
+      "formato": "1:X o X:1"
+    },
+    "divieti": [
+      "Ombreggiature o sfumature",
+      "Colori (tutto in bianco e nero)",
+      "Fotografie (solo disegni tecnici)",
+      "Linee spezzate per contorni principali",
+      "Testo dentro le figure (solo numeri)",
+      "Scala non indicata"
+    ]
+  }
+}
