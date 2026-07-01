@@ -265,8 +265,9 @@ def main():
 
         range_inizio += 25
         time.sleep(1)  # Rispetta rate limit EPO
-        
-print(f"\nTotale brevetti estratti: {len(tutti_brevetti)}")
+
+    # FIX: indentato dentro main() - prima era a livello modulo
+    print(f"\nTotale brevetti estratti: {len(tutti_brevetti)}")
 
     # Aggiorna database
     if tutti_brevetti:
@@ -275,8 +276,8 @@ print(f"\nTotale brevetti estratti: {len(tutti_brevetti)}")
     else:
         print("Nessun brevetto da aggiornare")
 
-    print("
-Aggiornamento completato!")
+    # FIX: stringa con a capo spezzata - usato \n
+    print("\nAggiornamento completato!")
 
 
 if __name__ == "__main__":
