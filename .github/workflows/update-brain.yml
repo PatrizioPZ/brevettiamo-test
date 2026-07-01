@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Write update_brain.py
+      - name: Generate update_brain.py
         run: |
           mkdir -p scripts
           cat > scripts/update_brain.py << 'PYEOF'
@@ -48,12 +48,13 @@ jobs:
                   r.raise_for_status()
                   return r.json()["access_token"]
               except Exception as e:
-                  print(f"Errore auth EPO: {e}")
+                  print(f"Errore auth: {e}")
                   return None
 
-          def cerca_brevetti_it(token, anno_inizio, anno_fine, range_inizio=1):
+          def cerca_brevetti_it(token, range_inizio=1):
               headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
-              query = f"pn=IT*"
+              # Query semplice: tutti i brevetti con numero pubblicazione IT
+              query = "pn=IT*"
               params = {"q": query, "Range": f"{range_inizio}-{range_inizio + 24}"}
               try:
                   r = requests.get(EPO_API_URL, headers=headers, params=params, timeout=60)
@@ -68,65 +69,64 @@ jobs:
           def estrai_dati_brevetto(doc):
               try:
                   biblio = doc.get("bibliographic-data", {})
-                  titoli = biblio.get("invention-title", [])
+                  t = biblio.get("invention-title", [])
                   titolo = "N/A"
-                  if isinstance(titoli, list) and titoli:
-                      titolo = titoli[0].get("$", "N/A")
-                  elif isinstance(titoli, dict):
-                      titolo = titoli.get("$", "N/A")
-                  doc_num = biblio.get("publication-reference", {})
-                  doc_id = doc_num.get("document-id", [{}])[0]
-                  numero = doc_id.get("doc-number", "N/A")
-                  date = doc_id.get("date", "N/A")
-                  if date != "N/A":
-                      date = f"{date[:4]}-{date[4:6]}-{date[6:]}"
-                  classi = []
-                  ipcs = biblio.get("classifications-ipcr", {}).get("classification-ipcr", [])
-                  if not isinstance(ipcs, list):
-                      ipcs = [ipcs]
-                  for ipc in ipcs:
-                      if isinstance(ipc, dict):
-                          classi.append(ipc.get("text", ""))
-                  locarno = biblio.get("locarno-classification", {})
-                  locarno_class = ""
-                  if locarno:
-                      locs = locarno.get("locarno-class", [])
-                      if isinstance(locs, list) and locs:
-                          locarno_class = locs[0].get("text", "")
-                      elif isinstance(locs, dict):
-                          locarno_class = locs.get("text", "")
-                  link = f"https://worldwide.espacenet.com/patent/search?q=pn%3D{numero}"
-                  return {"titolo": titolo, "numero_brevetto": numero, "data_approvazione": date,
-                          "classificazioni": classi, "locarno": locarno_class, "disegni_url": link,
+                  if isinstance(t, list) and t:
+                      titolo = t[0].get("$", "N/A")
+                  elif isinstance(t, dict):
+                      titolo = t.get("$", "N/A")
+                  dn = biblio.get("publication-reference", {}).get("document-id", [{}])[0]
+                  numero = dn.get("doc-number", "N/A")
+                  d = dn.get("date", "N/A")
+                  if d != "N/A":
+                      d = f"{d[:4]}-{d[4:6]}-{d[6:]}"
+                  c = []
+                  ip = biblio.get("classifications-ipcr", {}).get("classification-ipcr", [])
+                  if not isinstance(ip, list):
+                      ip = [ip]
+                  for i in ip:
+                      if isinstance(i, dict):
+                          c.append(i.get("text", ""))
+                  l = biblio.get("locarno-classification", {})
+                  lc = ""
+                  if l:
+                      ls = l.get("locarno-class", [])
+                      if isinstance(ls, list) and ls:
+                          lc = ls[0].get("text", "")
+                      elif isinstance(ls, dict):
+                          lc = ls.get("text", "")
+                  lk = f"https://worldwide.espacenet.com/patent/search?q=pn%3D{numero}"
+                  return {"titolo": titolo, "numero_brevetto": numero, "data_approvazione": d,
+                          "classificazioni": c, "locarno": lc, "disegni_url": lk,
                           "caratteristiche_approvate": [], "errori_comuni_evitati": []}
               except Exception as e:
                   print(f"Errore estrazione: {e}")
                   return None
 
-          def mappa_categoria_locarno(locarno_class):
-              mapping = {"06-01": "06-01", "06-02": "06-01", "14-03": "14-03",
-                          "12-05": "12-05", "15-01": "15-01", "26-05": "26-05"}
-              base = locarno_class[:5] if len(locarno_class) >= 5 else locarno_class
-              return mapping.get(base, "altro")
+          def mappa_cat(lc):
+              m = {"06-01": "06-01", "06-02": "06-01", "14-03": "14-03",
+                    "12-05": "12-05", "15-01": "15-01", "26-05": "26-05"}
+              b = lc[:5] if len(lc) >= 5 else lc
+              return m.get(b, "altro")
 
-          def aggiorna_database(nuovi_brevetti):
+          def aggiorna(nuovi):
               db = {"metadata": {}, "categorie": {}, "regole_generali_uibm": {}}
               if os.path.exists(OUTPUT_FILE):
                   with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
                       db = json.load(f)
               db["metadata"]["ultimo_aggiornamento"] = datetime.datetime.now().isoformat()
               db["metadata"]["fonte"] = "EPO/UIBM"
-              for brevetto in nuovi_brevetti:
-                  cat = mappa_categoria_locarno(brevetto.get("locarno", ""))
+              for bv in nuovi:
+                  cat = mappa_cat(bv.get("locarno", ""))
                   if cat not in db["categorie"]:
                       db["categorie"][cat] = {"nome": f"Categoria {cat}", "classe_locarno": cat,
                                               "classe_cpc": "", "esempi_approvati": [], "pattern_approvazione": {}}
-                  esistenti = [e["numero_brevetto"] for e in db["categorie"][cat]["esempi_approvati"]]
-                  if brevetto["numero_brevetto"] not in esistenti:
-                      db["categorie"][cat]["esempi_approvati"].append(brevetto)
+                  es = [e["numero_brevetto"] for e in db["categorie"][cat]["esempi_approvati"]]
+                  if bv["numero_brevetto"] not in es:
+                      db["categorie"][cat]["esempi_approvati"].append(bv)
               db["metadata"]["totale_categorie"] = len(db["categorie"])
               db["metadata"]["totale_brevetti"] = sum(
-                  len(cat["esempi_approvati"]) for cat in db["categorie"].values())
+                  len(c["esempi_approvati"]) for c in db["categorie"].values())
               os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
               with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
                   json.dump(db, f, indent=2, ensure_ascii=False)
@@ -154,51 +154,49 @@ jobs:
               print("=" * 60)
               print("BREVETTIAMO - Update Brain v1.0")
               print("=" * 60)
-              anno_corrente = datetime.datetime.now().year
-              anno_inizio = anno_corrente - ANNI_STORICO
-              print(f"Intervallo: {anno_inizio}-{anno_corrente}")
               token = ottieni_token_epo()
               if not token:
-                  print("Token EPO mancante")
-                  sys.exit(1)
+                  print("Token mancante, creo database vuoto")
+                  aggiorna([])
+                  return
               print("Token OK")
               tutti = []
-              rstart = 1; retry = 0; MAX_RETRY = 3
+              rstart = 1
+              retry = 0
+              MAX_RETRY = 3
               while rstart <= MAX_RISULTATI:
                   print(f"Pagina {rstart}-{rstart + 24}...")
-                  dati = cerca_brevetti_it(token, anno_inizio, anno_corrente, rstart)
-                          if dati is None:
-            retry += 1
-            if retry > MAX_RETRY:
-                print("Troppi errori, interrompo"); break
-            token = ottieni_token_epo()
+                  dati = cerca_brevetti_it(token, rstart)
+                  if dati is None:
+                      retry += 1
+                      if retry > MAX_RETRY:
+                          print("Troppi errori consecutivi, interrompo")
+                          break
+                      token = ottieni_token_epo()
                       if not token:
                           break
                       continue
-                          risultati = estrai_documenti(dati)
-                        retry = 0
-                   if not risultati:
-                      print("Fine risultati")
+                  retry = 0
+                  risultati = estrai_documenti(dati)
+                  if not risultati:
+                      print("Nessun risultato")
                       break
                   for doc in risultati:
                       b = estrai_dati_brevetto(doc)
                       if b:
                           tutti.append(b)
                   print(f"Totali: {len(tutti)}")
-                  totali = dati.get("ops:world-patent-data", {}).get("ops:biblio-search", {}).get("@total-result-count", "0")
+                  tot = dati.get("ops:world-patent-data", {}).get("ops:biblio-search", {}).get("@total-result-count", "0")
                   try:
-                      if rstart + 24 >= int(totali):
+                      if rstart + 24 >= int(tot):
                           break
                   except (ValueError, TypeError):
                       break
                   rstart += 25
-                  time.sleep(1)
+                  time.sleep(2)
               print(f"\nTotale estratti: {len(tutti)}")
-              if tutti:
-                  aggiorna_database(tutti)
-                  print(f"Salvato in: {OUTPUT_FILE}")
-              else:
-                  print("Nessun brevetto trovato")
+              aggiorna(tutti)
+              print(f"Salvato in: {OUTPUT_FILE}")
               print("\nCompletato!")
 
           if __name__ == "__main__":
